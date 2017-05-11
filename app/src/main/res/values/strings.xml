@@ -24,5 +24,10 @@
     <string name="change_old_pwd">请输入旧密码</string>
     <string name="change_new_pwd">请输入新密码</string>
     <string name="action_change_pwd">修改密码</string>
+    <string name="starting_point">Starting Point</string>
+    <string name="distination">Distination</string>
+    <string name="customer_phone_short">Cust.Phone</string>
+    <string name="notes">Notes</string>
+    <string name="others">Others</string>
 
 </resources>

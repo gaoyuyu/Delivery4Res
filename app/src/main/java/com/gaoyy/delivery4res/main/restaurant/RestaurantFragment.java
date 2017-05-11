@@ -1,9 +1,13 @@
 package com.gaoyy.delivery4res.main.restaurant;
 
 
+import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatCheckBox;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,6 +18,8 @@ import android.widget.Spinner;
 import com.gaoyy.delivery4res.R;
 import com.gaoyy.delivery4res.api.bean.RestInfo;
 import com.gaoyy.delivery4res.base.BaseFragment;
+import com.gaoyy.delivery4res.main.OrderDetailActivity;
+import com.gaoyy.delivery4res.main.SearchActivity;
 import com.gaoyy.delivery4res.util.CommonUtils;
 
 import java.util.ArrayList;
@@ -36,8 +42,8 @@ public class RestaurantFragment extends BaseFragment
 
 
     private List<RestInfo.BodyBean.RemarkDictBean> remarkDict;
-    private List<RestInfo.BodyBean.FinishedTimeBean> finishedTime ;
-    private List<RestInfo.BodyBean.DictStatusBean> dictStatus ;
+    private List<RestInfo.BodyBean.FinishedTimeBean> finishedTime;
+    private List<RestInfo.BodyBean.DictStatusBean> dictStatus;
 
 
     public RestaurantFragment()
@@ -93,16 +99,14 @@ public class RestaurantFragment extends BaseFragment
         //设置备注项信息
         restDoorBell.setText(remarkDict.get(0).getLabel());
 
-
         ArrayList<String> finishedTimeList = new ArrayList<>();
-        for(int i=0;i<finishedTime.size();i++)
+        for (int i = 0; i < finishedTime.size(); i++)
         {
             finishedTimeList.add(finishedTime.get(i).getLabel());
         }
 
-
         //适配器
-        ArrayAdapter driverAdapter= new ArrayAdapter<String>(activity, android.R.layout.simple_spinner_item, finishedTimeList);
+        ArrayAdapter driverAdapter = new ArrayAdapter<String>(activity, android.R.layout.simple_spinner_item, finishedTimeList);
         //设置样式
         driverAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //加载适配器
@@ -115,6 +119,45 @@ public class RestaurantFragment extends BaseFragment
         super.setListener();
 
         //TODO:设置输入监听，跳转到searchactivity去获取位置信息
+        restAddress.addTextChangedListener(new TextWatcher()
+        {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2)
+            {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
+            {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable)
+            {
+                String inputingText = editable.toString();
+                Intent intent = new Intent();
+                intent.putExtra("inputingText", inputingText);
+                intent.setClass(activity, SearchActivity.class);
+                startActivityForResult(intent, 1000);
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode)
+        {
+            case 1000:
+                if (resultCode == activity.RESULT_OK)
+                {
+                    Log.d("TAG", "收到返回值了收到了了子了了了了了了子了了了了了了了");
+                }
+                break;
+        }
     }
 
     @Override
@@ -133,6 +176,30 @@ public class RestaurantFragment extends BaseFragment
         {
             case R.id.action_send_order:
                 validate();
+                if (restPhoneTextinputlayout.isErrorEnabled() || restAddressTextinputlayout.isErrorEnabled() || restAptTextinputlayout.isErrorEnabled())
+                    break;
+                String customerTel = restPhone.getText().toString();
+                String customerAddr = restAddress.getText().toString();
+                String apt = restApt.getText().toString();
+                String finishedTime = (String) restSpinner.getSelectedItem();
+                String remark = "";
+                if (restDoorBell.isChecked())
+                {
+                    remark = restDoorBell.getText().toString();
+                }
+                String remarks = restRemark.getText().toString();
+
+                Intent intent = new Intent();
+                intent.putExtra("customerTel", customerTel);
+                intent.putExtra("customerAddr", customerAddr);
+                intent.putExtra("apt", apt);
+                intent.putExtra("finishedTime", finishedTime);
+                intent.putExtra("remark", remark);
+                intent.putExtra("remarks", remarks);
+                intent.setClass(activity, OrderDetailActivity.class);
+                startActivity(intent);
+
+
                 break;
         }
 
@@ -146,8 +213,17 @@ public class RestaurantFragment extends BaseFragment
     private void validate()
     {
         CommonUtils.textInputLayoutSetting(restPhone, restPhoneTextinputlayout, "Can't be empty");
+        if (restPhone.getText().toString().length() != 10)
+        {
+            restPhoneTextinputlayout.setErrorEnabled(true);
+            restPhoneTextinputlayout.setError("The phone number should be a 10-digit array");
+        }
+        else
+        {
+            restPhoneTextinputlayout.setError(null);
+            restPhoneTextinputlayout.setErrorEnabled(false);
+        }
         CommonUtils.textInputLayoutSetting(restAddress, restAddressTextinputlayout, "Can't be empty");
         CommonUtils.textInputLayoutSetting(restApt, restAptTextinputlayout, "Can't be empty");
-        CommonUtils.textInputLayoutSetting(restRemark, restRemarkTextinputlayout, "Can't be empty");
     }
 }

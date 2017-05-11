@@ -1,6 +1,7 @@
 package com.gaoyy.delivery4res.changepwd;
 
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import com.gaoyy.delivery4res.R;
 import com.gaoyy.delivery4res.base.BaseActivity;
@@ -43,5 +44,17 @@ public class ChangePwdActivity extends BaseActivity
             ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),changePwdFragment, R.id.change_pwd_content);
         }
         new ChangePwdPresenter(changePwdFragment);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        int id = item.getItemId();
+        switch (id)
+        {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

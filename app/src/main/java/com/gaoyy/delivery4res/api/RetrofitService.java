@@ -17,6 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitService
 {
     public static Api sApiService;
+    public static GoogleMapApi sGoogleMapApiService;
     private RetrofitService()
     {
         throw new AssertionError();
@@ -38,12 +39,22 @@ public class RetrofitService
                 .readTimeout(2000000, TimeUnit.MILLISECONDS)
                 .build();
 
-        Retrofit newsRetrofit = new Retrofit.Builder()
+        Retrofit apiRetrofit = new Retrofit.Builder()
                 .baseUrl(Constant.API_BASE)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        sApiService = newsRetrofit.create(Api.class);
+        sApiService = apiRetrofit.create(Api.class);
+
+
+
+        Retrofit mapRetrofit = new Retrofit.Builder()
+                .baseUrl(Constant.GOOGLE_MAP_API_BASE)
+                .client(okHttpClient)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        sGoogleMapApiService = mapRetrofit.create(GoogleMapApi.class);
     }
 }

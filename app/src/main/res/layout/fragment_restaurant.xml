@@ -46,6 +46,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/customer_address"
+                    android:text="1552a rue Baxter"
                     android:inputType="textEmailAddress"
                     android:textColor="@color/text_basic_color"/>
 
