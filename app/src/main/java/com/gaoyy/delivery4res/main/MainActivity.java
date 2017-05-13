@@ -11,7 +11,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gaoyy.delivery4res.R;
 import com.gaoyy.delivery4res.api.RetrofitService;
@@ -22,6 +21,7 @@ import com.gaoyy.delivery4res.base.CustomDialogFragment;
 import com.gaoyy.delivery4res.changepwd.ChangePwdActivity;
 import com.gaoyy.delivery4res.login.LoginActivity;
 import com.gaoyy.delivery4res.main.restaurant.RestaurantFragment;
+import com.gaoyy.delivery4res.orderlist.OrderListActivity;
 import com.gaoyy.delivery4res.util.ActivityUtils;
 import com.gaoyy.delivery4res.util.CommonUtils;
 import com.gaoyy.delivery4res.util.DialogUtils;
@@ -40,6 +40,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private DrawerLayout mainDrawerLayout;
     private NavigationView mainNavView;
+
+
+    public static List<RestInfo.BodyBean.RemarkDictBean> remarkDict;
+    public static List<RestInfo.BodyBean.FinishedTimeBean> finishedTime;
+    public static List<RestInfo.BodyBean.DictStatusBean> dictStatus;
 
 
     @Override
@@ -84,9 +89,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         RestaurantFragment restaurantFragment = RestaurantFragment.newInstance();
 
-        List<RestInfo.BodyBean.RemarkDictBean> remarkDict = (List<RestInfo.BodyBean.RemarkDictBean>) getIntent().getSerializableExtra("remarkDict");
-        List<RestInfo.BodyBean.FinishedTimeBean> finishedTime = (List<RestInfo.BodyBean.FinishedTimeBean>) getIntent().getSerializableExtra("finishedTime");
-        List<RestInfo.BodyBean.DictStatusBean> dictStatus = (List<RestInfo.BodyBean.DictStatusBean>) getIntent().getSerializableExtra("dictStatus");
+        remarkDict = (List<RestInfo.BodyBean.RemarkDictBean>) getIntent().getSerializableExtra("remarkDict");
+        finishedTime = (List<RestInfo.BodyBean.FinishedTimeBean>) getIntent().getSerializableExtra("finishedTime");
+        dictStatus = (List<RestInfo.BodyBean.DictStatusBean>) getIntent().getSerializableExtra("dictStatus");
 
         Bundle bundle = new Bundle();
         bundle.putSerializable("remarkDict",(Serializable)remarkDict);
@@ -123,12 +128,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         switch (id)
         {
             case R.id.nav_order_list:
-                Toast.makeText(this, "order list", Toast.LENGTH_SHORT).show();
+                Intent orderList = new Intent();
+                orderList.setClass(MainActivity.this, OrderListActivity.class);
+                startActivity(orderList);
                 break;
             case R.id.nav_change_pwd:
-                Intent intent = new Intent();
-                intent.setClass(MainActivity.this, ChangePwdActivity.class);
-                startActivity(intent);
+                Intent changePwd = new Intent();
+                changePwd.setClass(MainActivity.this, ChangePwdActivity.class);
+                startActivity(changePwd);
                 break;
             case R.id.nav_exit:
                 String loginName = CommonUtils.getLoginName(this);

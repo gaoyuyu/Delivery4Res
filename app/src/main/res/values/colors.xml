@@ -12,4 +12,7 @@
     <color name="gray_light">#e3e3e3</color>
     <color name="text_basic_color">#333333</color>
     <color name="btn_highlight_color">#22000000</color>
+    <color name="success_color">#36d60a</color>
+
+
 </resources>

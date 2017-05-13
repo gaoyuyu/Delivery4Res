@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray_light"
-
     android:orientation="vertical"
     android:padding="10dp"
 
@@ -45,7 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/username_hint"
-                android:text="sanhe4424"
+                android:text="hotel"
                 android:inputType="textEmailAddress"
                 android:textColor="@color/text_basic_color"/>
 
@@ -65,7 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/password_hint"
-                android:text="sanhe951"
+                android:text="123456"
                 android:inputType="textPassword"
                 android:textColor="@color/text_basic_color"/>
 

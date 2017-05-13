@@ -111,6 +111,14 @@ public class RestaurantFragment extends BaseFragment
         driverAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //加载适配器
         restSpinner.setAdapter(driverAdapter);
+
+
+        //测试数据
+        int x=(int)(Math.random()*1000000000);
+        restPhone.setText(x+"0");
+        int y=(int)(Math.random()*100);
+        restApt.setText(y+"");
+        restRemark.setText(x+"  This is Test Data,PLEASE DO NOT ACCEPT THIS ORDER");
     }
 
     @Override
