@@ -228,6 +228,20 @@
             android:layout_height="wrap_content"
             android:text="rebsubmit"
             />
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/item_order_delivery_btn"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delivery"
+            />
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/item_order_cancle_after_delivery_btn"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CancleAD"
+            />
     </LinearLayout>
 
     <View

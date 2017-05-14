@@ -96,6 +96,12 @@ public class RestaurantFragment extends BaseFragment
     {
         super.configViews();
 
+        // TODO: 2017/5/14 0014 设置不自动弹出输入法
+        restPhone.clearFocus();
+        restAddress.clearFocus();
+        restApt.clearFocus();
+        restRemark.clearFocus();
+
         //设置备注项信息
         restDoorBell.setText(remarkDict.get(0).getLabel());
 

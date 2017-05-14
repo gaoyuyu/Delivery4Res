@@ -3,6 +3,7 @@ package com.gaoyy.delivery4res.main;
 import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
@@ -11,7 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gaoyy.delivery4res.R;
 import com.gaoyy.delivery4res.api.Constant;
@@ -20,6 +20,7 @@ import com.gaoyy.delivery4res.api.bean.GeocodeInfo;
 import com.gaoyy.delivery4res.api.bean.OrderSaveInfo;
 import com.gaoyy.delivery4res.base.BaseActivity;
 import com.gaoyy.delivery4res.base.CustomDialogFragment;
+import com.gaoyy.delivery4res.orderlist.OrderListActivity;
 import com.gaoyy.delivery4res.util.CommonUtils;
 import com.gaoyy.delivery4res.util.DialogUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -185,9 +186,6 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
                 finish();
                 break;
             case R.id.action_submit:
-                Toast.makeText(this,"submit",Toast.LENGTH_SHORT).show();
-
-                //获取当前时间，进行判断，是不是在配送时间内
                 orderSave();
                 break;
         }
@@ -240,6 +238,10 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
                                         break;
                                     case AlertDialog.BUTTON_POSITIVE:
                                         // TODO: 2017/5/13 0013  跳转到OrderList
+                                        Intent orderList = new Intent();
+                                        orderList.setClass(OrderDetailActivity.this, OrderListActivity.class);
+                                        startActivity(orderList);
+                                        finish();
                                         break;
                                     default:
                                         break;

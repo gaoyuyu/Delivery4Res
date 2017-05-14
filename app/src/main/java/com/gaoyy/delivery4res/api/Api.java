@@ -3,6 +3,7 @@ package com.gaoyy.delivery4res.api;
 
 import com.gaoyy.delivery4res.api.bean.CommonInfo;
 import com.gaoyy.delivery4res.api.bean.OrderListInfo;
+import com.gaoyy.delivery4res.api.bean.OrderOperationStatusInfo;
 import com.gaoyy.delivery4res.api.bean.OrderSaveInfo;
 import com.gaoyy.delivery4res.api.bean.RestInfo;
 
@@ -22,6 +23,7 @@ public interface Api
 {
     /**
      * 登录
+     *
      * @param params
      * @return
      */
@@ -32,6 +34,7 @@ public interface Api
 
     /**
      * 退出
+     *
      * @param loginName
      * @param randomCode
      * @return
@@ -43,6 +46,7 @@ public interface Api
 
     /**
      * 修改密码
+     *
      * @param params
      * @return
      */
@@ -53,6 +57,7 @@ public interface Api
 
     /**
      * 保存（提交）订单
+     *
      * @param params
      * @return
      */
@@ -62,11 +67,58 @@ public interface Api
 
     /**
      * 订单列表
+     *
      * @param params
      * @return
      */
     @FormUrlEncoded
     @POST("a/order/order/mobile/orderlist")
     Call<OrderListInfo> orderList(@FieldMap Map<String, String> params);
+
+
+    /**
+     * 饭店订单取消，用于cancle按钮
+     *
+     * @param loginName
+     * @param randomCode
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("a/order/order/mobile/ordercancel")
+    Call<OrderOperationStatusInfo> orderCancle(@Field("loginName") String loginName, @Field("randomCode") String randomCode, @Field("id") String id);
+
+    /**
+     * 餐厅resubmit，用于resubmit按钮
+     *
+     * @param loginName
+     * @param randomCode
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("a/order/order/mobile/resubmit")
+    Call<OrderOperationStatusInfo> orderResubmit(@Field("loginName") String loginName, @Field("randomCode") String randomCode, @Field("id") String id);
+
+    /**
+     * 饭店及司机订单派送，用于Delivery按钮
+     *
+     * @param loginName
+     * @param randomCode
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("a/order/order/mobile/ordersend")
+    Call<OrderOperationStatusInfo> orderSend(@Field("loginName") String loginName, @Field("randomCode") String randomCode, @Field("id") String id);
+
+    /**
+     * 饭店订单退单，用于cancle after deliver按钮
+     *
+     * @param loginName
+     * @param randomCode
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("a/order/order/mobile/orderback")
+    Call<OrderOperationStatusInfo> orderBack(@Field("loginName") String loginName, @Field("randomCode") String randomCode, @Field("id") String id);
+
 
 }

@@ -33,7 +33,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public interface OnItemClickListener
     {
-        void onItemClick(View view, int position);
+        void onItemClick(View view, int position, OrderListInfo.BodyBean.PageBean.ListBean order);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener)
@@ -64,7 +64,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         OrderListInfo.BodyBean.PageBean.ListBean order = data.get(position);
         int orderStatus = order.getStatus();
         List<RestInfo.BodyBean.DictStatusBean> dictStatus = MainActivity.dictStatus;
-        vh.itemOrderAddress.setText(order.getCustomerAddr());
+        vh.itemOrderAddress.setText(order.getId()+"===="+order.getCustomerAddr());
         vh.itemOrderDriverName.setText(order.getCourierName());
         vh.itemOrderCustomerPhone.setText(order.getCustomerTel());
         vh.itemOrderNo.setText(order.getOrderNo());
@@ -72,59 +72,112 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         vh.itemOrderOthers.setText(order.getRemark());
         vh.itemOrderFinishedTime.setText(order.getFinishedTime());
 
-        for(int i=0;i<dictStatus.size();i++)
+        Log.d(Constant.TAG,position+"==status=="+order.getStatus());
+
+        for (int i = 0; i < dictStatus.size(); i++)
         {
             int value = Integer.valueOf(dictStatus.get(i).getValue());
             //Wait
-            if((orderStatus ==value)&&(value == 0))
+            if ((orderStatus == value) && (value == 0))
             {
-//                Log.d(Constant.TAG,"adapter order status is Wait");
+                Log.d(Constant.TAG, "adapter order status is Wait");
                 vh.itemOrderStatus.setBackgroundColor(context.getResources().getColor(android.R.color.holo_green_dark));
                 vh.itemOrderStatus.setText("Wait");
                 vh.itemOrderStatusDate.setText(order.getCreateDate());
                 //隐藏司机名字
                 vh.itemOrderDriverNameLayout.setVisibility(View.GONE);
 
+                //显示按钮组
+                vh.itemOrderOperationLayout.setVisibility(View.VISIBLE);
+                //显示Cancle按钮和resubmit按钮
+                vh.itemOrderCancleBtn.setVisibility(View.VISIBLE);
+                if(order.getIsTimeout() == 1)
+                {
+                    vh.itemOrderResubmitBtn.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    vh.itemOrderResubmitBtn.setVisibility(View.GONE);
+                }
+                vh.itemOrderDeliveryBtn.setVisibility(View.GONE);
+                vh.itemOrderCancleAfterDeliveryBtn.setVisibility(View.GONE);
+
             }
             //Accept
-            if((orderStatus ==value)&&(value == 1))
+            else if ((orderStatus == value) && (value == 1))
             {
-//                Log.d(Constant.TAG,"adapter order status is Accept");
+                Log.d(Constant.TAG,"adapter order status is Accept");
                 vh.itemOrderStatus.setBackgroundColor(context.getResources().getColor(android.R.color.holo_orange_dark));
                 vh.itemOrderStatus.setText("Accept");
                 vh.itemOrderStatusDate.setText(order.getAcceptDate());
+
+                //显示按钮组
+                vh.itemOrderOperationLayout.setVisibility(View.VISIBLE);
+                //显示Cancle按钮和Delivery按钮
+                vh.itemOrderCancleBtn.setVisibility(View.VISIBLE);
+                vh.itemOrderResubmitBtn.setVisibility(View.GONE);
+                vh.itemOrderDeliveryBtn.setVisibility(View.VISIBLE);
+                vh.itemOrderCancleAfterDeliveryBtn.setVisibility(View.GONE);
+
             }
             //Delivery
-            if((orderStatus ==value)&&(value == 2))
+            else if ((orderStatus == value) && (value == 2))
             {
-//                Log.d(Constant.TAG,"adapter order status is Delivery");
+                Log.d(Constant.TAG,"adapter order status is Delivery");
                 vh.itemOrderStatus.setBackgroundColor(context.getResources().getColor(android.R.color.holo_red_dark));
                 vh.itemOrderStatus.setText("Delivery");
                 vh.itemOrderStatusDate.setText(order.getDeliveryDate());
+                //显示按钮组
+                vh.itemOrderOperationLayout.setVisibility(View.VISIBLE);
+                //显示CancleAfterDelivery按钮
+                vh.itemOrderCancleBtn.setVisibility(View.GONE);
+                vh.itemOrderResubmitBtn.setVisibility(View.GONE);
+                vh.itemOrderDeliveryBtn.setVisibility(View.GONE);
+                vh.itemOrderCancleAfterDeliveryBtn.setVisibility(View.VISIBLE);
             }
             //Finish
-            if((orderStatus ==value)&&(value ==3))
+            else if((orderStatus == value) && (value == 3))
             {
 //                Log.d(Constant.TAG,"adapter order status is Finish");
                 vh.itemOrderStatus.setBackgroundColor(context.getResources().getColor(android.R.color.darker_gray));
                 vh.itemOrderStatus.setText("Finish");
                 vh.itemOrderStatusDate.setText(order.getFinishDate());
+
+                //不显示按钮
+                vh.itemOrderOperationLayout.setVisibility(View.GONE);
             }
             //Cancel
-            if((orderStatus ==value)&&(value ==4))
+            else if ((orderStatus == value) && (value == 4))
             {
 //                Log.d(Constant.TAG,"adapter order status is Cancel");
                 vh.itemOrderStatus.setBackgroundColor(context.getResources().getColor(android.R.color.darker_gray));
                 vh.itemOrderStatus.setText("Cancel");
-                vh.itemOrderStatusDate.setText((String)order.getCancelDate());
+                vh.itemOrderStatusDate.setText((String) order.getCancelDate());
+
+                //不显示按钮
+                vh.itemOrderOperationLayout.setVisibility(View.GONE);
             }
             //Back
-            if((orderStatus ==value)&&(value ==4))
+            else if ((orderStatus == value) && (value == 5))
             {
 //                Log.d(Constant.TAG,"adapter order status is Back");
                 vh.itemOrderStatus.setBackgroundColor(context.getResources().getColor(android.R.color.darker_gray));
                 vh.itemOrderStatus.setText("Back");
+                vh.itemOrderStatusDate.setText((String) order.getCancelDate());
+
+                //不显示按钮
+                vh.itemOrderOperationLayout.setVisibility(View.GONE);
             }
+        }
+
+
+        //设置btn的点击监听器
+        if(onItemClickListener != null)
+        {
+            vh.itemOrderCancleBtn.setOnClickListener(new BasicOnClickListener(vh,order));
+            vh.itemOrderResubmitBtn.setOnClickListener(new BasicOnClickListener(vh,order));
+            vh.itemOrderDeliveryBtn.setOnClickListener(new BasicOnClickListener(vh,order));
+            vh.itemOrderCancleAfterDeliveryBtn.setOnClickListener(new BasicOnClickListener(vh,order));
         }
     }
 
@@ -155,13 +208,8 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private LinearLayout itemOrderOperationLayout;
         private AppCompatButton itemOrderCancleBtn;
         private AppCompatButton itemOrderResubmitBtn;
-
-
-        public OrderListViewHolder(View itemView)
-        {
-            super(itemView);
-            assignViews(itemView);
-        }
+        private AppCompatButton itemOrderDeliveryBtn;
+        private AppCompatButton itemOrderCancleAfterDeliveryBtn;
 
         private void assignViews(View itemView)
         {
@@ -183,15 +231,24 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             itemOrderOperationLayout = (LinearLayout) itemView.findViewById(R.id.item_order_operation_layout);
             itemOrderCancleBtn = (AppCompatButton) itemView.findViewById(R.id.item_order_cancle_btn);
             itemOrderResubmitBtn = (AppCompatButton) itemView.findViewById(R.id.item_order_resubmit_btn);
+            itemOrderDeliveryBtn = (AppCompatButton) itemView.findViewById(R.id.item_order_delivery_btn);
+            itemOrderCancleAfterDeliveryBtn = (AppCompatButton) itemView.findViewById(R.id.item_order_cancle_after_delivery_btn);
         }
-    }
 
+        public OrderListViewHolder(View itemView)
+        {
+            super(itemView);
+            assignViews(itemView);
+        }
+
+    }
 
     /**
      * 第一次加载
+     *
      * @param s
      */
-    public void updateData(LinkedList<OrderListInfo.BodyBean.PageBean.ListBean>  s)
+    public void updateData(LinkedList<OrderListInfo.BodyBean.PageBean.ListBean> s)
     {
         this.data = s;
         notifyDataSetChanged();
@@ -199,28 +256,38 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     /**
      * 下拉加载更多
+     *
      * @param newDatas
      */
     public void addMoreItem(LinkedList<OrderListInfo.BodyBean.PageBean.ListBean> newDatas)
     {
-        Log.d(Constant.TAG,"newDatas-->"+newDatas.size());
+        Log.d(Constant.TAG, "newDatas-->" + newDatas.size());
 
-        for(int i=0;i<newDatas.size();i++)
+        for (int i = 0; i < newDatas.size(); i++)
         {
             data.addLast(newDatas.get(i));
         }
-        Log.d(Constant.TAG,"data-->"+data.size());
-        notifyItemRangeInserted(getItemCount(),newDatas.size());
-        notifyItemRangeChanged(getItemCount(), getItemCount()-newDatas.size());
+        Log.d(Constant.TAG, "data-->" + data.size());
+        notifyItemRangeInserted(getItemCount(), newDatas.size());
+        notifyItemRangeChanged(getItemCount(), getItemCount() - newDatas.size());
+    }
+
+    public void singleItemUpdate(int position, OrderListInfo.BodyBean.PageBean.ListBean order)
+    {
+        data.remove(position);
+        data.add(position,order);
+        notifyItemChanged(position);
     }
 
     private class BasicOnClickListener implements View.OnClickListener
     {
         private OrderListViewHolder vh;
+        private OrderListInfo.BodyBean.PageBean.ListBean order;
 
-        public BasicOnClickListener(OrderListViewHolder vh)
+        public BasicOnClickListener(OrderListViewHolder vh, OrderListInfo.BodyBean.PageBean.ListBean order)
         {
             this.vh = vh;
+            this.order = order;
         }
 
         @Override
@@ -228,9 +295,18 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         {
             switch (v.getId())
             {
-//                case R.id.item_news_layout:
-//                    onItemClickListener.onItemClick(newsViewHolder.itemNewsLayout, newsViewHolder.getLayoutPosition());
-//                    break;
+                case R.id.item_order_cancle_btn:
+                    onItemClickListener.onItemClick(vh.itemOrderCancleBtn, vh.getLayoutPosition(),order);
+                    break;
+                case R.id.item_order_resubmit_btn:
+                    onItemClickListener.onItemClick(vh.itemOrderResubmitBtn, vh.getLayoutPosition(),order);
+                    break;
+                case R.id.item_order_delivery_btn:
+                    onItemClickListener.onItemClick(vh.itemOrderDeliveryBtn, vh.getLayoutPosition(),order);
+                    break;
+                case R.id.item_order_cancle_after_delivery_btn:
+                    onItemClickListener.onItemClick(vh.itemOrderCancleAfterDeliveryBtn, vh.getLayoutPosition(),order);
+                    break;
             }
         }
     }

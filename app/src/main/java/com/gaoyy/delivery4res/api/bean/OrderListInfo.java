@@ -241,7 +241,7 @@ public class OrderListInfo
                 private String acceptDate;
                 private String deliveryDate;
                 private String finishDate;
-                private Object cancelDate;
+                private String cancelDate;
                 private long pushDate;
                 private int status;
                 private int isTimeout;
@@ -463,12 +463,12 @@ public class OrderListInfo
                     this.finishDate = finishDate;
                 }
 
-                public Object getCancelDate()
+                public String getCancelDate()
                 {
                     return cancelDate;
                 }
 
-                public void setCancelDate(Object cancelDate)
+                public void setCancelDate(String cancelDate)
                 {
                     this.cancelDate = cancelDate;
                 }
