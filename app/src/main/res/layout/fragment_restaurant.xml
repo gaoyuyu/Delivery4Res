@@ -45,7 +45,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/customer_address"
-                    android:text="中国广东省广州市天河区天河北广州大道中289号"
+                    android:text="中国广东省广州市天河区车陂车陂路425号"
                     android:inputType="textMultiLine"
                     android:textColor="@color/text_basic_color"/>
 

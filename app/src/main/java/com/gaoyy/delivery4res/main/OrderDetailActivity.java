@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -138,8 +139,12 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
                 if (response.isSuccessful() && response.body() != null)
                 {
                     GeocodeInfo geocodeInfo = response.body();
+
                     customerAddrLat = geocodeInfo.getResults().get(0).getGeometry().getLocation().getLat();
                     customerAddrLng = geocodeInfo.getResults().get(0).getGeometry().getLocation().getLng();
+
+                    Log.d(Constant.TAG,"customerAddrLat--->"+customerAddrLat);
+                    Log.d(Constant.TAG,"customerAddrLng--->"+customerAddrLng);
 
                     LatLng res = new LatLng(Double.parseDouble(hotelLat), Double.parseDouble(hotelLng));
                     LatLng cus = new LatLng(customerAddrLat, customerAddrLng);

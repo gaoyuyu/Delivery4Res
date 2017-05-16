@@ -234,6 +234,7 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
                 Map<String, String> params = new HashMap<>();
                 params.put("loginName", loginUsername.getText().toString());
                 params.put("pwd", loginPassword.getText().toString());
+                //appType=1餐厅端
                 params.put("appType", "1");
                 mLoginPresenter.login(params);
                 break;
