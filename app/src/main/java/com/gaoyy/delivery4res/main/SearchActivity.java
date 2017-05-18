@@ -1,19 +1,44 @@
 package com.gaoyy.delivery4res.main;
 
+import android.content.Intent;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.gaoyy.delivery4res.R;
+import com.gaoyy.delivery4res.adapter.SearchListAdapter;
+import com.gaoyy.delivery4res.api.Constant;
+import com.gaoyy.delivery4res.api.RetrofitService;
+import com.gaoyy.delivery4res.api.bean.GeocodeInfo;
 import com.gaoyy.delivery4res.base.BaseActivity;
+import com.gaoyy.delivery4res.util.CommonUtils;
+import com.pnikosis.materialishprogress.ProgressWheel;
 
-public class SearchActivity extends BaseActivity
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class SearchActivity extends BaseActivity implements SearchListAdapter.OnItemClickListener, View.OnClickListener
 {
     private Toolbar searchToolbar;
+    private ProgressWheel searchProgressWheel;
+    private ImageButton seachCheck;
     private EditText searchEdit;
     private RecyclerView searchRv;
+    private SearchListAdapter searchListAdapter;
+    private List<GeocodeInfo.ResultsBean> placeList = new ArrayList<>();
+    private LinearLayoutManager linearLayoutManager;
 
 
     @Override
@@ -27,6 +52,8 @@ public class SearchActivity extends BaseActivity
     {
         super.assignViews();
         searchToolbar = (Toolbar) findViewById(R.id.search_toolbar);
+        seachCheck = (ImageButton) findViewById(R.id.search_check);
+        searchProgressWheel = (ProgressWheel) findViewById(R.id.search_progresswheel);
         searchEdit = (EditText) findViewById(R.id.search_edit);
         searchRv = (RecyclerView) findViewById(R.id.search_rv);
     }
@@ -34,7 +61,7 @@ public class SearchActivity extends BaseActivity
     @Override
     protected void initToolbar()
     {
-        super.initToolbar(searchToolbar,"",true,-1);
+        super.initToolbar(searchToolbar, "", true, -1);
     }
 
     @Override
@@ -45,6 +72,76 @@ public class SearchActivity extends BaseActivity
         searchEdit.setText(inputText);
         //将光标移至文字末尾
         searchEdit.setSelection(inputText.length());
+
+
+        searchListAdapter = new SearchListAdapter(this, placeList);
+        searchRv.setAdapter(searchListAdapter);
+        //设置布局
+        linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        searchRv.setLayoutManager(linearLayoutManager);
+        searchRv.setItemAnimator(new DefaultItemAnimator());
+
+    }
+
+    @Override
+    protected void setListener()
+    {
+        super.setListener();
+        searchEdit.addTextChangedListener(new TextWatcher()
+        {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2)
+            {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
+            {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable)
+            {
+                String address = editable.toString();
+                Call<GeocodeInfo> call = RetrofitService.sGoogleMapApiService.query(address, Constant.GOOGLE_MAP_KEY, "CA");
+                searchProgressWheel.setVisibility(View.VISIBLE);
+                searchRv.setVisibility(View.GONE);
+                call.enqueue(new Callback<GeocodeInfo>()
+                {
+                    @Override
+                    public void onResponse(Call<GeocodeInfo> call, Response<GeocodeInfo> response)
+                    {
+                        searchProgressWheel.setVisibility(View.GONE);
+                        searchRv.setVisibility(View.VISIBLE);
+                        if (response.isSuccessful() && response.body() != null)
+                        {
+                            GeocodeInfo geocodeInfo = response.body();
+                            if (geocodeInfo.getStatus().equals("OK"))
+                            {
+                                List<GeocodeInfo.ResultsBean> list = geocodeInfo.getResults();
+                                searchListAdapter.updateData(list);
+                            }
+                            else
+                            {
+                                CommonUtils.showSnackBar(searchToolbar, geocodeInfo.getStatus());
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<GeocodeInfo> call, Throwable t)
+                    {
+                        searchProgressWheel.setVisibility(View.GONE);
+                        searchRv.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+        });
+
+        searchListAdapter.setOnItemClickListener(this);
+        seachCheck.setOnClickListener(this);
     }
 
     @Override
@@ -64,5 +161,33 @@ public class SearchActivity extends BaseActivity
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemClick(View view, int position, GeocodeInfo.ResultsBean place)
+    {
+        switch (view.getId())
+        {
+            case R.id.item_search_layout:
+                Intent intent = new Intent();
+                intent.putExtra("place", place.getFormatted_address());
+                setResult(RESULT_OK, intent);
+                finish();
+                break;
+        }
+    }
+
+    @Override
+    public void onClick(View view)
+    {
+        switch (view.getId())
+        {
+            case R.id.search_check:
+                Intent intent = new Intent();
+                intent.putExtra("place", searchEdit.getText().toString());
+                setResult(RESULT_OK, intent);
+                finish();
+                break;
+        }
     }
 }

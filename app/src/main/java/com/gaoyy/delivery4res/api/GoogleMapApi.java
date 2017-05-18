@@ -15,4 +15,8 @@ public interface GoogleMapApi
 
     @GET("geocode/json")
     Call<GeocodeInfo> getLatLng(@Query("address") String address, @Query("key") String key);
+
+
+    @GET("geocode/json")
+    Call<GeocodeInfo> query(@Query("address") String address, @Query("key") String key, @Query("region") String region);
 }

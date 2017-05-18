@@ -5,9 +5,6 @@ import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatCheckBox;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class RestaurantFragment extends BaseFragment
+public class RestaurantFragment extends BaseFragment implements View.OnClickListener
 {
 
     private TextInputLayout restPhoneTextinputlayout;
@@ -39,6 +36,7 @@ public class RestaurantFragment extends BaseFragment
     private AppCompatCheckBox restDoorBell;
     private TextInputLayout restRemarkTextinputlayout;
     private TextInputEditText restRemark;
+    private boolean isAddressSet = false;
 
 
     private List<RestInfo.BodyBean.RemarkDictBean> remarkDict;
@@ -99,6 +97,7 @@ public class RestaurantFragment extends BaseFragment
         // TODO: 2017/5/14 0014 设置不自动弹出输入法
         restPhone.clearFocus();
         restAddress.clearFocus();
+        restAddress.setFocusable(false);
         restApt.clearFocus();
         restRemark.clearFocus();
 
@@ -125,6 +124,7 @@ public class RestaurantFragment extends BaseFragment
         int y=(int)(Math.random()*100);
         restApt.setText(y+"");
         restRemark.setText(x+"  This is Test Data,PLEASE DO NOT ACCEPT THIS ORDER");
+
     }
 
     @Override
@@ -133,30 +133,7 @@ public class RestaurantFragment extends BaseFragment
         super.setListener();
 
         //TODO:设置输入监听，跳转到searchactivity去获取位置信息
-        restAddress.addTextChangedListener(new TextWatcher()
-        {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2)
-            {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
-            {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable)
-            {
-                String inputingText = editable.toString();
-                Intent intent = new Intent();
-                intent.putExtra("inputingText", inputingText);
-                intent.setClass(activity, SearchActivity.class);
-                startActivityForResult(intent, 1000);
-            }
-        });
+        restAddress.setOnClickListener(this);
     }
 
     @Override
@@ -168,7 +145,7 @@ public class RestaurantFragment extends BaseFragment
             case 1000:
                 if (resultCode == activity.RESULT_OK)
                 {
-                    Log.d("TAG", "收到返回值了收到了了子了了了了了了子了了了了了了了");
+                    restAddress.setText(data.getStringExtra("place"));
                 }
                 break;
         }
@@ -239,5 +216,19 @@ public class RestaurantFragment extends BaseFragment
         }
         CommonUtils.textInputLayoutSetting(restAddress, restAddressTextinputlayout, "Can't be empty");
         CommonUtils.textInputLayoutSetting(restApt, restAptTextinputlayout, "Can't be empty");
+    }
+
+    @Override
+    public void onClick(View view)
+    {
+        switch (view.getId())
+        {
+            case R.id.rest_address:
+                Intent intent = new Intent();
+                intent.putExtra("inputingText", "");
+                intent.setClass(activity, SearchActivity.class);
+                startActivityForResult(intent, 1000);
+                break;
+        }
     }
 }

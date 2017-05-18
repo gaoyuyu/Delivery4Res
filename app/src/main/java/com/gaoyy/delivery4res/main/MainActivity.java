@@ -8,11 +8,13 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import com.gaoyy.delivery4res.R;
+import com.gaoyy.delivery4res.api.Constant;
 import com.gaoyy.delivery4res.api.RetrofitService;
 import com.gaoyy.delivery4res.api.bean.CommonInfo;
 import com.gaoyy.delivery4res.api.bean.RestInfo;
@@ -102,6 +104,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
 
         ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), restaurantFragment, R.id.main_content);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent)
+    {
+        super.onNewIntent(intent);
+        Log.d(Constant.TAG,"MainActivity onNewIntent");
     }
 
     @Override

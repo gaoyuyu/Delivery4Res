@@ -51,13 +51,14 @@ public class ChangePwdPresenter implements ChangePwdContract.Presenter
                     CommonInfo commonInfo = response.body();
                     String msg = commonInfo.getMsg();
                     String errorCode = commonInfo.getErrorCode();
+
                     mChangePwdView.showToast(msg);
 
                     if(errorCode.equals("-1"))
                     {
 
                     }
-                    else if(errorCode.equals("-2"))
+                    else
                     {
                         //登录失败
                     }
