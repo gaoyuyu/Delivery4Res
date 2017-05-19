@@ -2,12 +2,9 @@ package com.gaoyy.delivery4res.main;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -18,10 +15,8 @@ import com.gaoyy.delivery4res.R;
 import com.gaoyy.delivery4res.api.Constant;
 import com.gaoyy.delivery4res.api.RetrofitService;
 import com.gaoyy.delivery4res.api.bean.GeocodeInfo;
-import com.gaoyy.delivery4res.api.bean.OrderSaveInfo;
 import com.gaoyy.delivery4res.base.BaseActivity;
 import com.gaoyy.delivery4res.base.CustomDialogFragment;
-import com.gaoyy.delivery4res.orderlist.OrderListActivity;
 import com.gaoyy.delivery4res.util.CommonUtils;
 import com.gaoyy.delivery4res.util.DialogUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -36,6 +31,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -130,6 +126,7 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
 
         Call<GeocodeInfo> call = RetrofitService.sGoogleMapApiService.getLatLng(customerAddr, Constant.GOOGLE_MAP_KEY);
         final CustomDialogFragment loading = DialogUtils.showLoadingDialog(this);
+        CommonUtils.httpDebugLogger("谷歌地图-根据位置获取经纬度");
         call.enqueue(new Callback<GeocodeInfo>()
         {
             @Override
@@ -139,29 +136,35 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
                 if (response.isSuccessful() && response.body() != null)
                 {
                     GeocodeInfo geocodeInfo = response.body();
+                    CommonUtils.httpDebugLogger("[status]" + geocodeInfo.getStatus());
+                    if (geocodeInfo.getStatus().equals("OK"))
+                    {
+                        customerAddrLat = geocodeInfo.getResults().get(0).getGeometry().getLocation().getLat();
+                        customerAddrLng = geocodeInfo.getResults().get(0).getGeometry().getLocation().getLng();
 
-                    customerAddrLat = geocodeInfo.getResults().get(0).getGeometry().getLocation().getLat();
-                    customerAddrLng = geocodeInfo.getResults().get(0).getGeometry().getLocation().getLng();
+                        CommonUtils.httpDebugLogger("[customerAddrLat=" + customerAddrLat + "][customerAddrLng=" + customerAddrLng + "]");
 
-                    Log.d(Constant.TAG,"customerAddrLat--->"+customerAddrLat);
-                    Log.d(Constant.TAG,"customerAddrLng--->"+customerAddrLng);
+                        LatLng res = new LatLng(Double.parseDouble(hotelLat), Double.parseDouble(hotelLng));
+                        LatLng cus = new LatLng(customerAddrLat, customerAddrLng);
 
-                    LatLng res = new LatLng(Double.parseDouble(hotelLat), Double.parseDouble(hotelLng));
-                    LatLng cus = new LatLng(customerAddrLat, customerAddrLng);
+                        MarkerOptions resOptions = new MarkerOptions()
+                                .position(res)
+                                .title(hotelAddr)
+                                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_restaurant_location));
+                        MarkerOptions cusOptions = new MarkerOptions()
+                                .position(cus)
+                                .title(customerAddr)
+                                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_customer_location));
 
-                    MarkerOptions resOptions = new MarkerOptions()
-                            .position(res)
-                            .title(hotelAddr)
-                            .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_restaurant_location));
-                    MarkerOptions cusOptions = new MarkerOptions()
-                            .position(cus)
-                            .title(customerAddr)
-                            .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_customer_location));
+                        mMap.addMarker(resOptions);
+                        mMap.addMarker(cusOptions);
 
-                    mMap.addMarker(resOptions);
-                    mMap.addMarker(cusOptions);
-
-                    mMap.animateCamera(CameraUpdateFactory.newLatLng(res));
+                        mMap.animateCamera(CameraUpdateFactory.newLatLng(res));
+                    }
+                    else
+                    {
+                        CommonUtils.showToast(OrderDetailActivity.this, geocodeInfo.getStatus());
+                    }
 
                 }
             }
@@ -170,6 +173,7 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
             public void onFailure(Call<GeocodeInfo> call, Throwable t)
             {
                 loading.dismiss();
+                CommonUtils.httpErrorLogger(t.toString());
             }
         });
     }
@@ -202,34 +206,55 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
      */
     private void orderSave()
     {
-        Map<String,String> params = new HashMap<>();
+        Map<String, String> params = new HashMap<>();
         params.put("loginName", CommonUtils.getLoginName(this));
-        params.put("randomCode",CommonUtils.getRandomCode(this));
-        params.put("customerTel",customerTel);
-        params.put("customerAddr",customerAddr);
-        params.put("apt",apt);
-        params.put("orderPrice","0");
-        params.put("remark",remark);
-        params.put("remarks",remarks);
-        params.put("customerLongitude",String.valueOf(customerAddrLng));
-        params.put("customerLatitude",String.valueOf(customerAddrLat));
-        params.put("finishedTime",finishedTime);
-        Call<OrderSaveInfo> call = RetrofitService.sApiService.orderSave(params);
+        params.put("randomCode", CommonUtils.getRandomCode(this));
+        params.put("customerTel", customerTel);
+        params.put("customerAddr", customerAddr);
+        params.put("apt", apt);
+        params.put("orderPrice", "0");
+        params.put("remark", remark);
+        params.put("remarks", remarks);
+        params.put("customerLongitude", String.valueOf(customerAddrLng));
+        params.put("customerLatitude", String.valueOf(customerAddrLat));
+        params.put("finishedTime", finishedTime);
+        Call<ResponseBody> call = RetrofitService.sApiService.orderSave(params);
         final CustomDialogFragment loading = DialogUtils.showLoadingDialog(this);
-        call.enqueue(new Callback<OrderSaveInfo>()
+        CommonUtils.httpDebugLogger("保存订单请求");
+        Log.d(Constant.TAG, "params==>" + params.toString());
+        call.enqueue(new Callback<ResponseBody>()
         {
             @Override
-            public void onResponse(Call<OrderSaveInfo> call, Response<OrderSaveInfo> response)
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response)
             {
                 loading.dismiss();
+                Log.d(Constant.TAG, response.isSuccessful() + "");
+                Log.d(Constant.TAG, response.body() + "");
+                Log.d(Constant.TAG,response.message());
                 if (response.isSuccessful() && response.body() != null)
                 {
-                    OrderSaveInfo orderSaveInfo = response.body();
-                    CommonUtils.showSnackBar(orderDetailToolbar,orderSaveInfo.getMsg());
-                    if(orderSaveInfo.getBody()!= null)
+
+                    try
                     {
-                        CustomDialogFragment dialog = DialogUtils.showAlertDialog(OrderDetailActivity.this,"Operation Successfully Competed","Order has been sent,wait for being accepted",
-                                "continue to send orders","Order Lists");
+                        Log.d(Constant.TAG,response.message());
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+
+                    /**
+                     *
+                    CommonInfo commonInfo = response.body();
+                    String msg = commonInfo.getMsg();
+                    String errorCode = commonInfo.getErrorCode();
+                    CommonUtils.httpDebugLogger("[isSuccess=" + commonInfo.isSuccess() + "][errorCode=" + errorCode + "][msg=" + msg + "]");
+
+                    CommonUtils.showToast(OrderDetailActivity.this, commonInfo.getMsg());
+                    if (errorCode.equals("-1"))
+                    {
+                        CustomDialogFragment dialog = DialogUtils.showAlertDialog(OrderDetailActivity.this, "Operation Successfully Competed", "Order has been sent,wait for being accepted",
+                                "continue to send orders", "Order Lists");
                         dialog.setOnAlertDialogClickListener(new CustomDialogFragment.OnAlertDialogClickListener()
                         {
                             @Override
@@ -242,7 +267,6 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
                                         finish();
                                         break;
                                     case AlertDialog.BUTTON_POSITIVE:
-                                        // TODO: 2017/5/13 0013  跳转到OrderList
                                         Intent orderList = new Intent();
                                         orderList.setClass(OrderDetailActivity.this, OrderListActivity.class);
                                         startActivity(orderList);
@@ -255,13 +279,15 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
                             }
                         });
                     }
+                     */
                 }
             }
 
             @Override
-            public void onFailure(Call<OrderSaveInfo> call, Throwable t)
+            public void onFailure(Call<ResponseBody> call, Throwable t)
             {
                 loading.dismiss();
+                CommonUtils.httpErrorLogger(t.toString());
             }
         });
     }

@@ -3,6 +3,7 @@ package com.gaoyy.delivery4res.changepwd;
 
 import com.gaoyy.delivery4res.api.RetrofitService;
 import com.gaoyy.delivery4res.api.bean.CommonInfo;
+import com.gaoyy.delivery4res.util.CommonUtils;
 
 import java.util.Map;
 
@@ -24,6 +25,7 @@ public class ChangePwdPresenter implements ChangePwdContract.Presenter
         this.mChangePwdView = mChangePwdView;
         mChangePwdView.setPresenter(this);
     }
+
     @Override
     public void start()
     {
@@ -34,6 +36,7 @@ public class ChangePwdPresenter implements ChangePwdContract.Presenter
     @Override
     public void changePwd(Map<String, String> params)
     {
+        CommonUtils.httpDebugLogger("修改密码请求");
         Call<CommonInfo> call = RetrofitService.sApiService.changePwd(params);
         mChangePwdView.showLoading();
         call.enqueue(new Callback<CommonInfo>()
@@ -51,16 +54,13 @@ public class ChangePwdPresenter implements ChangePwdContract.Presenter
                     CommonInfo commonInfo = response.body();
                     String msg = commonInfo.getMsg();
                     String errorCode = commonInfo.getErrorCode();
+                    CommonUtils.httpDebugLogger("[isSuccess="+commonInfo.isSuccess()+"][errorCode=" + errorCode + "][msg=" + msg + "]");
 
                     mChangePwdView.showToast(msg);
 
-                    if(errorCode.equals("-1"))
+                    if (errorCode.equals("-1"))
                     {
-
-                    }
-                    else
-                    {
-                        //登录失败
+                        mChangePwdView.redirectToLogin();
                     }
                 }
             }
@@ -68,7 +68,12 @@ public class ChangePwdPresenter implements ChangePwdContract.Presenter
             @Override
             public void onFailure(Call<CommonInfo> call, Throwable t)
             {
-
+                if (!mChangePwdView.isActive())
+                {
+                    return;
+                }
+                mChangePwdView.hideLoading();
+                CommonUtils.httpErrorLogger(t.toString());
             }
         });
     }

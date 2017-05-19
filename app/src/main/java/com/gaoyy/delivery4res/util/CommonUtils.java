@@ -214,4 +214,25 @@ public class CommonUtils
     }
 
 
+    /**
+     * 【DEBUG】用于输出http请求信息
+     *
+     * @param msg
+     */
+    public static void httpDebugLogger(String msg)
+    {
+        Log.d(Constant.TAG, "[-HTTP LOG-]" + "==========" + msg + "==========");
+    }
+
+    /**
+     * 【DEBUG】用于输出http请求信息
+     *
+     * @param msg
+     */
+    public static void httpErrorLogger(String msg)
+    {
+        Log.e(Constant.TAG, "[-HTTP LOG-]" + "==========" + msg + "==========");
+    }
+
+
 }

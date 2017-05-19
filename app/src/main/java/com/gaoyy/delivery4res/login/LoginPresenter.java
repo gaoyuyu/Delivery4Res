@@ -5,6 +5,7 @@ import android.util.Log;
 import com.gaoyy.delivery4res.api.Constant;
 import com.gaoyy.delivery4res.api.RetrofitService;
 import com.gaoyy.delivery4res.api.bean.RestInfo;
+import com.gaoyy.delivery4res.util.CommonUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -33,6 +34,7 @@ public class LoginPresenter implements LoginContract.Presenter
     public void login(Map<String, String> params)
     {
         Call<RestInfo> call = RetrofitService.sApiService.login(params);
+        CommonUtils.httpDebugLogger("登录请求");
         mLoginView.showLoading();
         call.enqueue(new Callback<RestInfo>()
         {
@@ -49,6 +51,7 @@ public class LoginPresenter implements LoginContract.Presenter
                     RestInfo restInfo = response.body();
                     String msg = restInfo.getMsg();
                     String errorCode = restInfo.getErrorCode();
+                    CommonUtils.httpDebugLogger("[isSuccess="+restInfo.isSuccess()+"][errorCode=" + errorCode + "][msg=" + msg + "]");
                     mLoginView.showToast(msg);
 
                     if(errorCode.equals("-1"))
@@ -79,7 +82,12 @@ public class LoginPresenter implements LoginContract.Presenter
             @Override
             public void onFailure(Call<RestInfo> call, Throwable t)
             {
-                Log.e(Constant.TAG, "==>" + t.toString());
+                if (!mLoginView.isActive())
+                {
+                    return;
+                }
+                mLoginView.hideLoading();
+                CommonUtils.httpErrorLogger(t.toString());
             }
         });
 

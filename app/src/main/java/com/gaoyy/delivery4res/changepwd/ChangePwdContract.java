@@ -20,6 +20,11 @@ public class ChangePwdContract
         void hideLoading();
         void showToast(String msg);
 
+        /**
+         * 修改密码成功后跳转到LoginActivity
+         */
+        void redirectToLogin();
+
     }
 
     interface Presenter extends BasePresenter

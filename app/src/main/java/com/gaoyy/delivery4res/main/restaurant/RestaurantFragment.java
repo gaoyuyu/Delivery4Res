@@ -119,11 +119,11 @@ public class RestaurantFragment extends BaseFragment implements View.OnClickList
 
 
         //测试数据
-        int x=(int)(Math.random()*1000000000);
-        restPhone.setText(x+"0");
-        int y=(int)(Math.random()*100);
-        restApt.setText(y+"");
-        restRemark.setText(x+"  This is Test Data,PLEASE DO NOT ACCEPT THIS ORDER");
+        int x = (int) (Math.random() * 1000000000);
+        restPhone.setText(x + "0");
+        int y = (int) (Math.random() * 100);
+        restApt.setText(y + "");
+        restRemark.setText(x + "  This is Test Data,PLEASE DO NOT ACCEPT THIS ORDER");
 
     }
 
@@ -146,6 +146,9 @@ public class RestaurantFragment extends BaseFragment implements View.OnClickList
                 if (resultCode == activity.RESULT_OK)
                 {
                     restAddress.setText(data.getStringExtra("place"));
+                    //将错误信息去除
+                    restAddressTextinputlayout.setError(null);
+                    restAddressTextinputlayout.setErrorEnabled(false);
                 }
                 break;
         }
@@ -214,7 +217,17 @@ public class RestaurantFragment extends BaseFragment implements View.OnClickList
             restPhoneTextinputlayout.setError(null);
             restPhoneTextinputlayout.setErrorEnabled(false);
         }
-        CommonUtils.textInputLayoutSetting(restAddress, restAddressTextinputlayout, "Can't be empty");
+        if (restAddress.getText().toString().equals("Click To Seach")||restAddress.getText().toString().equals(""))
+        {
+            restAddressTextinputlayout.setErrorEnabled(true);
+            restAddressTextinputlayout.setError("Can't be empty");
+        }
+        else
+        {
+            restAddressTextinputlayout.setError(null);
+            restAddressTextinputlayout.setErrorEnabled(false);
+        }
+
         CommonUtils.textInputLayoutSetting(restApt, restAptTextinputlayout, "Can't be empty");
     }
 

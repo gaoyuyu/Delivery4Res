@@ -11,7 +11,7 @@ public class OrderSaveInfo
      * success : true
      * errorCode : -1
      * msg : Save
-     * body : {"order":{"id":"b6bab4d1a5854813afc14ad3cb825530","isNewRecord":false,"remarks":"234994740  This is Test Data,PLEASE DO NOT ACCEPT THIS ORDER","createDate":"2017-05-12 08:38:27","updateDate":"2017-05-12 08:38:27","orderNo":"201705122222","customerName":null,"customerTel":"2349947400","customerAddr":"APT48,1552a rue Baxter","apt":"48","orderPrice":0,"createName":"hotel","hotelUser":"hotel","courierName":null,"actionName":null,"courierLogin":null,"courierTel":null,"acceptDate":null,"deliveryDate":null,"finishDate":null,"cancelDate":null,"pushDate":1494596307058,"status":0,"isTimeout":0,"pushCount":1,"finishedTime":"other","remark":"door bell not working","dispatch":null,"customerLongitude":"-73.6101765","customerLatitude":"45.438691","hotelLongitude":null,"hotelLatitude":null,"hotelAddr":null,"isHasCourierLogin":null,"validTime":null,"hotelTel":null,"date":null,"count":null,"remarkList":null,"pushFrequency":null,"price":"0.0"}}
+     * body : {"order":{"id":"ac9afaa24ec14f1687d7c7397d508ee3","isNewRecord":false,"remarks":"502202210  This is Test Data,PLEASE DO NOT ACCEPT THIS ORDER","createDate":"2017-05-19 13:57:23","updateDate":"2017-05-19 13:57:23","orderNo":"201705192222","customerName":null,"customerTel":"5022022100","customerAddr":"APT58,1522","apt":"58","orderPrice":0,"createName":"hotel","hotelUser":"hotel","courierName":null,"actionName":null,"courierLogin":null,"courierTel":null,"acceptDate":null,"deliveryDate":null,"finishDate":null,"cancelDate":null,"pushDate":1495220243526,"status":0,"isTimeout":0,"pushCount":1,"finishedTime":"other","remark":"","dispatch":null,"customerLongitude":"0.0","customerLatitude":"0.0","hotelLongitude":null,"hotelLatitude":null,"hotelAddr":null,"isHasCourierLogin":null,"validTime":null,"hotelTel":null,"date":null,"count":null,"remarkList":null,"pushFrequency":null,"price":"0.0"}}
      */
 
     private boolean success;
@@ -62,7 +62,7 @@ public class OrderSaveInfo
     public static class BodyBean
     {
         /**
-         * order : {"id":"b6bab4d1a5854813afc14ad3cb825530","isNewRecord":false,"remarks":"234994740  This is Test Data,PLEASE DO NOT ACCEPT THIS ORDER","createDate":"2017-05-12 08:38:27","updateDate":"2017-05-12 08:38:27","orderNo":"201705122222","customerName":null,"customerTel":"2349947400","customerAddr":"APT48,1552a rue Baxter","apt":"48","orderPrice":0,"createName":"hotel","hotelUser":"hotel","courierName":null,"actionName":null,"courierLogin":null,"courierTel":null,"acceptDate":null,"deliveryDate":null,"finishDate":null,"cancelDate":null,"pushDate":1494596307058,"status":0,"isTimeout":0,"pushCount":1,"finishedTime":"other","remark":"door bell not working","dispatch":null,"customerLongitude":"-73.6101765","customerLatitude":"45.438691","hotelLongitude":null,"hotelLatitude":null,"hotelAddr":null,"isHasCourierLogin":null,"validTime":null,"hotelTel":null,"date":null,"count":null,"remarkList":null,"pushFrequency":null,"price":"0.0"}
+         * order : {"id":"ac9afaa24ec14f1687d7c7397d508ee3","isNewRecord":false,"remarks":"502202210  This is Test Data,PLEASE DO NOT ACCEPT THIS ORDER","createDate":"2017-05-19 13:57:23","updateDate":"2017-05-19 13:57:23","orderNo":"201705192222","customerName":null,"customerTel":"5022022100","customerAddr":"APT58,1522","apt":"58","orderPrice":0,"createName":"hotel","hotelUser":"hotel","courierName":null,"actionName":null,"courierLogin":null,"courierTel":null,"acceptDate":null,"deliveryDate":null,"finishDate":null,"cancelDate":null,"pushDate":1495220243526,"status":0,"isTimeout":0,"pushCount":1,"finishedTime":"other","remark":"","dispatch":null,"customerLongitude":"0.0","customerLatitude":"0.0","hotelLongitude":null,"hotelLatitude":null,"hotelAddr":null,"isHasCourierLogin":null,"validTime":null,"hotelTel":null,"date":null,"count":null,"remarkList":null,"pushFrequency":null,"price":"0.0"}
          */
 
         private OrderBean order;
@@ -80,16 +80,16 @@ public class OrderSaveInfo
         public static class OrderBean
         {
             /**
-             * id : b6bab4d1a5854813afc14ad3cb825530
+             * id : ac9afaa24ec14f1687d7c7397d508ee3
              * isNewRecord : false
-             * remarks : 234994740  This is Test Data,PLEASE DO NOT ACCEPT THIS ORDER
-             * createDate : 2017-05-12 08:38:27
-             * updateDate : 2017-05-12 08:38:27
-             * orderNo : 201705122222
+             * remarks : 502202210  This is Test Data,PLEASE DO NOT ACCEPT THIS ORDER
+             * createDate : 2017-05-19 13:57:23
+             * updateDate : 2017-05-19 13:57:23
+             * orderNo : 201705192222
              * customerName : null
-             * customerTel : 2349947400
-             * customerAddr : APT48,1552a rue Baxter
-             * apt : 48
+             * customerTel : 5022022100
+             * customerAddr : APT58,1522
+             * apt : 58
              * orderPrice : 0
              * createName : hotel
              * hotelUser : hotel
@@ -101,15 +101,15 @@ public class OrderSaveInfo
              * deliveryDate : null
              * finishDate : null
              * cancelDate : null
-             * pushDate : 1494596307058
+             * pushDate : 1495220243526
              * status : 0
              * isTimeout : 0
              * pushCount : 1
              * finishedTime : other
-             * remark : door bell not working
+             * remark :
              * dispatch : null
-             * customerLongitude : -73.6101765
-             * customerLatitude : 45.438691
+             * customerLongitude : 0.0
+             * customerLatitude : 0.0
              * hotelLongitude : null
              * hotelLatitude : null
              * hotelAddr : null

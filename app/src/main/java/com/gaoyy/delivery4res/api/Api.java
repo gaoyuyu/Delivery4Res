@@ -4,11 +4,11 @@ package com.gaoyy.delivery4res.api;
 import com.gaoyy.delivery4res.api.bean.CommonInfo;
 import com.gaoyy.delivery4res.api.bean.OrderListInfo;
 import com.gaoyy.delivery4res.api.bean.OrderOperationStatusInfo;
-import com.gaoyy.delivery4res.api.bean.OrderSaveInfo;
 import com.gaoyy.delivery4res.api.bean.RestInfo;
 
 import java.util.Map;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
@@ -63,7 +63,7 @@ public interface Api
      */
     @FormUrlEncoded
     @POST("a/order/order/mobile/ordersave")
-    Call<OrderSaveInfo> orderSave(@FieldMap Map<String, String> params);
+    Call<ResponseBody> orderSave(@FieldMap Map<String, String> params);
 
     /**
      * 订单列表

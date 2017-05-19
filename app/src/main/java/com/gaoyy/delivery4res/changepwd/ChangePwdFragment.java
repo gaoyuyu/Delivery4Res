@@ -1,6 +1,7 @@
 package com.gaoyy.delivery4res.changepwd;
 
 
+import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.util.Log;
@@ -13,6 +14,7 @@ import com.gaoyy.delivery4res.R;
 import com.gaoyy.delivery4res.api.Constant;
 import com.gaoyy.delivery4res.base.BaseFragment;
 import com.gaoyy.delivery4res.base.CustomDialogFragment;
+import com.gaoyy.delivery4res.login.LoginActivity;
 import com.gaoyy.delivery4res.util.CommonUtils;
 import com.gaoyy.delivery4res.util.DialogUtils;
 
@@ -30,6 +32,7 @@ public class ChangePwdFragment extends BaseFragment implements ChangePwdContract
 
     private ChangePwdContract.Presenter mChangePwdPresenter;
     private CustomDialogFragment loading;
+
     public ChangePwdFragment()
     {
         // Required empty public constructor
@@ -40,6 +43,7 @@ public class ChangePwdFragment extends BaseFragment implements ChangePwdContract
         ChangePwdFragment fragment = new ChangePwdFragment();
         return fragment;
     }
+
     @Override
     protected int getFragmentLayoutId()
     {
@@ -62,8 +66,8 @@ public class ChangePwdFragment extends BaseFragment implements ChangePwdContract
      */
     public void validate()
     {
-        CommonUtils.textInputLayoutSetting(changeOldpwd,changeOldpwdTextinputlayout,"Can't be empty");
-        CommonUtils.textInputLayoutSetting(changeNewpwd,changeNewpwdTextinputlayout,"Can't be empty");
+        CommonUtils.textInputLayoutSetting(changeOldpwd, changeOldpwdTextinputlayout, "Can't be empty");
+        CommonUtils.textInputLayoutSetting(changeNewpwd, changeNewpwdTextinputlayout, "Can't be empty");
     }
 
     @Override
@@ -82,19 +86,21 @@ public class ChangePwdFragment extends BaseFragment implements ChangePwdContract
         {
             case R.id.action_change_pwd:
                 validate();
-                Map<String,String> params = new HashMap<>();
-                params.put("loginName",CommonUtils.getLoginName(activity));
-                params.put("randomCode",CommonUtils.getRandomCode(activity));
-                params.put("password",changeOldpwd.getText().toString());
-                params.put("newPassword",changeNewpwd.getText().toString());
-                mChangePwdPresenter.changePwd(params);
+                if (!(changeOldpwdTextinputlayout.isErrorEnabled() || changeNewpwdTextinputlayout.isErrorEnabled()))
+                {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("loginName", CommonUtils.getLoginName(activity));
+                    params.put("randomCode", CommonUtils.getRandomCode(activity));
+                    params.put("password", changeOldpwd.getText().toString());
+                    params.put("newPassword", changeNewpwd.getText().toString());
+                    mChangePwdPresenter.changePwd(params);
+                }
                 break;
         }
 
 
         return super.onOptionsItemSelected(item);
     }
-
 
 
     @Override
@@ -129,6 +135,13 @@ public class ChangePwdFragment extends BaseFragment implements ChangePwdContract
     public void showToast(String msg)
     {
         CommonUtils.showToast(activity, msg);
+    }
+
+    @Override
+    public void redirectToLogin()
+    {
+        Intent login = new Intent(activity, LoginActivity.class);
+        startActivity(login);
     }
 
     @Override

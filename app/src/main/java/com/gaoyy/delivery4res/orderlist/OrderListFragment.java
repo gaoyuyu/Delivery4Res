@@ -251,6 +251,7 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
     {
         final CustomDialogFragment cancleADLoading = DialogUtils.showLoadingDialog(activity);
         Call<OrderOperationStatusInfo> cancleADCall = RetrofitService.sApiService.orderBack(CommonUtils.getLoginName(activity), CommonUtils.getRandomCode(activity), order.getId());
+        CommonUtils.httpDebugLogger("饭店退单请求");
         cancleADCall.enqueue(new Callback<OrderOperationStatusInfo>()
         {
             @Override
@@ -260,6 +261,10 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
                 if (response.isSuccessful() && response.body() != null)
                 {
                     OrderOperationStatusInfo oosi = response.body();
+                    String msg = oosi.getMsg();
+                    String errorCode = oosi.getErrorCode();
+                    CommonUtils.httpDebugLogger("[isSuccess="+oosi.isSuccess()+"][errorCode=" + errorCode + "][msg=" + msg + "]");
+
                     CommonUtils.showSnackBar(commonRv, oosi.getMsg());
                     if (oosi.isSuccess() && oosi.getErrorCode().equals("-1"))
                     {
@@ -278,6 +283,7 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
             public void onFailure(Call<OrderOperationStatusInfo> call, Throwable t)
             {
                 cancleADLoading.dismiss();
+                CommonUtils.httpErrorLogger(t.toString());
             }
         });
     }
@@ -291,6 +297,7 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
     {
         final CustomDialogFragment deliveryLoading = DialogUtils.showLoadingDialog(activity);
         Call<OrderOperationStatusInfo> deliveryCall = RetrofitService.sApiService.orderSend(CommonUtils.getLoginName(activity), CommonUtils.getRandomCode(activity), order.getId());
+        CommonUtils.httpDebugLogger("饭店及司机订单派送请求");
         deliveryCall.enqueue(new Callback<OrderOperationStatusInfo>()
         {
             @Override
@@ -300,6 +307,9 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
                 if (response.isSuccessful() && response.body() != null)
                 {
                     OrderOperationStatusInfo oosi = response.body();
+                    String msg = oosi.getMsg();
+                    String errorCode = oosi.getErrorCode();
+                    CommonUtils.httpDebugLogger("[isSuccess="+oosi.isSuccess()+"][errorCode=" + errorCode + "][msg=" + msg + "]");
                     CommonUtils.showSnackBar(commonRv, oosi.getMsg());
                     if (oosi.isSuccess() && oosi.getErrorCode().equals("-1"))
                     {
@@ -318,6 +328,7 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
             public void onFailure(Call<OrderOperationStatusInfo> call, Throwable t)
             {
                 deliveryLoading.dismiss();
+                CommonUtils.httpErrorLogger(t.toString());
             }
         });
     }
@@ -331,6 +342,7 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
     {
         final CustomDialogFragment resubmitLoading = DialogUtils.showLoadingDialog(activity);
         Call<OrderOperationStatusInfo> resubmitCall = RetrofitService.sApiService.orderResubmit(CommonUtils.getLoginName(activity), CommonUtils.getRandomCode(activity), order.getId());
+        CommonUtils.httpDebugLogger("餐厅resubmit请求");
         resubmitCall.enqueue(new Callback<OrderOperationStatusInfo>()
         {
             @Override
@@ -340,6 +352,9 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
                 if (response.isSuccessful() && response.body() != null)
                 {
                     OrderOperationStatusInfo oosi = response.body();
+                    String msg = oosi.getMsg();
+                    String errorCode = oosi.getErrorCode();
+                    CommonUtils.httpDebugLogger("[isSuccess="+oosi.isSuccess()+"][errorCode=" + errorCode + "][msg=" + msg + "]");
                     CommonUtils.showSnackBar(commonRv, oosi.getMsg());
                     if (oosi.isSuccess() && oosi.getErrorCode().equals("-1"))
                     {
@@ -357,6 +372,7 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
             public void onFailure(Call<OrderOperationStatusInfo> call, Throwable t)
             {
                 resubmitLoading.dismiss();
+                CommonUtils.httpErrorLogger(t.toString());
             }
         });
     }
@@ -369,6 +385,7 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
     {
         final CustomDialogFragment cancleLoading = DialogUtils.showLoadingDialog(activity);
         Call<OrderOperationStatusInfo> cancleCall = RetrofitService.sApiService.orderCancle(CommonUtils.getLoginName(activity), CommonUtils.getRandomCode(activity), order.getId());
+        CommonUtils.httpDebugLogger("饭店订单取消请求");
         cancleCall.enqueue(new Callback<OrderOperationStatusInfo>()
         {
             @Override
@@ -378,6 +395,9 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
                 if (response.isSuccessful() && response.body() != null)
                 {
                     OrderOperationStatusInfo oosi = response.body();
+                    String msg = oosi.getMsg();
+                    String errorCode = oosi.getErrorCode();
+                    CommonUtils.httpDebugLogger("[isSuccess="+oosi.isSuccess()+"][errorCode=" + errorCode + "][msg=" + msg + "]");
                     CommonUtils.showSnackBar(commonRv, oosi.getMsg());
                     if (oosi.isSuccess() && oosi.getErrorCode().equals("-1"))
                     {
@@ -396,6 +416,7 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
             public void onFailure(Call<OrderOperationStatusInfo> call, Throwable t)
             {
                 cancleLoading.dismiss();
+                CommonUtils.httpErrorLogger(t.toString());
             }
         });
     }

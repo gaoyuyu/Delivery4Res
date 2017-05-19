@@ -11,7 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.gaoyy.delivery4res.R;
 import com.gaoyy.delivery4res.adapter.SearchListAdapter;
@@ -33,7 +33,7 @@ public class SearchActivity extends BaseActivity implements SearchListAdapter.On
 {
     private Toolbar searchToolbar;
     private ProgressWheel searchProgressWheel;
-    private ImageButton seachCheck;
+    private ImageView seachCheck;
     private EditText searchEdit;
     private RecyclerView searchRv;
     private SearchListAdapter searchListAdapter;
@@ -52,7 +52,7 @@ public class SearchActivity extends BaseActivity implements SearchListAdapter.On
     {
         super.assignViews();
         searchToolbar = (Toolbar) findViewById(R.id.search_toolbar);
-        seachCheck = (ImageButton) findViewById(R.id.search_check);
+        seachCheck = (ImageView) findViewById(R.id.search_check);
         searchProgressWheel = (ProgressWheel) findViewById(R.id.search_progresswheel);
         searchEdit = (EditText) findViewById(R.id.search_edit);
         searchRv = (RecyclerView) findViewById(R.id.search_rv);
@@ -104,39 +104,45 @@ public class SearchActivity extends BaseActivity implements SearchListAdapter.On
             @Override
             public void afterTextChanged(Editable editable)
             {
-                String address = editable.toString();
-                Call<GeocodeInfo> call = RetrofitService.sGoogleMapApiService.query(address, Constant.GOOGLE_MAP_KEY, "CA");
-                searchProgressWheel.setVisibility(View.VISIBLE);
-                searchRv.setVisibility(View.GONE);
-                call.enqueue(new Callback<GeocodeInfo>()
+                if (!editable.toString().equals(""))
                 {
-                    @Override
-                    public void onResponse(Call<GeocodeInfo> call, Response<GeocodeInfo> response)
+                    String address = editable.toString();
+                    Call<GeocodeInfo> call = RetrofitService.sGoogleMapApiService.query(address, Constant.GOOGLE_MAP_KEY, "CA");
+                    CommonUtils.httpDebugLogger("谷歌地图-位置模糊查询");
+                    searchProgressWheel.setVisibility(View.VISIBLE);
+                    searchRv.setVisibility(View.GONE);
+                    call.enqueue(new Callback<GeocodeInfo>()
                     {
-                        searchProgressWheel.setVisibility(View.GONE);
-                        searchRv.setVisibility(View.VISIBLE);
-                        if (response.isSuccessful() && response.body() != null)
+                        @Override
+                        public void onResponse(Call<GeocodeInfo> call, Response<GeocodeInfo> response)
                         {
-                            GeocodeInfo geocodeInfo = response.body();
-                            if (geocodeInfo.getStatus().equals("OK"))
+                            searchProgressWheel.setVisibility(View.GONE);
+                            searchRv.setVisibility(View.VISIBLE);
+                            if (response.isSuccessful() && response.body() != null)
                             {
-                                List<GeocodeInfo.ResultsBean> list = geocodeInfo.getResults();
-                                searchListAdapter.updateData(list);
-                            }
-                            else
-                            {
-                                CommonUtils.showSnackBar(searchToolbar, geocodeInfo.getStatus());
+                                GeocodeInfo geocodeInfo = response.body();
+                                CommonUtils.httpDebugLogger("[status]"+geocodeInfo.getStatus());
+                                if (geocodeInfo.getStatus().equals("OK"))
+                                {
+                                    List<GeocodeInfo.ResultsBean> list = geocodeInfo.getResults();
+                                    searchListAdapter.updateData(list);
+                                }
+                                else
+                                {
+                                    CommonUtils.showSnackBar(searchToolbar, geocodeInfo.getStatus());
+                                }
                             }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<GeocodeInfo> call, Throwable t)
-                    {
-                        searchProgressWheel.setVisibility(View.GONE);
-                        searchRv.setVisibility(View.VISIBLE);
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<GeocodeInfo> call, Throwable t)
+                        {
+                            searchProgressWheel.setVisibility(View.GONE);
+                            searchRv.setVisibility(View.VISIBLE);
+                            CommonUtils.httpErrorLogger(t.toString());
+                        }
+                    });
+                }
             }
         });
 

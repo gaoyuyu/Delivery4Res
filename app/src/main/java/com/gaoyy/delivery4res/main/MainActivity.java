@@ -37,6 +37,9 @@ import retrofit2.Response;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener
 {
+
+
+    // TODO: 2017/5/20 0020 需要加双击2次退出
     private Toolbar mainToolbar;
     private FloatingActionButton mainFab;
 
@@ -166,6 +169,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private void logout(String loginName, String randomCode)
     {
         Call<CommonInfo> call = RetrofitService.sApiService.logout(loginName, randomCode);
+        CommonUtils.httpDebugLogger("退出请求");
         final CustomDialogFragment loading = DialogUtils.showLoadingDialog(this);
         call.enqueue(new Callback<CommonInfo>()
         {
@@ -178,17 +182,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     CommonInfo logoutInfo = response.body();
                     String msg = logoutInfo.getMsg();
                     String errorCode = logoutInfo.getErrorCode();
+                    CommonUtils.httpDebugLogger("[isSuccess="+logoutInfo.isSuccess()+"][errorCode=" + errorCode + "][msg=" + msg + "]");
+                    CommonUtils.showToast(MainActivity.this, msg);
                     if (errorCode.equals("-1"))
                     {
                         Intent intent = new Intent();
                         intent.setClass(MainActivity.this, LoginActivity.class);
                         startActivity(intent);
                         finish();
-                        CommonUtils.showToast(MainActivity.this, msg);
-                    }
-                    else if (errorCode.equals("-2"))
-                    {
-                        CommonUtils.showToast(MainActivity.this, msg);
                     }
                 }
             }
@@ -197,6 +198,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             public void onFailure(Call<CommonInfo> call, Throwable t)
             {
                 loading.dismiss();
+                CommonUtils.httpErrorLogger(t.toString());
             }
         });
     }

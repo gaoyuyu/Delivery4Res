@@ -46,10 +46,10 @@
 
         <activity
             android:name=".main.MainActivity"
-            android:launchMode="singleTask"
             android:label="@string/app_name"
-            android:windowSoftInputMode="stateHidden"
-            android:theme="@style/AppTheme.WithDrawerTheme">
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.WithDrawerTheme"
+            android:windowSoftInputMode="stateHidden">
         </activity>
         <activity
             android:name=".login.LoginActivity"
@@ -73,8 +73,9 @@
             android:name=".main.OrderDetailActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".orderlist.OrderListActivity"
-              android:theme="@style/AppTheme.NoActionBar"
+        <activity
+            android:name=".orderlist.OrderListActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             >
         </activity>
     </application>
