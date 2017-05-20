@@ -52,7 +52,7 @@
             android:id="@+id/item_order_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:gravity="start"
             android:padding="5dp"
             android:text="APT20,1552a rue Baxter"
             android:textColor="@android:color/darker_gray"
@@ -161,6 +161,7 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:text="啊实打实大"
+                android:gravity="start"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="15sp"/>
 
@@ -188,6 +189,7 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:text="555555555555555555555"
+                android:gravity="start"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="15sp"/>
 
