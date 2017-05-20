@@ -2,7 +2,6 @@ package com.gaoyy.delivery4res.main;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -38,10 +37,8 @@ import retrofit2.Response;
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener
 {
 
-
     // TODO: 2017/5/20 0020 需要加双击2次退出
     private Toolbar mainToolbar;
-    private FloatingActionButton mainFab;
 
     private DrawerLayout mainDrawerLayout;
     private NavigationView mainNavView;
@@ -63,7 +60,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     {
         super.assignViews();
         mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
-        mainFab = (FloatingActionButton) findViewById(R.id.main_fab);
         mainDrawerLayout = (DrawerLayout) findViewById(R.id.main_drawer_layout);
         mainNavView = (NavigationView) findViewById(R.id.main_nav_view);
     }

@@ -46,7 +46,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/customer_address"
                     android:inputType="textMultiLine"
-                    android:text="Click To Seach"
+                    android:text="中国广东省广州市天河区车陂车陂路425号"
                     android:textColor="@color/text_basic_color"/>
 
 

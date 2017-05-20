@@ -56,4 +56,7 @@
     <string name="order_no">Order No：</string>
     <string name="finished_time">Finished Time：</string>
 
+
+    <string name="exit_after_press_again">Exit After Press Again</string>
+
 </resources>
