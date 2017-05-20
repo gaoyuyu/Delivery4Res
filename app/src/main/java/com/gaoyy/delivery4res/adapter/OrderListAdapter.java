@@ -64,7 +64,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         OrderListInfo.BodyBean.PageBean.ListBean order = data.get(position);
         int orderStatus = order.getStatus();
         List<RestInfo.BodyBean.DictStatusBean> dictStatus = MainActivity.dictStatus;
-        vh.itemOrderAddress.setText(order.getId()+"===="+order.getCustomerAddr());
+        vh.itemOrderAddress.setText(order.getCustomerAddr());
         vh.itemOrderDriverName.setText(order.getCourierName());
         vh.itemOrderCustomerPhone.setText(order.getCustomerTel());
         vh.itemOrderNo.setText(order.getOrderNo());
@@ -82,7 +82,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             {
                 Log.d(Constant.TAG, "adapter order status is Wait");
                 vh.itemOrderStatus.setBackgroundColor(context.getResources().getColor(android.R.color.holo_green_dark));
-                vh.itemOrderStatus.setText("Wait");
+                vh.itemOrderStatus.setText(R.string.status_wait);
                 vh.itemOrderStatusDate.setText(order.getCreateDate());
                 //隐藏司机名字
                 vh.itemOrderDriverNameLayout.setVisibility(View.GONE);
@@ -108,7 +108,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             {
                 Log.d(Constant.TAG,"adapter order status is Accept");
                 vh.itemOrderStatus.setBackgroundColor(context.getResources().getColor(android.R.color.holo_orange_dark));
-                vh.itemOrderStatus.setText("Accept");
+                vh.itemOrderStatus.setText(R.string.status_accept);
                 vh.itemOrderStatusDate.setText(order.getAcceptDate());
 
                 //显示按钮组
@@ -125,7 +125,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             {
                 Log.d(Constant.TAG,"adapter order status is Delivery");
                 vh.itemOrderStatus.setBackgroundColor(context.getResources().getColor(android.R.color.holo_red_dark));
-                vh.itemOrderStatus.setText("Delivery");
+                vh.itemOrderStatus.setText(R.string.status_delivery);
                 vh.itemOrderStatusDate.setText(order.getDeliveryDate());
                 //显示按钮组
                 vh.itemOrderOperationLayout.setVisibility(View.VISIBLE);
@@ -140,7 +140,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             {
 //                Log.d(Constant.TAG,"adapter order status is Finish");
                 vh.itemOrderStatus.setBackgroundColor(context.getResources().getColor(android.R.color.darker_gray));
-                vh.itemOrderStatus.setText("Finish");
+                vh.itemOrderStatus.setText(R.string.status_finish);
                 vh.itemOrderStatusDate.setText(order.getFinishDate());
 
                 //不显示按钮
@@ -151,7 +151,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             {
 //                Log.d(Constant.TAG,"adapter order status is Cancel");
                 vh.itemOrderStatus.setBackgroundColor(context.getResources().getColor(android.R.color.darker_gray));
-                vh.itemOrderStatus.setText("Cancel");
+                vh.itemOrderStatus.setText(R.string.status_cancle);
                 vh.itemOrderStatusDate.setText((String) order.getCancelDate());
 
                 //不显示按钮
@@ -162,7 +162,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             {
 //                Log.d(Constant.TAG,"adapter order status is Back");
                 vh.itemOrderStatus.setBackgroundColor(context.getResources().getColor(android.R.color.darker_gray));
-                vh.itemOrderStatus.setText("Back");
+                vh.itemOrderStatus.setText(R.string.status_back);
                 vh.itemOrderStatusDate.setText((String) order.getCancelDate());
 
                 //不显示按钮

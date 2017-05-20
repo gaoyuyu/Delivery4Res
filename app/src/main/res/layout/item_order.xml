@@ -7,9 +7,9 @@
     android:layout_marginLeft="2dp"
     android:layout_marginRight="2dp"
     android:layout_marginTop="2dp"
+    android:foreground="?attr/selectableItemBackground"
     app:cardCornerRadius="10dp"
     app:cardElevation="5dp"
-    android:foreground="?attr/selectableItemBackground"
     >
 
     <LinearLayout
@@ -70,7 +70,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:padding="5dp"
-                android:text="Driver's Name："
+                android:text="@string/driver_name"
                 android:textColor="@android:color/darker_gray"
                 />
 
@@ -124,7 +124,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:padding="5dp"
-                android:text="orderNo："
+                android:text="@string/order_no"
                 android:textColor="@android:color/darker_gray"
                 />
 
@@ -151,7 +151,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:padding="5dp"
-                android:text="Note："
+                android:text="@string/notes"
                 android:textColor="@android:color/darker_gray"
                 />
 
@@ -178,7 +178,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:padding="5dp"
-                android:text="Otrhers："
+                android:text="@string/others"
                 android:textColor="@android:color/darker_gray"
                 />
 
@@ -205,7 +205,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:padding="5dp"
-                android:text="Finished Time："
+                android:text="@string/finished_time"
                 android:textColor="@android:color/darker_gray"
                 />
 
@@ -231,7 +231,7 @@
                 style="@style/Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cancle"
+                android:text="@string/status_cancle_btn"
                 />
 
             <android.support.v7.widget.AppCompatButton
@@ -239,7 +239,7 @@
                 style="@style/Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="rebsubmit"
+                android:text="@string/status_resubmit_btn"
                 />
 
             <android.support.v7.widget.AppCompatButton
@@ -247,7 +247,7 @@
                 style="@style/Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Delivery"
+                android:text="@string/status_delivery_btn"
                 />
 
             <android.support.v7.widget.AppCompatButton
@@ -255,7 +255,7 @@
                 style="@style/Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="CancleAD"
+                android:text="@string/status_cancle_btn"
                 />
         </LinearLayout>
 

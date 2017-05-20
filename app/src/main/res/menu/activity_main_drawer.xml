@@ -5,16 +5,16 @@
         <item
             android:id="@+id/nav_order_list"
             android:icon="@drawable/ic_order_list"
-            android:title="Order List"/>
+            android:title="@string/menu_order_list"/>
         <item
             android:id="@+id/nav_change_pwd"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Change Password"/>
+            android:title="@string/menu_change_pwd"/>
 
         <item
             android:id="@+id/nav_exit"
             android:icon="@drawable/ic_logout"
-            android:title="Sign Out"/>
+            android:title="@string/menu_sign_out"/>
     </group>
 
 

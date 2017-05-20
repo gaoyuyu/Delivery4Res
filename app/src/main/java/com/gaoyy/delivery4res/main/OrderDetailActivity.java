@@ -2,9 +2,12 @@ package com.gaoyy.delivery4res.main;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -14,9 +17,11 @@ import android.widget.TextView;
 import com.gaoyy.delivery4res.R;
 import com.gaoyy.delivery4res.api.Constant;
 import com.gaoyy.delivery4res.api.RetrofitService;
+import com.gaoyy.delivery4res.api.bean.CommonInfo;
 import com.gaoyy.delivery4res.api.bean.GeocodeInfo;
 import com.gaoyy.delivery4res.base.BaseActivity;
 import com.gaoyy.delivery4res.base.CustomDialogFragment;
+import com.gaoyy.delivery4res.orderlist.OrderListActivity;
 import com.gaoyy.delivery4res.util.CommonUtils;
 import com.gaoyy.delivery4res.util.DialogUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -31,7 +36,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.HashMap;
 import java.util.Map;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -90,7 +94,7 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
     @Override
     protected void initToolbar()
     {
-        super.initToolbar(orderDetailToolbar, "订单详情", true, -1);
+        super.initToolbar(orderDetailToolbar, R.string.toolbar_title_order_detail, true, -1);
     }
 
 
@@ -218,33 +222,21 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
         params.put("customerLongitude", String.valueOf(customerAddrLng));
         params.put("customerLatitude", String.valueOf(customerAddrLat));
         params.put("finishedTime", finishedTime);
-        Call<ResponseBody> call = RetrofitService.sApiService.orderSave(params);
+        Call<CommonInfo> call = RetrofitService.sApiService.orderSave(params);
         final CustomDialogFragment loading = DialogUtils.showLoadingDialog(this);
         CommonUtils.httpDebugLogger("保存订单请求");
         Log.d(Constant.TAG, "params==>" + params.toString());
-        call.enqueue(new Callback<ResponseBody>()
+        call.enqueue(new Callback<CommonInfo>()
         {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response)
+            public void onResponse(Call<CommonInfo> call, Response<CommonInfo> response)
             {
                 loading.dismiss();
                 Log.d(Constant.TAG, response.isSuccessful() + "");
                 Log.d(Constant.TAG, response.body() + "");
-                Log.d(Constant.TAG,response.message());
+                Log.d(Constant.TAG, response.message());
                 if (response.isSuccessful() && response.body() != null)
                 {
-
-                    try
-                    {
-                        Log.d(Constant.TAG,response.message());
-                    }
-                    catch (Exception e)
-                    {
-                        e.printStackTrace();
-                    }
-
-                    /**
-                     *
                     CommonInfo commonInfo = response.body();
                     String msg = commonInfo.getMsg();
                     String errorCode = commonInfo.getErrorCode();
@@ -253,8 +245,9 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
                     CommonUtils.showToast(OrderDetailActivity.this, commonInfo.getMsg());
                     if (errorCode.equals("-1"))
                     {
-                        CustomDialogFragment dialog = DialogUtils.showAlertDialog(OrderDetailActivity.this, "Operation Successfully Competed", "Order has been sent,wait for being accepted",
-                                "continue to send orders", "Order Lists");
+                        CustomDialogFragment dialog = DialogUtils.showAlertDialog(OrderDetailActivity.this, getResources().getString(R.string.order_submit_success),
+                                getResources().getString(R.string.order_submit_success_sub),
+                                getResources().getString(R.string.dialog_order_list), getResources().getString(R.string.dialog_continue_to_send_order));
                         dialog.setOnAlertDialogClickListener(new CustomDialogFragment.OnAlertDialogClickListener()
                         {
                             @Override
@@ -279,12 +272,11 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
                             }
                         });
                     }
-                     */
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t)
+            public void onFailure(Call<CommonInfo> call, Throwable t)
             {
                 loading.dismiss();
                 CommonUtils.httpErrorLogger(t.toString());

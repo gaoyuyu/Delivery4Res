@@ -36,7 +36,7 @@ public class OrderListActivity extends BaseActivity
     @Override
     protected void initToolbar()
     {
-        super.initToolbar(orderListToolbar,"订单列表",true,-1);
+        super.initToolbar(orderListToolbar, R.string.toolbar_title_order_list, true, -1);
     }
 
 
@@ -49,7 +49,7 @@ public class OrderListActivity extends BaseActivity
         if (orderListFragment == null)
         {
             orderListFragment = OrderListFragment.newInstance();
-            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),orderListFragment, R.id.order_list_content);
+            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), orderListFragment, R.id.order_list_content);
         }
         new OrderListPresenter(orderListFragment);
     }
