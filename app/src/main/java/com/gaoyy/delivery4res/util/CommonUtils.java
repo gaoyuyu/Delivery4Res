@@ -225,7 +225,7 @@ public class CommonUtils
     }
 
     /**
-     * 【DEBUG】用于输出http请求信息
+     * 【ERROR】用于输出http请求错误信息
      *
      * @param msg
      */
