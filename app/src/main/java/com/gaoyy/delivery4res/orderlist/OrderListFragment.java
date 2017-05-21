@@ -216,7 +216,8 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
     @Override
     public void onRefresh()
     {
-        Map<String, String> params = getOrderListParams(1, pageSize);
+        pageNo=1;
+        Map<String, String> params = getOrderListParams(pageNo, pageSize);
         Log.d(Constant.TAG, "下拉刷新，传递参数-->" + params.toString());
         mOrderListPresenter.orderList(params, PULL_TO_REFRESH);
     }

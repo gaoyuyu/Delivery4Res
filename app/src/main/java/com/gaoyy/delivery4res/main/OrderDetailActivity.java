@@ -127,59 +127,6 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
         orderDetailNotes.setText(remark);
         orderDetailFinishTime.setText(finishedTime);
         orderDetailOther.setText(remarks);
-
-        Call<GeocodeInfo> call = RetrofitService.sGoogleMapApiService.getLatLng(customerAddr, Constant.GOOGLE_MAP_KEY);
-        final CustomDialogFragment loading = DialogUtils.showLoadingDialog(this);
-        CommonUtils.httpDebugLogger("谷歌地图-根据位置获取经纬度");
-        call.enqueue(new Callback<GeocodeInfo>()
-        {
-            @Override
-            public void onResponse(Call<GeocodeInfo> call, Response<GeocodeInfo> response)
-            {
-                loading.dismiss();
-                if (response.isSuccessful() && response.body() != null)
-                {
-                    GeocodeInfo geocodeInfo = response.body();
-                    CommonUtils.httpDebugLogger("[status]" + geocodeInfo.getStatus());
-                    if (geocodeInfo.getStatus().equals("OK"))
-                    {
-                        customerAddrLat = geocodeInfo.getResults().get(0).getGeometry().getLocation().getLat();
-                        customerAddrLng = geocodeInfo.getResults().get(0).getGeometry().getLocation().getLng();
-
-                        CommonUtils.httpDebugLogger("[customerAddrLat=" + customerAddrLat + "][customerAddrLng=" + customerAddrLng + "]");
-
-                        LatLng res = new LatLng(Double.parseDouble(hotelLat), Double.parseDouble(hotelLng));
-                        LatLng cus = new LatLng(customerAddrLat, customerAddrLng);
-
-                        MarkerOptions resOptions = new MarkerOptions()
-                                .position(res)
-                                .title(hotelAddr)
-                                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_restaurant_location));
-                        MarkerOptions cusOptions = new MarkerOptions()
-                                .position(cus)
-                                .title(customerAddr)
-                                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_customer_location));
-
-                        mMap.addMarker(resOptions);
-                        mMap.addMarker(cusOptions);
-
-                        mMap.animateCamera(CameraUpdateFactory.newLatLng(res));
-                    }
-                    else
-                    {
-                        CommonUtils.showToast(OrderDetailActivity.this, geocodeInfo.getStatus());
-                    }
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<GeocodeInfo> call, Throwable t)
-            {
-                loading.dismiss();
-                CommonUtils.httpErrorLogger(t.toString());
-            }
-        });
     }
 
     @Override
@@ -257,12 +204,13 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
                                 {
                                     case AlertDialog.BUTTON_NEGATIVE:
                                         dialog.dismiss();
-                                        finish();
-                                        break;
-                                    case AlertDialog.BUTTON_POSITIVE:
                                         Intent orderList = new Intent();
                                         orderList.setClass(OrderDetailActivity.this, OrderListActivity.class);
                                         startActivity(orderList);
+                                        finish();
+                                        break;
+                                    case AlertDialog.BUTTON_POSITIVE:
+                                        dialog.dismiss();
                                         finish();
                                         break;
                                     default:
@@ -289,6 +237,64 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
     {
         mMap = googleMap;
         configMapUiSettings();
+
+
+        Call<GeocodeInfo> call = RetrofitService.sGoogleMapApiService.getLatLng(customerAddr, Constant.GOOGLE_MAP_KEY);
+        final CustomDialogFragment loading = DialogUtils.showLoadingDialog(this);
+        CommonUtils.httpDebugLogger("谷歌地图-根据位置获取经纬度");
+        call.enqueue(new Callback<GeocodeInfo>()
+        {
+            @Override
+            public void onResponse(Call<GeocodeInfo> call, Response<GeocodeInfo> response)
+            {
+                loading.dismiss();
+                if (response.isSuccessful() && response.body() != null)
+                {
+                    GeocodeInfo geocodeInfo = response.body();
+                    CommonUtils.httpDebugLogger("[status]" + geocodeInfo.getStatus());
+                    if (geocodeInfo.getStatus().equals("OK"))
+                    {
+                        customerAddrLat = geocodeInfo.getResults().get(0).getGeometry().getLocation().getLat();
+                        customerAddrLng = geocodeInfo.getResults().get(0).getGeometry().getLocation().getLng();
+
+                        CommonUtils.httpDebugLogger("[customerAddrLat=" + customerAddrLat + "][customerAddrLng=" + customerAddrLng + "]");
+
+                        LatLng res = new LatLng(Double.parseDouble(hotelLat), Double.parseDouble(hotelLng));
+                        LatLng cus = new LatLng(customerAddrLat, customerAddrLng);
+
+                        MarkerOptions resOptions = new MarkerOptions()
+                                .position(res)
+                                .title(hotelAddr)
+                                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_restaurant_location));
+                        MarkerOptions cusOptions = new MarkerOptions()
+                                .position(cus)
+                                .title(customerAddr)
+                                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_customer_location));
+
+                        mMap.addMarker(resOptions);
+                        mMap.addMarker(cusOptions);
+
+                        mMap.animateCamera(CameraUpdateFactory.newLatLng(res));
+                    }
+                    else
+                    {
+                        CommonUtils.showToast(OrderDetailActivity.this, geocodeInfo.getStatus());
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GeocodeInfo> call, Throwable t)
+            {
+                loading.dismiss();
+                CommonUtils.httpErrorLogger(t.toString());
+            }
+        });
+
+
+
+
     }
 
     /**

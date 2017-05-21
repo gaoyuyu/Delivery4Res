@@ -25,7 +25,7 @@
     <string name="change_new_pwd">new password</string>
     <string name="action_change_pwd">reset</string>
     <string name="starting_point">Starting Point：</string>
-    <string name="distination">Distination：</string>
+    <string name="destination">Destination：</string>
     <string name="customer_phone_short">Cust.Phone：</string>
     <string name="notes">Notes：</string>
     <string name="others">Others：</string>
