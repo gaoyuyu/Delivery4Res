@@ -258,6 +258,7 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
                         customerAddrLng = geocodeInfo.getResults().get(0).getGeometry().getLocation().getLng();
 
                         CommonUtils.httpDebugLogger("[customerAddrLat=" + customerAddrLat + "][customerAddrLng=" + customerAddrLng + "]");
+                        CommonUtils.httpDebugLogger("[hotelLat=" + hotelLat + "][hotelLng=" + hotelLng + "]");
 
                         LatLng res = new LatLng(Double.parseDouble(hotelLat), Double.parseDouble(hotelLng));
                         LatLng cus = new LatLng(customerAddrLat, customerAddrLng);
