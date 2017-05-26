@@ -72,6 +72,14 @@ public class SearchOrderActivity extends BaseActivity
         setStatusToSpinner();
     }
 
+    @Override
+    protected void onNewIntent(Intent intent)
+    {
+        super.onNewIntent(intent);
+        Log.d(Constant.TAG,"SearchOrderActivity onNewIntent");
+
+    }
+
     /**
      * 填充数据至Spinner
      */
@@ -125,6 +133,7 @@ public class SearchOrderActivity extends BaseActivity
                     if(!customerPhone.equals("")) intent.putExtra("customerPhone",customerPhone);
                     intent.putExtra("status",status);
                     startActivity(intent);
+                    finish();
                 }
                 break;
         }

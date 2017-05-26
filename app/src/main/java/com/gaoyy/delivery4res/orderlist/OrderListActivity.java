@@ -3,12 +3,14 @@ package com.gaoyy.delivery4res.orderlist;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.gaoyy.delivery4res.R;
+import com.gaoyy.delivery4res.api.Constant;
 import com.gaoyy.delivery4res.base.BaseActivity;
 import com.gaoyy.delivery4res.main.SearchOrderActivity;
 import com.gaoyy.delivery4res.util.ActivityUtils;
@@ -42,6 +44,13 @@ public class OrderListActivity extends BaseActivity
         super.initToolbar(orderListToolbar, R.string.toolbar_title_order_list, true, -1);
     }
 
+
+    @Override
+    protected void onNewIntent(Intent intent)
+    {
+        super.onNewIntent(intent);
+        Log.d(Constant.TAG,"OrderListActivity onNewIntent");
+    }
 
     @Override
     protected void configViews()
@@ -86,6 +95,7 @@ public class OrderListActivity extends BaseActivity
             case R.id.action_search_order:
                 Intent intent = new Intent(OrderListActivity.this, SearchOrderActivity.class);
                 startActivity(intent);
+                finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
