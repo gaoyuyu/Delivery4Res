@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.gaoyy.delivery4res.main.SearchOrderActivity"
+    >
+
+    <include
+        android:id="@+id/search_order_toolbar"
+        layout="@layout/widget_toolbar"
+        />
+
+    <LinearLayout
+        android:id="@+id/activity_search_order"
+        android:layout_below="@+id/search_order_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp"
+        >
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/search_order_number_textinputlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/search_order_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/search_order_number"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/text_basic_color"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/search_driver_phone_textinputlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/search_driver_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/search_driver_phone"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/text_basic_color"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/search_customer_phone_textinputlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/search_customer_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/search_customer_phone"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/text_basic_color"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search_status"
+                android:textSize="17sp"/>
+
+            <Spinner
+                android:id="@+id/search_order_status"
+                android:layout_marginLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</RelativeLayout>

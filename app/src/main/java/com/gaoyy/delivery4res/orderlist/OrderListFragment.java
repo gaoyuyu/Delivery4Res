@@ -15,14 +15,17 @@ import com.gaoyy.delivery4res.api.Constant;
 import com.gaoyy.delivery4res.api.RetrofitService;
 import com.gaoyy.delivery4res.api.bean.OrderListInfo;
 import com.gaoyy.delivery4res.api.bean.OrderOperationStatusInfo;
+import com.gaoyy.delivery4res.api.bean.RestInfo;
 import com.gaoyy.delivery4res.base.BaseFragment;
 import com.gaoyy.delivery4res.base.CustomDialogFragment;
+import com.gaoyy.delivery4res.main.MainActivity;
 import com.gaoyy.delivery4res.util.CommonUtils;
 import com.gaoyy.delivery4res.util.DialogUtils;
 import com.pnikosis.materialishprogress.ProgressWheel;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -68,6 +71,7 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
     }
 
 
+
     @Override
     protected int getFragmentLayoutId()
     {
@@ -99,7 +103,7 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
         CommonUtils.setSwipeLayoutProgressBackgroundColor(activity, commonSwipeRefreshLayout);
 
         Map<String, String> params = getOrderListParams(pageNo, pageSize);
-        Log.d(Constant.TAG, params.toString());
+        Log.d(Constant.TAG, "订单列表参数："+params.toString());
         mOrderListPresenter.orderList(params, PULL_TO_REFRESH);
 
     }
@@ -160,7 +164,47 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
         params.put("randomCode", CommonUtils.getRandomCode(activity));
         params.put("pageNo", String.valueOf(pageNo));
         params.put("pageSize", String.valueOf(pageSize));
+        String orderNo = getArguments().getString("orderNo");
+        String driverPhone = getArguments().getString("driverPhone");
+        String customerPhone = getArguments().getString("customerPhone");
+        String status = getArguments().getString("status","");
+        Log.d(Constant.TAG,"orderNo==>"+orderNo);
+        Log.d(Constant.TAG,"driverPhone===>"+driverPhone);
+        Log.d(Constant.TAG,"customerPhone==>"+customerPhone);
+        Log.d(Constant.TAG,"status==>"+status);
+        if(orderNo!=null) params.put("orderNo", orderNo);
+        if(driverPhone!=null) params.put("courierTel", driverPhone);
+        if(customerPhone!=null) params.put("customerTel", customerPhone);
+        if(!status.equals(""))
+        {
+            if(!status.equals("All"))
+            {
+                params.put("status", transformStatus(status));
+            }
+        }
+
+        Log.d(Constant.TAG,"transformStatus(status)==>"+transformStatus(status));
         return params;
+    }
+
+    /**
+     * 订单状态转换
+     * @param status
+     * @return
+     */
+    private String transformStatus(String status)
+    {
+        String statusCode = "";
+        List<RestInfo.BodyBean.DictStatusBean> dictStatus = MainActivity.dictStatus;
+        for(int i=0;i<dictStatus.size();i++)
+        {
+            if(status.equals(dictStatus.get(i).getLabel()))
+            {
+                statusCode = dictStatus.get(i).getValue();
+                break;
+            }
+        }
+        return statusCode;
     }
 
     @Override

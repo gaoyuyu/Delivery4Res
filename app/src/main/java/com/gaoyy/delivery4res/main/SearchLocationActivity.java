@@ -29,7 +29,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SearchActivity extends BaseActivity implements SearchListAdapter.OnItemClickListener, View.OnClickListener
+public class SearchLocationActivity extends BaseActivity implements SearchListAdapter.OnItemClickListener, View.OnClickListener
 {
     private Toolbar searchToolbar;
     private ProgressWheel searchProgressWheel;

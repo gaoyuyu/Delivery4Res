@@ -16,7 +16,7 @@ import com.gaoyy.delivery4res.R;
 import com.gaoyy.delivery4res.api.bean.RestInfo;
 import com.gaoyy.delivery4res.base.BaseFragment;
 import com.gaoyy.delivery4res.main.OrderDetailActivity;
-import com.gaoyy.delivery4res.main.SearchActivity;
+import com.gaoyy.delivery4res.main.SearchLocationActivity;
 import com.gaoyy.delivery4res.util.CommonUtils;
 
 import java.util.ArrayList;
@@ -239,7 +239,7 @@ public class RestaurantFragment extends BaseFragment implements View.OnClickList
             case R.id.rest_address:
                 Intent intent = new Intent();
                 intent.putExtra("inputingText", "");
-                intent.setClass(activity, SearchActivity.class);
+                intent.setClass(activity, SearchLocationActivity.class);
                 startActivityForResult(intent, 1000);
                 break;
         }

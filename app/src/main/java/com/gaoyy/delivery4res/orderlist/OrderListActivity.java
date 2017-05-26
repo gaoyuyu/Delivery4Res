@@ -1,5 +1,7 @@
 package com.gaoyy.delivery4res.orderlist;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -8,6 +10,7 @@ import android.widget.LinearLayout;
 
 import com.gaoyy.delivery4res.R;
 import com.gaoyy.delivery4res.base.BaseActivity;
+import com.gaoyy.delivery4res.main.SearchOrderActivity;
 import com.gaoyy.delivery4res.util.ActivityUtils;
 
 public class OrderListActivity extends BaseActivity
@@ -44,11 +47,21 @@ public class OrderListActivity extends BaseActivity
     protected void configViews()
     {
         super.configViews();
+        String orderNo = getIntent().getStringExtra("orderNo");
+        String driverPhone = getIntent().getStringExtra("driverPhone");
+        String customerPhone = getIntent().getStringExtra("customerPhone");
+        String status = getIntent().getStringExtra("status");
 
         OrderListFragment orderListFragment = (OrderListFragment) getSupportFragmentManager().findFragmentById(R.id.order_list_content);
         if (orderListFragment == null)
         {
             orderListFragment = OrderListFragment.newInstance();
+            Bundle bundle = new Bundle();
+            if(orderNo!=null) bundle.putString("orderNo",orderNo);
+            if(driverPhone!=null) bundle.putString("driverPhone",driverPhone);
+            if(customerPhone!=null) bundle.putString("customerPhone",customerPhone);
+            if(status!=null) bundle.putString("status",status);
+            orderListFragment.setArguments(bundle);
             ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), orderListFragment, R.id.order_list_content);
         }
         new OrderListPresenter(orderListFragment);
@@ -57,7 +70,7 @@ public class OrderListActivity extends BaseActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-//        getMenuInflater().inflate(R.menu.order_detail_menu, menu);
+        getMenuInflater().inflate(R.menu.order_list_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -69,6 +82,10 @@ public class OrderListActivity extends BaseActivity
         {
             case android.R.id.home:
                 finish();
+                break;
+            case R.id.action_search_order:
+                Intent intent = new Intent(OrderListActivity.this, SearchOrderActivity.class);
+                startActivity(intent);
                 break;
         }
         return super.onOptionsItemSelected(item);
