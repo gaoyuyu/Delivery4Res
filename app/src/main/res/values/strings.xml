@@ -34,6 +34,7 @@
     <string name="order_submit_success_sub">Order has been sent, wait for being accepted</string>
     <string name="menu_order_list">Order List</string>
     <string name="menu_change_pwd">Change Password</string>
+    <string name="menu_new_order">New Order</string>
     <string name="menu_sign_out">Sign Out</string>
     <string name="dialog_order_list">Order Lists</string>
     <string name="dialog_continue_to_send_order">Continue To Send Orders</string>

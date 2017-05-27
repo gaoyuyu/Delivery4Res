@@ -1,9 +1,13 @@
 package com.gaoyy.delivery4res.main.restaurant;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +21,7 @@ import com.gaoyy.delivery4res.api.bean.RestInfo;
 import com.gaoyy.delivery4res.base.BaseFragment;
 import com.gaoyy.delivery4res.main.OrderDetailActivity;
 import com.gaoyy.delivery4res.main.SearchLocationActivity;
+import com.gaoyy.delivery4res.orderlist.OrderListActivity;
 import com.gaoyy.delivery4res.util.CommonUtils;
 
 import java.util.ArrayList;
@@ -36,12 +41,29 @@ public class RestaurantFragment extends BaseFragment implements View.OnClickList
     private AppCompatCheckBox restDoorBell;
     private TextInputLayout restRemarkTextinputlayout;
     private TextInputEditText restRemark;
-    private boolean isAddressSet = false;
+    private AppCompatButton restBtn;
 
 
     private List<RestInfo.BodyBean.RemarkDictBean> remarkDict;
     private List<RestInfo.BodyBean.FinishedTimeBean> finishedTime;
     private List<RestInfo.BodyBean.DictStatusBean> dictStatus;
+
+    public class ClearOrderInfoReceiver extends BroadcastReceiver
+    {
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            if(intent.getAction().equals("android.intent.action.ClearOrderInfoReceiver"))
+            {
+                restPhone.setText("");
+                restAddress.setText("");
+                restApt.setText("");
+                restSpinner.setSelection(0);
+                restDoorBell.setChecked(false);
+                restRemark.setText("");
+            }
+        }
+    }
 
 
     public RestaurantFragment()
@@ -87,6 +109,12 @@ public class RestaurantFragment extends BaseFragment implements View.OnClickList
         restDoorBell = (AppCompatCheckBox) rootView.findViewById(R.id.rest_door_bell);
         restRemarkTextinputlayout = (TextInputLayout) rootView.findViewById(R.id.rest_remark_textinputlayout);
         restRemark = (TextInputEditText) rootView.findViewById(R.id.rest_remark);
+        restBtn = (AppCompatButton) rootView.findViewById(R.id.rest_btn);
+
+        ClearOrderInfoReceiver receiver=new ClearOrderInfoReceiver();
+        IntentFilter filter=new IntentFilter();
+        filter.addAction("android.intent.action.ClearOrderInfoReceiver");
+        activity.registerReceiver(receiver, filter);
     }
 
     @Override
@@ -105,6 +133,7 @@ public class RestaurantFragment extends BaseFragment implements View.OnClickList
         restDoorBell.setText(remarkDict.get(0).getLabel());
 
         ArrayList<String> finishedTimeList = new ArrayList<>();
+        finishedTimeList.add("");
         for (int i = 0; i < finishedTime.size(); i++)
         {
             finishedTimeList.add(finishedTime.get(i).getLabel());
@@ -134,6 +163,8 @@ public class RestaurantFragment extends BaseFragment implements View.OnClickList
 
         //TODO:设置输入监听，跳转到searchactivity去获取位置信息
         restAddress.setOnClickListener(this);
+
+        restBtn.setOnClickListener(this);
     }
 
     @Override
@@ -168,32 +199,10 @@ public class RestaurantFragment extends BaseFragment implements View.OnClickList
         int id = item.getItemId();
         switch (id)
         {
-            case R.id.action_send_order:
-                validate();
-                if (restPhoneTextinputlayout.isErrorEnabled() || restAddressTextinputlayout.isErrorEnabled() || restAptTextinputlayout.isErrorEnabled())
-                    break;
-                String customerTel = restPhone.getText().toString();
-                String customerAddr = restAddress.getText().toString();
-                String apt = restApt.getText().toString();
-                String finishedTime = (String) restSpinner.getSelectedItem();
-                String remark = "";
-                if (restDoorBell.isChecked())
-                {
-                    remark = restDoorBell.getText().toString();
-                }
-                String remarks = restRemark.getText().toString();
-
-                Intent intent = new Intent();
-                intent.putExtra("customerTel", customerTel);
-                intent.putExtra("customerAddr", customerAddr);
-                intent.putExtra("apt", apt);
-                intent.putExtra("finishedTime", finishedTime);
-                intent.putExtra("remark", remark);
-                intent.putExtra("remarks", remarks);
-                intent.setClass(activity, OrderDetailActivity.class);
-                startActivity(intent);
-
-
+            case R.id.action_order_list:
+                Intent orderList = new Intent();
+                orderList.setClass(activity, OrderListActivity.class);
+                startActivity(orderList);
                 break;
         }
 
@@ -217,7 +226,7 @@ public class RestaurantFragment extends BaseFragment implements View.OnClickList
             restPhoneTextinputlayout.setError(null);
             restPhoneTextinputlayout.setErrorEnabled(false);
         }
-        if (restAddress.getText().toString().equals("Click To Seach")||restAddress.getText().toString().equals(""))
+        if (restAddress.getText().toString().equals("Click To Seach") || restAddress.getText().toString().equals(""))
         {
             restAddressTextinputlayout.setErrorEnabled(true);
             restAddressTextinputlayout.setError("Can't be empty");
@@ -237,11 +246,37 @@ public class RestaurantFragment extends BaseFragment implements View.OnClickList
         switch (view.getId())
         {
             case R.id.rest_address:
-                Intent intent = new Intent();
-                intent.putExtra("inputingText", "");
-                intent.setClass(activity, SearchLocationActivity.class);
-                startActivityForResult(intent, 1000);
+                Intent searchOrder = new Intent();
+                searchOrder.putExtra("inputingText", "");
+                searchOrder.setClass(activity, SearchLocationActivity.class);
+                startActivityForResult(searchOrder, 1000);
+                break;
+            case R.id.rest_btn:
+                validate();
+                if (restPhoneTextinputlayout.isErrorEnabled() || restAddressTextinputlayout.isErrorEnabled() || restAptTextinputlayout.isErrorEnabled())
+                    break;
+                String customerTel = restPhone.getText().toString();
+                String customerAddr = restAddress.getText().toString();
+                String apt = restApt.getText().toString();
+                String finishedTime = (String) restSpinner.getSelectedItem();
+                String remark = "";
+                if (restDoorBell.isChecked())
+                {
+                    remark = restDoorBell.getText().toString();
+                }
+                String remarks = restRemark.getText().toString();
+
+                Intent orderDetail = new Intent();
+                orderDetail.putExtra("customerTel", customerTel);
+                orderDetail.putExtra("customerAddr", customerAddr);
+                orderDetail.putExtra("apt", apt);
+                orderDetail.putExtra("finishedTime", finishedTime);
+                orderDetail.putExtra("remark", remark);
+                orderDetail.putExtra("remarks", remarks);
+                orderDetail.setClass(activity, OrderDetailActivity.class);
+                startActivity(orderDetail);
                 break;
         }
     }
+
 }

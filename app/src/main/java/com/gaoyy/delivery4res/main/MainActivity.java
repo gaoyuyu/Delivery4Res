@@ -95,9 +95,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         dictStatus = (List<RestInfo.BodyBean.DictStatusBean>) getIntent().getSerializableExtra("dictStatus");
 
         Bundle bundle = new Bundle();
-        bundle.putSerializable("remarkDict",(Serializable)remarkDict);
-        bundle.putSerializable("finishedTime",(Serializable)finishedTime);
-        bundle.putSerializable("dictStatus",(Serializable)dictStatus);
+        bundle.putSerializable("remarkDict", (Serializable) remarkDict);
+        bundle.putSerializable("finishedTime", (Serializable) finishedTime);
+        bundle.putSerializable("dictStatus", (Serializable) dictStatus);
 
         restaurantFragment.setArguments(bundle);
 
@@ -109,7 +109,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     protected void onNewIntent(Intent intent)
     {
         super.onNewIntent(intent);
-        Log.d(Constant.TAG,"MainActivity onNewIntent");
+        Log.d(Constant.TAG, "MainActivity onNewIntent");
     }
 
     @Override
@@ -145,6 +145,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 changePwd.setClass(MainActivity.this, ChangePwdActivity.class);
                 startActivity(changePwd);
                 break;
+            case R.id.nav_new_order:
+                Intent clearInfo = new Intent();
+                clearInfo.setAction("android.intent.action.ClearOrderInfoReceiver");
+                sendBroadcast(clearInfo);
+
+                break;
             case R.id.nav_exit:
                 String loginName = CommonUtils.getLoginName(this);
                 String randomCode = CommonUtils.getRandomCode(this);
@@ -178,7 +184,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     CommonInfo logoutInfo = response.body();
                     String msg = logoutInfo.getMsg();
                     String errorCode = logoutInfo.getErrorCode();
-                    CommonUtils.httpDebugLogger("[isSuccess="+logoutInfo.isSuccess()+"][errorCode=" + errorCode + "][msg=" + msg + "]");
+                    CommonUtils.httpDebugLogger("[isSuccess=" + logoutInfo.isSuccess() + "][errorCode=" + errorCode + "][msg=" + msg + "]");
                     CommonUtils.showToast(MainActivity.this, msg);
                     if (errorCode.equals("-1"))
                     {

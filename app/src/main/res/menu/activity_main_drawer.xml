@@ -12,6 +12,11 @@
             android:title="@string/menu_change_pwd"/>
 
         <item
+            android:id="@+id/nav_new_order"
+           android:icon="@drawable/ic_fiber_new"
+            android:title="@string/menu_new_order"/>
+
+        <item
             android:id="@+id/nav_exit"
             android:icon="@drawable/ic_logout"
             android:title="@string/menu_sign_out"/>

@@ -34,6 +34,7 @@
     <string name="order_submit_success_sub">订单提交成功，正在等待</string>
     <string name="menu_order_list">订单列表</string>
     <string name="menu_change_pwd">修改密码</string>
+    <string name="menu_new_order">添加新订单</string>
     <string name="menu_sign_out">退出</string>
     <string name="dialog_order_list">去订单列表</string>
     <string name="dialog_continue_to_send_order">继续添加订单</string>

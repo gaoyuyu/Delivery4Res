@@ -116,12 +116,6 @@
 
             </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:text="@string/others"
-                android:textColor="@color/text_basic_color"/>
 
 
             <android.support.design.widget.TextInputLayout
@@ -140,6 +134,16 @@
                     android:textColor="@color/text_basic_color"/>
 
             </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/rest_btn"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/action_submit_order"
+                android:theme="@style/Success.Button.Theme"
+                android:textColor="@color/white"/>
 
         </LinearLayout>
 

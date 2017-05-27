@@ -172,7 +172,7 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
         Call<CommonInfo> call = RetrofitService.sApiService.orderSave(params);
         final CustomDialogFragment loading = DialogUtils.showLoadingDialog(this);
         CommonUtils.httpDebugLogger("保存订单请求");
-        Log.d(Constant.TAG, "params==>" + params.toString());
+        Log.d(Constant.TAG, "提交订单 参数==>" + params.toString());
         call.enqueue(new Callback<CommonInfo>()
         {
             @Override
