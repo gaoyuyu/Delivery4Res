@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="10dp"
+        android:padding="5dp"
         >
 
         <LinearLayout
@@ -20,6 +20,7 @@
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/rest_phone_textinputlayout"
                 android:layout_width="match_parent"
+                android:layout_margin="5dp"
                 android:layout_height="wrap_content">
 
 
@@ -37,6 +38,7 @@
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/rest_address_textinputlayout"
                 android:layout_width="match_parent"
+                android:layout_margin="5dp"
                 android:layout_height="wrap_content">
 
 
@@ -55,6 +57,7 @@
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/rest_apt_textinputlayout"
                 android:layout_width="match_parent"
+                android:layout_margin="5dp"
                 android:layout_height="wrap_content">
 
 
@@ -71,6 +74,7 @@
 
 
             <LinearLayout
+                android:layout_margin="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -96,6 +100,7 @@
 
 
             <LinearLayout
+                android:layout_margin="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -121,6 +126,7 @@
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/rest_remark_textinputlayout"
                 android:layout_width="match_parent"
+                android:layout_margin="5dp"
                 android:layout_height="wrap_content">
 
 

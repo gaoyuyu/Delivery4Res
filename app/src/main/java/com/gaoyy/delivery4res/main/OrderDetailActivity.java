@@ -212,6 +212,9 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
                                     case AlertDialog.BUTTON_POSITIVE:
                                         dialog.dismiss();
                                         finish();
+                                        Intent clearInfo = new Intent();
+                                        clearInfo.setAction("android.intent.action.ClearOrderInfoReceiver");
+                                        sendBroadcast(clearInfo);
                                         break;
                                     default:
                                         break;
@@ -237,7 +240,6 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
     {
         mMap = googleMap;
         configMapUiSettings();
-
 
         Call<GeocodeInfo> call = RetrofitService.sGoogleMapApiService.getLatLng(customerAddr, Constant.GOOGLE_MAP_KEY);
         final CustomDialogFragment loading = DialogUtils.showLoadingDialog(this);
@@ -292,9 +294,6 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
                 CommonUtils.httpErrorLogger(t.toString());
             }
         });
-
-
-
 
     }
 

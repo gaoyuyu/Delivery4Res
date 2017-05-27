@@ -67,6 +67,10 @@
     <string name="search_status">Inquiry By Order Status</string>
 
     <string name="cannt_be_empty_same_time">Order Number,Driver Phone,Customer Phone cannt be empty at the same time</string>
+    <string name="dialog_check_update">Check Update</string>
+    <string name="dialog_update_message">A new version was detected,Need Update Right Now</string>
+    <string name="dialog_update">Update</string>
+    <string name="dialog_updateing">Updating</string>
 
 
 </resources>

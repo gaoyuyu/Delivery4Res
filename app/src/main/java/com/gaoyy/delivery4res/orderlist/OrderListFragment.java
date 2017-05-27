@@ -248,6 +248,12 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
     }
 
     @Override
+    public void showToast(String msg)
+    {
+        CommonUtils.showToast(activity,msg);
+    }
+
+    @Override
     public void setPresenter(OrderListContract.Presenter presenter)
     {
         Log.i(Constant.TAG, LOG_TAG + "  setPresenter");
