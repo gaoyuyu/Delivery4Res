@@ -231,6 +231,7 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
             {
                 loading.dismiss();
                 CommonUtils.httpErrorLogger(t.toString());
+                CommonUtils.showToast(OrderDetailActivity.this, getResources().getString(R.string.network_error));
             }
         });
     }
@@ -292,6 +293,7 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
             {
                 loading.dismiss();
                 CommonUtils.httpErrorLogger(t.toString());
+                CommonUtils.showToast(OrderDetailActivity.this, getResources().getString(R.string.network_error));
             }
         });
 

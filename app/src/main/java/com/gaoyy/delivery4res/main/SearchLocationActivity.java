@@ -140,6 +140,7 @@ public class SearchLocationActivity extends BaseActivity implements SearchListAd
                             searchProgressWheel.setVisibility(View.GONE);
                             searchRv.setVisibility(View.VISIBLE);
                             CommonUtils.httpErrorLogger(t.toString());
+                            CommonUtils.showToast(SearchLocationActivity.this, getResources().getString(R.string.network_error));
                         }
                     });
                 }

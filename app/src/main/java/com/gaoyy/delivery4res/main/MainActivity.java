@@ -201,6 +201,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             {
                 loading.dismiss();
                 CommonUtils.httpErrorLogger(t.toString());
+                CommonUtils.showToast(MainActivity.this, getResources().getString(R.string.network_error));
             }
         });
     }

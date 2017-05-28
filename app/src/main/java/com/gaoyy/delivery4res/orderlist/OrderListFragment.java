@@ -335,6 +335,7 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
             {
                 cancleADLoading.dismiss();
                 CommonUtils.httpErrorLogger(t.toString());
+                CommonUtils.showToast(activity, getResources().getString(R.string.network_error));
             }
         });
     }
@@ -380,6 +381,7 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
             {
                 deliveryLoading.dismiss();
                 CommonUtils.httpErrorLogger(t.toString());
+                CommonUtils.showToast(activity, getResources().getString(R.string.network_error));
             }
         });
     }
@@ -424,6 +426,7 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
             {
                 resubmitLoading.dismiss();
                 CommonUtils.httpErrorLogger(t.toString());
+                CommonUtils.showToast(activity, getResources().getString(R.string.network_error));
             }
         });
     }
@@ -468,6 +471,7 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
             {
                 cancleLoading.dismiss();
                 CommonUtils.httpErrorLogger(t.toString());
+                CommonUtils.showToast(activity, getResources().getString(R.string.network_error));
             }
         });
     }

@@ -68,6 +68,7 @@
     <string name="dialog_update_message">检测到新版本，需要立即更新</string>
     <string name="dialog_update">更新</string>
     <string name="dialog_updateing">正在更新</string>
+    <string name="network_error">网络错误</string>
 
 
 </resources>

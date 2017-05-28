@@ -88,6 +88,7 @@ public class LoginPresenter implements LoginContract.Presenter
                 }
                 mLoginView.hideLoading();
                 CommonUtils.httpErrorLogger(t.toString());
+                mLoginView.showToast("NetWork Error");
             }
         });
 
