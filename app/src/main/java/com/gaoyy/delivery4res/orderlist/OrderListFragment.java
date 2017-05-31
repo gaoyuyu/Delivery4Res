@@ -101,11 +101,6 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
         commonRv.setItemAnimator(new DefaultItemAnimator());
 
         CommonUtils.setSwipeLayoutProgressBackgroundColor(activity, commonSwipeRefreshLayout);
-
-        Map<String, String> params = getOrderListParams(pageNo, pageSize);
-        Log.d(Constant.TAG, "订单列表参数："+params.toString());
-        mOrderListPresenter.orderList(params, PULL_TO_REFRESH);
-
     }
 
     @Override
@@ -212,6 +207,11 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
     {
         super.onResume();
         mOrderListPresenter.start();
+        //在onResume中加载数据
+        pageNo=1;
+        Map<String, String> params = getOrderListParams(pageNo, pageSize);
+        Log.d(Constant.TAG, "订单列表参数："+params.toString());
+        mOrderListPresenter.orderList(params, PULL_TO_REFRESH);
     }
 
     @Override
