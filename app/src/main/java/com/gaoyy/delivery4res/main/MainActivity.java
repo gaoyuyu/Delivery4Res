@@ -88,21 +88,26 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mainNavView.setNavigationItemSelectedListener(this);
 
 
-        RestaurantFragment restaurantFragment = RestaurantFragment.newInstance();
 
-        remarkDict = (List<RestInfo.BodyBean.RemarkDictBean>) getIntent().getSerializableExtra("remarkDict");
-        finishedTime = (List<RestInfo.BodyBean.FinishedTimeBean>) getIntent().getSerializableExtra("finishedTime");
-        dictStatus = (List<RestInfo.BodyBean.DictStatusBean>) getIntent().getSerializableExtra("dictStatus");
+        RestaurantFragment restaurantFragment = (RestaurantFragment) getSupportFragmentManager().findFragmentById(R.id.main_content);
+        if (restaurantFragment == null)
+        {
+            restaurantFragment = RestaurantFragment.newInstance();
 
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("remarkDict", (Serializable) remarkDict);
-        bundle.putSerializable("finishedTime", (Serializable) finishedTime);
-        bundle.putSerializable("dictStatus", (Serializable) dictStatus);
+            remarkDict = (List<RestInfo.BodyBean.RemarkDictBean>) getIntent().getSerializableExtra("remarkDict");
+            finishedTime = (List<RestInfo.BodyBean.FinishedTimeBean>) getIntent().getSerializableExtra("finishedTime");
+            dictStatus = (List<RestInfo.BodyBean.DictStatusBean>) getIntent().getSerializableExtra("dictStatus");
 
-        restaurantFragment.setArguments(bundle);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("remarkDict", (Serializable) remarkDict);
+            bundle.putSerializable("finishedTime", (Serializable) finishedTime);
+            bundle.putSerializable("dictStatus", (Serializable) dictStatus);
+
+            restaurantFragment.setArguments(bundle);
 
 
-        ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), restaurantFragment, R.id.main_content);
+            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), restaurantFragment, R.id.main_content);
+        }
     }
 
     @Override
