@@ -68,8 +68,8 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         vh.itemOrderDriverName.setText(order.getCourierName());
         vh.itemOrderCustomerPhone.setText(order.getCustomerTel());
         vh.itemOrderNo.setText(order.getOrderNo());
-        vh.itemOrderNotes.setText(order.getRemarks());
-        vh.itemOrderOthers.setText(order.getRemark());
+        vh.itemOrderNotes.setText(order.getRemark());
+        vh.itemOrderOthers.setText(order.getRemarks());
         vh.itemOrderFinishedTime.setText(order.getFinishedTime());
 
         Log.d(Constant.TAG,position+"==status=="+order.getStatus());
