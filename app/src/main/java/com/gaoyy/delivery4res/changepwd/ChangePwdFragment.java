@@ -107,6 +107,7 @@ public class ChangePwdFragment extends BaseFragment implements ChangePwdContract
     public void onResume()
     {
         super.onResume();
+        if(mChangePwdPresenter == null) return;
         mChangePwdPresenter.start();
     }
 
@@ -135,6 +136,12 @@ public class ChangePwdFragment extends BaseFragment implements ChangePwdContract
     public void showToast(String msg)
     {
         CommonUtils.showToast(activity, msg);
+    }
+
+    @Override
+    public void showToast(int msgId)
+    {
+        CommonUtils.showToast(activity, msgId);
     }
 
     @Override

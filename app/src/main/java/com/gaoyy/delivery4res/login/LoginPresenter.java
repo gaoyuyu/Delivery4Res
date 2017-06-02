@@ -2,6 +2,7 @@ package com.gaoyy.delivery4res.login;
 
 import android.util.Log;
 
+import com.gaoyy.delivery4res.R;
 import com.gaoyy.delivery4res.api.Constant;
 import com.gaoyy.delivery4res.api.RetrofitService;
 import com.gaoyy.delivery4res.api.bean.RestInfo;
@@ -88,7 +89,7 @@ public class LoginPresenter implements LoginContract.Presenter
                 }
                 mLoginView.hideLoading();
                 CommonUtils.httpErrorLogger(t.toString());
-                mLoginView.showToast("NetWork Error");
+                mLoginView.showToast(R.string.network_error);
             }
         });
 

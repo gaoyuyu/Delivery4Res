@@ -206,6 +206,7 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
     public void onResume()
     {
         super.onResume();
+        if(mOrderListPresenter == null) return;
         mOrderListPresenter.start();
         //在onResume中加载数据
         pageNo=1;
@@ -251,6 +252,12 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
     public void showToast(String msg)
     {
         CommonUtils.showToast(activity,msg);
+    }
+
+    @Override
+    public void showToast(int msgId)
+    {
+        CommonUtils.showToast(activity,msgId);
     }
 
     @Override

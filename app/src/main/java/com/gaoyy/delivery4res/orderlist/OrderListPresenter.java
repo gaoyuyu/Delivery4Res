@@ -2,6 +2,7 @@ package com.gaoyy.delivery4res.orderlist;
 
 import android.util.Log;
 
+import com.gaoyy.delivery4res.R;
 import com.gaoyy.delivery4res.api.Constant;
 import com.gaoyy.delivery4res.api.RetrofitService;
 import com.gaoyy.delivery4res.api.bean.OrderListInfo;
@@ -91,7 +92,7 @@ public class OrderListPresenter implements OrderListContract.Presenter
                 //停止刷新
                 mOrderListView.finishRefesh();
                 CommonUtils.httpErrorLogger(t.toString());
-                mOrderListView.showToast("NetWork Error");
+                mOrderListView.showToast(R.string.network_error);
             }
         });
     }

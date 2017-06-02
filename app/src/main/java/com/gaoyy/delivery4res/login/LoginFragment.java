@@ -135,6 +135,7 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
     public void onResume()
     {
         super.onResume();
+        if(mLoginPresenter == null) return;
         mLoginPresenter.start();
     }
 
@@ -163,6 +164,12 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
     public void showToast(String msg)
     {
         CommonUtils.showToast(activity, msg);
+    }
+
+    @Override
+    public void showToast(int msgId)
+    {
+        CommonUtils.showToast(activity, msgId);
     }
 
     @Override
