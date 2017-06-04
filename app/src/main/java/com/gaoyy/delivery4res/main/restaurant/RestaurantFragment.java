@@ -48,6 +48,8 @@ public class RestaurantFragment extends BaseFragment implements View.OnClickList
     private List<RestInfo.BodyBean.FinishedTimeBean> finishedTime;
     private List<RestInfo.BodyBean.DictStatusBean> dictStatus;
 
+    private ClearOrderInfoReceiver clearOrderInfoReceiver;
+
     public class ClearOrderInfoReceiver extends BroadcastReceiver
     {
         @Override
@@ -111,10 +113,17 @@ public class RestaurantFragment extends BaseFragment implements View.OnClickList
         restRemark = (TextInputEditText) rootView.findViewById(R.id.rest_remark);
         restBtn = (AppCompatButton) rootView.findViewById(R.id.rest_btn);
 
-        ClearOrderInfoReceiver receiver=new ClearOrderInfoReceiver();
+        clearOrderInfoReceiver=new ClearOrderInfoReceiver();
         IntentFilter filter=new IntentFilter();
         filter.addAction("android.intent.action.ClearOrderInfoReceiver");
-        activity.registerReceiver(receiver, filter);
+        activity.registerReceiver(clearOrderInfoReceiver, filter);
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        activity.unregisterReceiver(clearOrderInfoReceiver);
     }
 
     @Override
