@@ -67,7 +67,7 @@ public class SearchOrderActivity extends BaseActivity
     {
         super.configViews();
 
-        searchCustomerPhone.setText("8956231234");
+//        searchCustomerPhone.setText("8956231234");
 
         setStatusToSpinner();
     }
