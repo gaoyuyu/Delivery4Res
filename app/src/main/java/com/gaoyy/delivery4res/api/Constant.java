@@ -14,4 +14,6 @@ public class Constant
     public static final String RES_APK_NAME = "delivery4Res.apk";
     public static final String DRIVER_APK_NAME = "delivery4Driver.apk";
 
+    public static final String BUGLY_APP_ID = "7bdfe7827e";
+
 }

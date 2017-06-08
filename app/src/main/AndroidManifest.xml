@@ -17,6 +17,8 @@
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
 
+    <uses-permission android:name="android.permission.READ_LOGS" />
+
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -86,6 +88,10 @@
                 <!--<category android:name="android.intent.category.DEFAULT"></category>-->
             <!--</intent-filter>-->
         <!--</receiver>-->
+
+        <meta-data
+            android:name="BUGLY_APP_CHANNEL"
+            android:value="Bugly" />
 
     </application>
 

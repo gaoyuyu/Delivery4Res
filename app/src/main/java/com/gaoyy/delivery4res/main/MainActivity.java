@@ -37,7 +37,6 @@ import retrofit2.Response;
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener
 {
 
-    // TODO: 2017/5/20 0020 需要加双击2次退出
     private Toolbar mainToolbar;
 
     private DrawerLayout mainDrawerLayout;
