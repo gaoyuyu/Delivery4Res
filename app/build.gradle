@@ -40,6 +40,6 @@ dependencies {
     compile 'com.google.android.gms:play-services-maps:9.8.0'
 
     //bugly SDk
-    compile 'com.tencent.bugly:crashreport:latest.release'
+    compile 'com.tencent.bugly:crashreport_upgrade:latest.release'
     testCompile 'junit:junit:4.12'
 }
