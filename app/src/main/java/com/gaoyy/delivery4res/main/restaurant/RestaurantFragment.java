@@ -246,7 +246,7 @@ public class RestaurantFragment extends BaseFragment implements View.OnClickList
             restAddressTextinputlayout.setErrorEnabled(false);
         }
 
-        CommonUtils.textInputLayoutSetting(restApt, restAptTextinputlayout, "Can't be empty");
+//        CommonUtils.textInputLayoutSetting(restApt, restAptTextinputlayout, "Can't be empty");
     }
 
     @Override
