@@ -28,6 +28,7 @@
     <string name="destination">Destination：</string>
     <string name="customer_phone_short">Cust.Phone：</string>
     <string name="notes">Notes：</string>
+    <string name="notes_short">Notes</string>
     <string name="others">Others：</string>
     <string name="action_submit_order">submit</string>
     <string name="order_submit_success">Operation Successfully Completed</string>
