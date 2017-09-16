@@ -160,7 +160,7 @@ public class ReplyListFragment extends BaseFragment implements ReplyListContract
         params.put("randomCode", CommonUtils.getRandomCode(activity));
         params.put("pageNo", String.valueOf(pageNo));
         params.put("pageSize", String.valueOf(pageSize));
-        params.put("language", "zh");
+        params.put("language", CommonUtils.getSysLanguage());
         return params;
     }
 

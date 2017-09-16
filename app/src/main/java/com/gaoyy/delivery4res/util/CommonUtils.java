@@ -17,6 +17,7 @@ import com.gaoyy.delivery4res.api.Constant;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 
 /**
@@ -99,6 +100,35 @@ public class CommonUtils
         SharedPreferences account = context.getSharedPreferences("account", Activity.MODE_PRIVATE);
         String loginName = account.getString("randomCode", "");
         return loginName;
+    }
+
+
+    /**
+     * 获取系统language，en（英语）、zh(中文)、fr(法文)
+     * 出现除以上3种语言外，默认en
+     *
+     * @return
+     */
+    public static String getSysLanguage()
+    {
+        String language = Locale.getDefault().getLanguage();
+        Log.e(Constant.TAG,"系统语言："+language);
+        if (language.equals("zh"))
+        {
+            return language;
+        }
+        else if (language.equals("en"))
+        {
+            return language;
+        }
+        else if (language.equals("fr"))
+        {
+            return language;
+        }
+        else
+        {
+            return "en";
+        }
     }
 
 

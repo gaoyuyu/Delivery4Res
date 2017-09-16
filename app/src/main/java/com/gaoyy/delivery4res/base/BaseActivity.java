@@ -15,6 +15,7 @@ public abstract class BaseActivity extends AppCompatActivity
     private long firstTime = 0;
 
     private int toolbarColor = R.color.colorPrimary;
+    public static boolean isForeground = false;
 
 //    private UpdateManager updateManager = new UpdateManager(BaseActivity.this, Constant.DOWNLOAD_RES_APK_URL,Constant.RES_APK_NAME);
 
@@ -35,39 +36,13 @@ public abstract class BaseActivity extends AppCompatActivity
         //设置监听器
         setListener();
 
-//        CommonUtils.httpDebugLogger("app更新请求");
-//        Call<UpdateInfo> call = RetrofitService.sApiService.getAppCurrentVersion();
-//        call.enqueue(new Callback<UpdateInfo>()
-//        {
-//            @Override
-//            public void onResponse(Call<UpdateInfo> call, Response<UpdateInfo> response)
-//            {
-//                if(response.isSuccessful()&&response.body()!=null)
-//                {
-//                    UpdateInfo updateInfo = response.body();
-//                    String msg = updateInfo.getMsg();
-//                    String errorCode = updateInfo.getErrorCode();
-//                    CommonUtils.httpDebugLogger("[isSuccess="+updateInfo.isSuccess()+"][errorCode=" + errorCode + "][msg=" + msg + "]");
-//                    if(errorCode.equals("-1"))
-//                    {
-//                        int code = Integer.valueOf(updateInfo.getBody().getAndroidIsUpdate());
-//                        code =0;
-//                        if(code == 1)
-//                        {
-//                            updateManager.showNoticeDialog();
-//                        }
-//                    }
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Call<UpdateInfo> call, Throwable t)
-//            {
-//
-//            }
-//        });
+    }
 
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        isForeground = true;
     }
 
     @Override
@@ -76,6 +51,7 @@ public abstract class BaseActivity extends AppCompatActivity
         super.onPause();
         //停止下载
 //        updateManager.stopApkThread();
+        isForeground = false;
     }
 
     protected abstract void initContentView();

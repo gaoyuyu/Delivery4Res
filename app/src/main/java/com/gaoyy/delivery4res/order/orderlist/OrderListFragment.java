@@ -315,7 +315,7 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
                 mOrderListPresenter.orderStatusOperate(position, params,order,Constant.CANCLE_AFTER_DELIVERY);
                 break;
             case R.id.item_order_making_finish_btn:
-                params.put("language", "zh");
+                params.put("language", CommonUtils.getSysLanguage());
                 params.put("order_id", ""+order.getOrderId());
                 mOrderListPresenter.orderStatusOperate(position, params,order,Constant.MAKING_FINISH);
                 break;

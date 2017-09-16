@@ -2,10 +2,16 @@ package com.gaoyy.delivery4res.application;
 
 import android.app.Application;
 import android.os.Environment;
+import android.util.Log;
 
 import com.gaoyy.delivery4res.R;
+import com.gaoyy.delivery4res.api.Constant;
 import com.gaoyy.delivery4res.api.RetrofitService;
 import com.tencent.bugly.beta.Beta;
+
+import java.util.Locale;
+
+import cn.jpush.android.api.JPushInterface;
 
 
 /**
@@ -20,6 +26,10 @@ public class MyApplication extends Application
     public void onCreate()
     {
         super.onCreate();
+        String language = Locale.getDefault().getLanguage();
+        Log.e(Constant.TAG,"系统语言："+language);
+
+        initJPush();
 
         RetrofitService.init(this);
 
@@ -33,6 +43,20 @@ public class MyApplication extends Application
          建议在测试阶段建议设置成true，发布时设置为false。
          */
 //        Bugly.init(getApplicationContext(), Constant.BUGLY_APP_ID, true);
+    }
+
+
+    /**
+     * 初始化极光推送服务
+     */
+    private void initJPush()
+    {
+        //初始化sdk
+        JPushInterface.setDebugMode(true);//正式版的时候设置false，关闭调试
+        JPushInterface.init(this);
+//        Set<String> set = new HashSet<>();
+//        set.add("demo");//名字任意，可多添加几个
+//        JPushInterface.setTags(this, set, null);//设置标签
     }
 
     /**

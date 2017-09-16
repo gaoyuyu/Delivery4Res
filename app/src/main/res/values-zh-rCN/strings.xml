@@ -114,8 +114,12 @@
     <string name="toolbar_title_my_reply">我的回复</string>
     <string name="alert_confirm">确定</string>
     <string name="alert_cancel">取消</string>
-    <string name="reply_patient">耐心回复该客户吧...</string>
+    <string name="reply_patient">耐心回复该客户吧</string>
     <string name="alert_confirm_refuse">确定拒绝该订单吗？</string>
+
+    <string name="dialog_reminder">温馨提示</string>
+    <string name="dialog_reminder_message">你没有开启定位权限，请到手机设置界面开启本应用的定位权限再登录</string>
+    <string name="dialog_setting">去设置</string>
 
 
 </resources>

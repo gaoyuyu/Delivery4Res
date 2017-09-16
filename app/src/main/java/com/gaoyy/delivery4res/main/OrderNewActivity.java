@@ -1,7 +1,11 @@
 package com.gaoyy.delivery4res.main;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
@@ -10,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -28,11 +33,16 @@ import com.gaoyy.delivery4res.base.CustomDialogFragment;
 import com.gaoyy.delivery4res.util.CommonUtils;
 import com.gaoyy.delivery4res.util.DialogUtils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import cn.jpush.android.api.JPushInterface;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -134,19 +144,77 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
     protected void configViews()
     {
         super.configViews();
-        order = (OrderListInfo.BodyBean.PageBean.ListBean) getIntent().getSerializableExtra("order");
+
+        String id = "";
+        String orderId = "";
+        if(getIntent().getBundleExtra("notice") == null)
+        {
+            order = (OrderListInfo.BodyBean.PageBean.ListBean) getIntent().getSerializableExtra("order");
+            id = order.getId();
+            orderId = String.valueOf(order.getOrderId());
+        }
+        else
+        {
+            Bundle bundle = getIntent().getBundleExtra("notice");
+            try
+            {
+                JSONObject json = new JSONObject(bundle.getString(JPushInterface.EXTRA_EXTRA));
+                Iterator<String> it = json.keys();
+
+                while (it.hasNext())
+                {
+                    String key = it.next().toString();
+                    String value = json.optString(key);
+                    if(key.equals("order_id"))
+                    {
+                        orderId = value;
+                    }
+                    if(key.equals("id"))
+                    {
+                        id = value;
+                    }
+
+                }
+            }
+            catch (JSONException e)
+            {
+                Log.e(Constant.TAG, "Get message extra JSON error!");
+            }
+            //餐厅接口无orderTime字段，默认30秒
+            ValueAnimator valueAnimator = ValueAnimator.ofInt(30,0);
+            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
+            {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator)
+                {
+                    int currentOrderTime = (int) valueAnimator.getAnimatedValue();
+                    orderNewRefuseBtn.setText(getResources().getString(R.string.refuse_order_btn_text)+"（"+currentOrderTime+"）");
+                }
+            });
+            valueAnimator.addListener(new AnimatorListenerAdapter()
+            {
+                @Override
+                public void onAnimationEnd(Animator animation)
+                {
+                    super.onAnimationEnd(animation);
+                    finish();
+                }
+            });
+            valueAnimator.setDuration(30000);
+            valueAnimator.setInterpolator(new LinearInterpolator());
+            valueAnimator.start();
+        }
 
         String loginName = CommonUtils.getLoginName(this);
         String randomCode = CommonUtils.getRandomCode(this);
-        String id = order.getId();
-        String orderId = String.valueOf(order.getOrderId());
+
 
         Map<String, String> params = new HashMap<>();
         params.put("loginName", loginName);
         params.put("randomCode", randomCode);
         params.put("id", id);
         params.put("order_id", orderId);
-        params.put("language", "zh");
+        params.put("language", CommonUtils.getSysLanguage());
 
         CommonUtils.httpDebugLogger("最新订单参数-->" + params.toString());
         Call<OrderNewInfo> call = RetrofitService.sApiService.newOrderDetail(params);

@@ -121,4 +121,9 @@
     <string name="reply_patient">Please Reply Patiently</string>
     <string name="alert_confirm_refuse">Are you sure you refuse the order？</string>
 
+
+    <string name="dialog_reminder">Reminder</string>
+    <string name="dialog_reminder_message">You do not open the location permissions, please go to the phone settings interface, open the application positioning rights, and then login</string>
+    <string name="dialog_setting">Setting</string>
+
 </resources>

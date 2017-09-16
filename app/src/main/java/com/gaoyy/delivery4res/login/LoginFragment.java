@@ -1,11 +1,18 @@
 package com.gaoyy.delivery4res.login;
 
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.provider.Settings;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,6 +32,10 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 
 public class LoginFragment extends BaseFragment implements LoginContract.View, View.OnClickListener
 {
@@ -135,7 +146,7 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
     public void onResume()
     {
         super.onResume();
-        if(mLoginPresenter == null) return;
+        if (mLoginPresenter == null) return;
         mLoginPresenter.start();
     }
 
@@ -197,12 +208,12 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
         editor.putString("name", hotel.getName());
         editor.putString("addr", hotel.getAddr());
         editor.putString("contacts", hotel.getContacts());
-        editor.putString("tel",hotel.getTel());
-        editor.putString("startDeliveryTime",hotel.getStartDeliveryTime());
-        editor.putString("endDeliveryTime",hotel.getEndDeliveryTime());
-        editor.putString("longitude",hotel.getLongitude());
-        editor.putString("latitude",hotel.getLatitude());
-        editor.putString("no",hotel.getNo());
+        editor.putString("tel", hotel.getTel());
+        editor.putString("startDeliveryTime", hotel.getStartDeliveryTime());
+        editor.putString("endDeliveryTime", hotel.getEndDeliveryTime());
+        editor.putString("longitude", hotel.getLongitude());
+        editor.putString("latitude", hotel.getLatitude());
+        editor.putString("no", hotel.getNo());
         editor.apply();
     }
 
@@ -210,10 +221,21 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
     @Override
     public void redirectToMain(List<RestInfo.BodyBean.RemarkDictBean> remarkDict, List<RestInfo.BodyBean.FinishedTimeBean> finishedTime, List<RestInfo.BodyBean.DictStatusBean> dictStatus)
     {
+        //设置JPush别名
+        JPushInterface.setAlias(activity, CommonUtils.getLoginName(activity), new TagAliasCallback()
+        {
+            @Override
+            public void gotResult(int i, String s, Set<String> set)
+            {
+                Log.d(Constant.TAG, "[JPUSH TagAliasCallback]--i->" + i);
+                Log.d(Constant.TAG, "[JPUSH TagAliasCallback]--s->" + s);
+            }
+        });
+
         Intent intent = new Intent();
-        intent.putExtra("remarkDict",(Serializable) remarkDict);
-        intent.putExtra("finishedTime",(Serializable) finishedTime);
-        intent.putExtra("dictStatus",(Serializable) dictStatus);
+        intent.putExtra("remarkDict", (Serializable) remarkDict);
+        intent.putExtra("finishedTime", (Serializable) finishedTime);
+        intent.putExtra("dictStatus", (Serializable) dictStatus);
         intent.setClass(activity, MainActivity.class);
         startActivity(intent);
         activity.finish();
@@ -236,15 +258,50 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
         switch (view.getId())
         {
             case R.id.login_btn:
-                validate();
-                if (loginUsernameTextinputlayout.isErrorEnabled() || loginPasswordTextinputlayout.isErrorEnabled())
-                    return;
-                Map<String, String> params = new HashMap<>();
-                params.put("loginName", loginUsername.getText().toString());
-                params.put("pwd", loginPassword.getText().toString());
-                //appType=1餐厅端
-                params.put("appType", "1");
-                mLoginPresenter.login(params);
+
+                if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                {
+                    Log.d(Constant.TAG, "没有打开定位权限");
+                    new AlertDialog.Builder(activity)
+                            .setTitle(R.string.dialog_reminder)
+                            .setMessage(R.string.dialog_reminder_message)
+                            .setCancelable(false)
+                            .setPositiveButton(R.string.dialog_setting, new DialogInterface.OnClickListener()
+                            {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i)
+                                {
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BASE)
+                                    {
+                                        // 进入设置系统应用权限界面
+                                        Intent intent = new Intent(Settings.ACTION_SETTINGS);
+                                        startActivity(intent);
+                                    }
+                                    else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                                    {
+                                        // 运行系统在5.x环境使用
+                                        // 进入设置系统应用权限界面
+                                        Intent intent = new Intent(Settings.ACTION_SETTINGS);
+                                        startActivity(intent);
+                                    }
+                                    return;
+                                }
+                            })
+                            .show();
+
+                }
+                else
+                {
+                    validate();
+                    if (loginUsernameTextinputlayout.isErrorEnabled() || loginPasswordTextinputlayout.isErrorEnabled())
+                        return;
+                    Map<String, String> params = new HashMap<>();
+                    params.put("loginName", loginUsername.getText().toString());
+                    params.put("pwd", loginPassword.getText().toString());
+                    //appType=1餐厅端
+                    params.put("appType", "1");
+                    mLoginPresenter.login(params);
+                }
                 break;
         }
     }

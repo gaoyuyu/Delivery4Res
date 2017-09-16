@@ -138,7 +138,7 @@ public class MessageListFragment extends BaseFragment implements  MessageListCon
         params.put("randomCode",CommonUtils.getRandomCode(activity));
         params.put("pageNo", String.valueOf(pageNo));
         params.put("pageSize", String.valueOf(pageSize));
-        params.put("language", "zh");
+        params.put("language", CommonUtils.getSysLanguage());
 
         return params;
     }
