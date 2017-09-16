@@ -1,17 +1,12 @@
-package com.gaoyy.delivery4res.main.restaurant;
+package com.gaoyy.delivery4res.home;
 
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatCheckBox;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -21,7 +16,6 @@ import com.gaoyy.delivery4res.api.bean.RestInfo;
 import com.gaoyy.delivery4res.base.BaseFragment;
 import com.gaoyy.delivery4res.main.OrderDetailActivity;
 import com.gaoyy.delivery4res.main.SearchLocationActivity;
-import com.gaoyy.delivery4res.orderlist.OrderListActivity;
 import com.gaoyy.delivery4res.util.CommonUtils;
 
 import java.util.ArrayList;
@@ -30,7 +24,7 @@ import java.util.List;
 
 public class RestaurantFragment extends BaseFragment implements View.OnClickListener
 {
-
+    private Toolbar restToolbar;
     private TextInputLayout restPhoneTextinputlayout;
     private TextInputEditText restPhone;
     private TextInputLayout restAddressTextinputlayout;
@@ -48,25 +42,6 @@ public class RestaurantFragment extends BaseFragment implements View.OnClickList
     private List<RestInfo.BodyBean.FinishedTimeBean> finishedTime;
     private List<RestInfo.BodyBean.DictStatusBean> dictStatus;
 
-    private ClearOrderInfoReceiver clearOrderInfoReceiver;
-
-    public class ClearOrderInfoReceiver extends BroadcastReceiver
-    {
-        @Override
-        public void onReceive(Context context, Intent intent)
-        {
-            if(intent.getAction().equals("android.intent.action.ClearOrderInfoReceiver"))
-            {
-                restPhone.setText("");
-                restAddress.setText("");
-                restApt.setText("");
-                restSpinner.setSelection(0);
-                restDoorBell.setChecked(false);
-                restRemark.setText("");
-            }
-        }
-    }
-
 
     public RestaurantFragment()
     {
@@ -78,7 +53,6 @@ public class RestaurantFragment extends BaseFragment implements View.OnClickList
         RestaurantFragment fragment = new RestaurantFragment();
         return fragment;
     }
-
 
     @Override
     protected int getFragmentLayoutId()
@@ -112,18 +86,29 @@ public class RestaurantFragment extends BaseFragment implements View.OnClickList
         restRemarkTextinputlayout = (TextInputLayout) rootView.findViewById(R.id.rest_remark_textinputlayout);
         restRemark = (TextInputEditText) rootView.findViewById(R.id.rest_remark);
         restBtn = (AppCompatButton) rootView.findViewById(R.id.rest_btn);
+        restToolbar = (Toolbar)rootView.findViewById(R.id.rest_toolbar);
 
-        clearOrderInfoReceiver=new ClearOrderInfoReceiver();
-        IntentFilter filter=new IntentFilter();
-        filter.addAction("android.intent.action.ClearOrderInfoReceiver");
-        activity.registerReceiver(clearOrderInfoReceiver, filter);
     }
 
+
     @Override
-    public void onDestroy()
+    protected void initToolbar()
     {
-        super.onDestroy();
-        activity.unregisterReceiver(clearOrderInfoReceiver);
+        String name = CommonUtils.getName(activity);
+        super.initToolbar(restToolbar, name, false, -1);
+    }
+
+    /**
+     * 重置输入内容
+     */
+    public void clear()
+    {
+        restPhone.setText("");
+        restAddress.setText("");
+        restApt.setText("");
+        restSpinner.setSelection(0);
+        restDoorBell.setChecked(false);
+        restRemark.setText("");
     }
 
     @Override
@@ -157,11 +142,12 @@ public class RestaurantFragment extends BaseFragment implements View.OnClickList
 
 
         //测试数据
-//        int x = (int) (Math.random() * 1000000000);
-//        restPhone.setText(x + "0");
-//        int y = (int) (Math.random() * 100);
-//        restApt.setText(y + "");
-//        restRemark.setText(x + "  This is Test Data,PLEASE DO NOT ACCEPT THIS ORDER");
+        int x = (int) (Math.random() * 1000000000);
+        restPhone.setText(x + "0");
+        int y = (int) (Math.random() * 100);
+        restAddress.setText("random");
+        restApt.setText(y + "");
+        restRemark.setText(x + "  This is Test Data,PLEASE DO NOT ACCEPT THIS ORDER");
 
     }
 
@@ -194,30 +180,6 @@ public class RestaurantFragment extends BaseFragment implements View.OnClickList
         }
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
-    {
-        activity.getMenuInflater().inflate(R.menu.main, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        int id = item.getItemId();
-        switch (id)
-        {
-            case R.id.action_order_list:
-                Intent orderList = new Intent();
-                orderList.setClass(activity, OrderListActivity.class);
-                startActivity(orderList);
-                break;
-        }
-
-
-        return super.onOptionsItemSelected(item);
-    }
 
     /**
      * 验证输入

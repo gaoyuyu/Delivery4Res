@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
-    tools:context="com.gaoyy.delivery.changepwd.ChangePwdActivity">
+    tools:context="com.gaoyy.delivery4res.changepwd.ChangePwdActivity">
 
     <include
         android:id="@+id/change_pwd_toolbar"

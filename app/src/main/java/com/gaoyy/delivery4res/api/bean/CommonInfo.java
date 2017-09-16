@@ -14,6 +14,7 @@ public class CommonInfo
      * body : {}
      */
 
+
     private boolean success;
     private String errorCode;
     private String msg;

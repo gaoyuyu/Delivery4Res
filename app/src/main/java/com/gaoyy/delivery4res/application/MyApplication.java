@@ -4,9 +4,7 @@ import android.app.Application;
 import android.os.Environment;
 
 import com.gaoyy.delivery4res.R;
-import com.gaoyy.delivery4res.api.Constant;
 import com.gaoyy.delivery4res.api.RetrofitService;
-import com.tencent.bugly.Bugly;
 import com.tencent.bugly.beta.Beta;
 
 
@@ -25,7 +23,7 @@ public class MyApplication extends Application
 
         RetrofitService.init(this);
 
-        upgradeSetting();
+//        upgradeSetting();
 
         /**
          * 第三个参数为SDK调试模式开关，调试模式的行为特性如下：
@@ -34,7 +32,7 @@ public class MyApplication extends Application
          自定义日志将会在Logcat中输出。
          建议在测试阶段建议设置成true，发布时设置为false。
          */
-        Bugly.init(getApplicationContext(), Constant.BUGLY_APP_ID, true);
+//        Bugly.init(getApplicationContext(), Constant.BUGLY_APP_ID, true);
     }
 
     /**

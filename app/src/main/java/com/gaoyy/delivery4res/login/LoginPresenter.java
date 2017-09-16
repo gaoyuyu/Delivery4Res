@@ -36,6 +36,7 @@ public class LoginPresenter implements LoginContract.Presenter
     {
         Call<RestInfo> call = RetrofitService.sApiService.login(params);
         CommonUtils.httpDebugLogger("登录请求");
+        CommonUtils.httpDebugLogger("登录请求参数："+params);
         mLoginView.showLoading();
         call.enqueue(new Callback<RestInfo>()
         {

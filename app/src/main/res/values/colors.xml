@@ -15,6 +15,7 @@
     <color name="success_color">#05bd03</color>
     <color name="login_top_text">#797979</color>
     <color name="login_bg_color">#f6f6f6</color>
+    <color name="mine_bg_color">#efeff4</color>
 
 
 </resources>

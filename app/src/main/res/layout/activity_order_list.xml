@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.gaoyy.delivery4res.orderlist.OrderListActivity">
+    tools:context="com.gaoyy.delivery4res.order.orderlist.OrderListActivity">
 
     <include
         android:id="@+id/order_list_toolbar"

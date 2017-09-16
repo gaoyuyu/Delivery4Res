@@ -16,8 +16,7 @@
     <!-- 蓝牙分享所需的权限 -->
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-
-    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.READ_LOGS"/>
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -25,6 +24,7 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:name=".application.MyApplication"
@@ -50,12 +50,9 @@
             android:name=".main.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.WithDrawerTheme"
             android:windowSoftInputMode="stateHidden">
         </activity>
-        <activity
-            android:name=".login.LoginActivity"
-            >
+        <activity android:name=".login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -75,24 +72,26 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".orderlist.OrderListActivity"
+            android:name=".order.orderlist.OrderListActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity
-            android:name=".main.SearchOrderActivity">
+        <activity android:name=".main.SearchOrderActivity">
         </activity>
-
-        <!--<receiver android:name=".main.restaurant.RestaurantFragment$ClearOrderInfoReceiver">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.ClearOrderInfoReceiver"></action>-->
-                <!--<category android:name="android.intent.category.DEFAULT"></category>-->
-            <!--</intent-filter>-->
-        <!--</receiver>-->
 
         <meta-data
             android:name="BUGLY_APP_CHANNEL"
-            android:value="Google Play" />
+            android:value="Google Play"/>
 
+        <activity android:name=".main.OrderNewActivity">
+        </activity>
+        <activity android:name=".main.NewOrderDetailActivity">
+        </activity>
+        <activity android:name=".mine.messagelist.MessageListActivity">
+        </activity>
+        <activity android:name=".main.PrintActivity">
+        </activity>
+        <activity android:name=".myreplylist.MyReplyListActivity">
+        </activity>
     </application>
 
 </manifest>

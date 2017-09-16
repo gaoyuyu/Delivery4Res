@@ -76,5 +76,25 @@ public class OrderOperationStatusInfo
         {
             this.status = status;
         }
+
+
+        @Override
+        public String toString()
+        {
+            return "BodyBean{" +
+                    "status=" + status +
+                    '}';
+        }
+    }
+
+    @Override
+    public String toString()
+    {
+        return "OrderOperationStatusInfo{" +
+                "success=" + success +
+                ", errorCode='" + errorCode + '\'' +
+                ", msg='" + msg + '\'' +
+                ", body=" + body +
+                '}';
     }
 }

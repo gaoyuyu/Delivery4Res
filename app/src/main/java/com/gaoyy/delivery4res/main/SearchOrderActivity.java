@@ -15,7 +15,7 @@ import com.gaoyy.delivery4res.R;
 import com.gaoyy.delivery4res.api.Constant;
 import com.gaoyy.delivery4res.api.bean.RestInfo;
 import com.gaoyy.delivery4res.base.BaseActivity;
-import com.gaoyy.delivery4res.orderlist.OrderListActivity;
+import com.gaoyy.delivery4res.order.orderlist.OrderListActivity;
 import com.gaoyy.delivery4res.util.CommonUtils;
 
 import java.util.ArrayList;

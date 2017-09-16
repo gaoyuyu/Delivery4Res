@@ -1,6 +1,6 @@
-package com.gaoyy.delivery4res.orderlist;
+package com.gaoyy.delivery4res.myreplylist;
 
-import com.gaoyy.delivery4res.api.bean.OrderListInfo;
+import com.gaoyy.delivery4res.api.bean.MyReplyListInfo;
 import com.gaoyy.delivery4res.base.BasePresenter;
 import com.gaoyy.delivery4res.base.BaseView;
 
@@ -8,28 +8,29 @@ import java.util.LinkedList;
 import java.util.Map;
 
 /**
- * Created by gaoyy on 2017/5/13 0013.
+ * Created by gaoyy on 2017/9/13 0013.
  */
 
-public class OrderListContract
+public class MyReplyListContract
 {
+
     interface View extends BaseView<Presenter>
     {
         boolean isActive();
 
         /**
          * 下拉刷新
-         * @param orderList 数据
+         * @param myReplyList 数据
          * @param count 一共数据量
          */
-        void showOrderList(LinkedList<OrderListInfo.BodyBean.PageBean.ListBean> orderList,int count);
+        void showMyReplyList(LinkedList<MyReplyListInfo.BodyBean.ListBean.ResultBean> myReplyList, int count);
 
         /**
          *上拉加载更多
-         * @param orderList 数据
+         * @param myReplyList 数据
          * @param count 一共数据量
          */
-        void loadMoreOrderList(LinkedList<OrderListInfo.BodyBean.PageBean.ListBean> orderList,int count);
+        void loadMoreMyReplyList(LinkedList<MyReplyListInfo.BodyBean.ListBean.ResultBean> myReplyList,int count);
 
         void refreshing();
 
@@ -37,10 +38,11 @@ public class OrderListContract
 
         void showToast(String msg);
         void showToast(int msgId);
+
     }
 
     interface Presenter extends BasePresenter
     {
-        void  orderList(Map<String,String>params,int refreshTag);
+        void  myReplyList(Map<String,String> params, int refreshTag);
     }
 }

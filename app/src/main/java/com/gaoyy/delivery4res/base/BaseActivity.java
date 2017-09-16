@@ -6,16 +6,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 
 import com.gaoyy.delivery4res.R;
-import com.gaoyy.delivery4res.api.Constant;
-import com.gaoyy.delivery4res.api.RetrofitService;
-import com.gaoyy.delivery4res.api.bean.UpdateInfo;
 import com.gaoyy.delivery4res.application.ExitApplication;
 import com.gaoyy.delivery4res.util.CommonUtils;
-import com.gaoyy.delivery4res.util.UpdateManager;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public abstract class BaseActivity extends AppCompatActivity
@@ -24,7 +16,7 @@ public abstract class BaseActivity extends AppCompatActivity
 
     private int toolbarColor = R.color.colorPrimary;
 
-    private UpdateManager updateManager = new UpdateManager(BaseActivity.this, Constant.DOWNLOAD_RES_APK_URL,Constant.RES_APK_NAME);
+//    private UpdateManager updateManager = new UpdateManager(BaseActivity.this, Constant.DOWNLOAD_RES_APK_URL,Constant.RES_APK_NAME);
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -43,38 +35,38 @@ public abstract class BaseActivity extends AppCompatActivity
         //设置监听器
         setListener();
 
-        CommonUtils.httpDebugLogger("app更新请求");
-        Call<UpdateInfo> call = RetrofitService.sApiService.getAppCurrentVersion();
-        call.enqueue(new Callback<UpdateInfo>()
-        {
-            @Override
-            public void onResponse(Call<UpdateInfo> call, Response<UpdateInfo> response)
-            {
-                if(response.isSuccessful()&&response.body()!=null)
-                {
-                    UpdateInfo updateInfo = response.body();
-                    String msg = updateInfo.getMsg();
-                    String errorCode = updateInfo.getErrorCode();
-                    CommonUtils.httpDebugLogger("[isSuccess="+updateInfo.isSuccess()+"][errorCode=" + errorCode + "][msg=" + msg + "]");
-                    if(errorCode.equals("-1"))
-                    {
-                        int code = Integer.valueOf(updateInfo.getBody().getAndroidIsUpdate());
-                        code =0;
-                        if(code == 1)
-                        {
-                            updateManager.showNoticeDialog();
-                        }
-                    }
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<UpdateInfo> call, Throwable t)
-            {
-
-            }
-        });
+//        CommonUtils.httpDebugLogger("app更新请求");
+//        Call<UpdateInfo> call = RetrofitService.sApiService.getAppCurrentVersion();
+//        call.enqueue(new Callback<UpdateInfo>()
+//        {
+//            @Override
+//            public void onResponse(Call<UpdateInfo> call, Response<UpdateInfo> response)
+//            {
+//                if(response.isSuccessful()&&response.body()!=null)
+//                {
+//                    UpdateInfo updateInfo = response.body();
+//                    String msg = updateInfo.getMsg();
+//                    String errorCode = updateInfo.getErrorCode();
+//                    CommonUtils.httpDebugLogger("[isSuccess="+updateInfo.isSuccess()+"][errorCode=" + errorCode + "][msg=" + msg + "]");
+//                    if(errorCode.equals("-1"))
+//                    {
+//                        int code = Integer.valueOf(updateInfo.getBody().getAndroidIsUpdate());
+//                        code =0;
+//                        if(code == 1)
+//                        {
+//                            updateManager.showNoticeDialog();
+//                        }
+//                    }
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<UpdateInfo> call, Throwable t)
+//            {
+//
+//            }
+//        });
 
     }
 
@@ -83,7 +75,7 @@ public abstract class BaseActivity extends AppCompatActivity
     {
         super.onPause();
         //停止下载
-        updateManager.stopApkThread();
+//        updateManager.stopApkThread();
     }
 
     protected abstract void initContentView();

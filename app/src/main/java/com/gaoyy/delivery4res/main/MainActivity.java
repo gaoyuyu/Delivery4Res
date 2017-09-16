@@ -1,52 +1,76 @@
 package com.gaoyy.delivery4res.main;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gaoyy.delivery4res.R;
+import com.gaoyy.delivery4res.adapter.MainPagerAdapter;
 import com.gaoyy.delivery4res.api.Constant;
-import com.gaoyy.delivery4res.api.RetrofitService;
-import com.gaoyy.delivery4res.api.bean.CommonInfo;
 import com.gaoyy.delivery4res.api.bean.RestInfo;
 import com.gaoyy.delivery4res.base.BaseActivity;
-import com.gaoyy.delivery4res.base.CustomDialogFragment;
-import com.gaoyy.delivery4res.changepwd.ChangePwdActivity;
-import com.gaoyy.delivery4res.login.LoginActivity;
-import com.gaoyy.delivery4res.main.restaurant.RestaurantFragment;
-import com.gaoyy.delivery4res.orderlist.OrderListActivity;
-import com.gaoyy.delivery4res.util.ActivityUtils;
-import com.gaoyy.delivery4res.util.CommonUtils;
-import com.gaoyy.delivery4res.util.DialogUtils;
+import com.gaoyy.delivery4res.home.RestaurantFragment;
+import com.gaoyy.delivery4res.mine.MineFragment;
+import com.gaoyy.delivery4res.order.OrderFragment;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener
+public class MainActivity extends BaseActivity implements MineFragment.OnFragmentInteractionListener
 {
 
-    private Toolbar mainToolbar;
+    // TODO: 2017/9/6 0006  去掉drawer
 
-    private DrawerLayout mainDrawerLayout;
-    private NavigationView mainNavView;
+    private RelativeLayout contentMain;
+    private ViewPager mainViewpager;
+    private TabLayout mainTablayout;
 
+    private int[] tabType = {R.string.tab_home, R.string.tab_order, R.string.tab_mine};
+    private int[] tabSelector = {R.drawable.selector_home, R.drawable.selector_order, R.drawable.selector_account};
 
     public static List<RestInfo.BodyBean.RemarkDictBean> remarkDict;
     public static List<RestInfo.BodyBean.FinishedTimeBean> finishedTime;
     public static List<RestInfo.BodyBean.DictStatusBean> dictStatus;
 
+    private MainPagerAdapter mainPagerAdapter;
+    private List<Fragment> fragmentList = new ArrayList<>();
+
+    private DetailToMainReceiver detailToMainReceiver;
+
+    public class DetailToMainReceiver extends BroadcastReceiver
+    {
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            if(intent.getAction().equals("android.intent.action.DetailToMainReceiver"))
+            {
+                if(intent.getIntExtra("orderList",0) == 1)
+                {
+                    mainViewpager.setCurrentItem(1, true);
+                    OrderFragment fragment = (OrderFragment) mainPagerAdapter.getItem(1);
+                    fragment.setToOrderList();
+                }
+
+                if(intent.getIntExtra("clearInfo",0) == 2)
+                {
+                    mainViewpager.setCurrentItem(0, true);
+                    RestaurantFragment fragment = (RestaurantFragment) mainPagerAdapter.getItem(0);
+                    fragment.clear();
+                }
+            }
+        }
+    }
 
     @Override
     protected void initContentView()
@@ -58,16 +82,22 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     protected void assignViews()
     {
         super.assignViews();
-        mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
-        mainDrawerLayout = (DrawerLayout) findViewById(R.id.main_drawer_layout);
-        mainNavView = (NavigationView) findViewById(R.id.main_nav_view);
+        contentMain = (RelativeLayout) findViewById(R.id.content_main);
+        mainViewpager = (ViewPager) findViewById(R.id.main_viewpager);
+        mainTablayout = (TabLayout) findViewById(R.id.main_tablayout);
+
+        detailToMainReceiver=new DetailToMainReceiver();
+        IntentFilter filter=new IntentFilter();
+        filter.addAction("android.intent.action.DetailToMainReceiver");
+        registerReceiver(detailToMainReceiver, filter);
     }
 
+
     @Override
-    protected void initToolbar()
+    protected void onDestroy()
     {
-        String name = CommonUtils.getName(this);
-        super.initToolbar(mainToolbar, name, false, -1);
+        super.onDestroy();
+        unregisterReceiver(detailToMainReceiver);
     }
 
     @Override
@@ -75,38 +105,52 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     {
         super.configViews();
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mainDrawerLayout, mainToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mainDrawerLayout.setDrawerListener(toggle);
-        toggle.syncState();
+        Fragment restaurantFragment = RestaurantFragment.newInstance();
 
-        View header = mainNavView.getHeaderView(0);
-        TextView tv = (TextView) header.findViewById(R.id.header_username);
-        tv.setText("Welcome," + CommonUtils.getName(this));
+        remarkDict = (List<RestInfo.BodyBean.RemarkDictBean>) getIntent().getSerializableExtra("remarkDict");
+        finishedTime = (List<RestInfo.BodyBean.FinishedTimeBean>) getIntent().getSerializableExtra("finishedTime");
+        dictStatus = (List<RestInfo.BodyBean.DictStatusBean>) getIntent().getSerializableExtra("dictStatus");
 
-        mainNavView.setNavigationItemSelectedListener(this);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("remarkDict", (Serializable) remarkDict);
+        bundle.putSerializable("finishedTime", (Serializable) finishedTime);
+        bundle.putSerializable("dictStatus", (Serializable) dictStatus);
+
+        restaurantFragment.setArguments(bundle);
+
+        fragmentList.add(restaurantFragment);
 
 
+        Fragment orderFragment = OrderFragment.newInstance();
+        fragmentList.add(orderFragment);
 
-        RestaurantFragment restaurantFragment = (RestaurantFragment) getSupportFragmentManager().findFragmentById(R.id.main_content);
-        if (restaurantFragment == null)
+
+        Fragment fragment = MineFragment.newInstance();
+        fragmentList.add(fragment);
+
+        mainPagerAdapter = new MainPagerAdapter(this, getSupportFragmentManager(), tabType, fragmentList);
+        mainViewpager.setAdapter(mainPagerAdapter);
+
+        mainTablayout.setTabMode(TabLayout.MODE_FIXED);
+        mainTablayout.setupWithViewPager(mainViewpager);
+        mainTablayout.setBackgroundColor(getResources().getColor(R.color.white));
+        mainTablayout.setTabsFromPagerAdapter(mainPagerAdapter);
+        for (int i = 0; i < tabType.length; i++)
         {
-            restaurantFragment = RestaurantFragment.newInstance();
-
-            remarkDict = (List<RestInfo.BodyBean.RemarkDictBean>) getIntent().getSerializableExtra("remarkDict");
-            finishedTime = (List<RestInfo.BodyBean.FinishedTimeBean>) getIntent().getSerializableExtra("finishedTime");
-            dictStatus = (List<RestInfo.BodyBean.DictStatusBean>) getIntent().getSerializableExtra("dictStatus");
-
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("remarkDict", (Serializable) remarkDict);
-            bundle.putSerializable("finishedTime", (Serializable) finishedTime);
-            bundle.putSerializable("dictStatus", (Serializable) dictStatus);
-
-            restaurantFragment.setArguments(bundle);
-
-
-            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), restaurantFragment, R.id.main_content);
+            TabLayout.Tab itemTab = mainTablayout.getTabAt(i);
+            if (itemTab != null)
+            {
+                itemTab.setCustomView(R.layout.tab_item);
+                View tabRoot = itemTab.getCustomView();
+                ImageView tabImg = (ImageView) tabRoot.findViewById(R.id.tab_img);
+                TextView tabText = (TextView) tabRoot.findViewById(R.id.tab_text);
+                tabImg.setImageDrawable(getResources().getDrawable(tabSelector[i]));
+                tabText.setText(tabType[i]);
+            }
         }
+        mainTablayout.getTabAt(0).getCustomView().setSelected(true);
+
+
     }
 
     @Override
@@ -116,97 +160,23 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         Log.d(Constant.TAG, "MainActivity onNewIntent");
     }
 
+
     @Override
-    public void onBackPressed()
+    public void onFragmentInteraction(int flag)
     {
-        if (mainDrawerLayout.isDrawerOpen(GravityCompat.START))
+        switch (flag)
         {
-            mainDrawerLayout.closeDrawer(GravityCompat.START);
+            case Constant.MSG_TO_ACT_ORDER_LIST:
+                mainViewpager.setCurrentItem(1, true);
+                OrderFragment orderFragment = (OrderFragment) mainPagerAdapter.getItem(1);
+                orderFragment.setToOrderList();
+                break;
+            case Constant.MSG_TO_ACT_NEW_ORDER:
+                mainViewpager.setCurrentItem(0, true);
+                RestaurantFragment restaurantFragment = (RestaurantFragment) mainPagerAdapter.getItem(0);
+                restaurantFragment.clear();
+                break;
+
         }
-        else
-        {
-            super.onBackPressed();
-        }
-    }
-
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item)
-    {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        switch (id)
-        {
-            case R.id.nav_order_list:
-                Intent orderList = new Intent();
-                orderList.setClass(MainActivity.this, OrderListActivity.class);
-                startActivity(orderList);
-                break;
-            case R.id.nav_change_pwd:
-                Intent changePwd = new Intent();
-                changePwd.setClass(MainActivity.this, ChangePwdActivity.class);
-                startActivity(changePwd);
-                break;
-            case R.id.nav_new_order:
-                Intent clearInfo = new Intent();
-                clearInfo.setAction("android.intent.action.ClearOrderInfoReceiver");
-                sendBroadcast(clearInfo);
-
-                break;
-            case R.id.nav_exit:
-                String loginName = CommonUtils.getLoginName(this);
-                String randomCode = CommonUtils.getRandomCode(this);
-                logout(loginName, randomCode);
-                break;
-        }
-
-        mainDrawerLayout.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    /**
-     * 用户退出
-     *
-     * @param loginName
-     * @param randomCode
-     */
-    private void logout(String loginName, String randomCode)
-    {
-        Call<CommonInfo> call = RetrofitService.sApiService.logout(loginName, randomCode);
-        CommonUtils.httpDebugLogger("退出请求");
-        final CustomDialogFragment loading = DialogUtils.showLoadingDialog(this);
-        call.enqueue(new Callback<CommonInfo>()
-        {
-            @Override
-            public void onResponse(Call<CommonInfo> call, Response<CommonInfo> response)
-            {
-                loading.dismiss();
-                if (response.isSuccessful() && response.body() != null)
-                {
-                    CommonInfo logoutInfo = response.body();
-                    String msg = logoutInfo.getMsg();
-                    String errorCode = logoutInfo.getErrorCode();
-                    CommonUtils.httpDebugLogger("[isSuccess=" + logoutInfo.isSuccess() + "][errorCode=" + errorCode + "][msg=" + msg + "]");
-                    CommonUtils.showToast(MainActivity.this, msg);
-                    if (errorCode.equals("-1"))
-                    {
-                        Intent intent = new Intent();
-                        intent.setClass(MainActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<CommonInfo> call, Throwable t)
-            {
-                loading.dismiss();
-                CommonUtils.httpErrorLogger(t.toString());
-                CommonUtils.showToast(MainActivity.this, getResources().getString(R.string.network_error));
-            }
-        });
     }
 }
