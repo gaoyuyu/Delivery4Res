@@ -85,11 +85,6 @@ public class ReplyListFragment extends BaseFragment implements ReplyListContract
         commonRv.setItemAnimator(new DefaultItemAnimator());
 
         CommonUtils.setSwipeLayoutProgressBackgroundColor(activity, commonSwipeRefreshLayout);
-
-        pageNo = 1;
-        Map<String, String> params = getReplyOrderListParams(pageNo, pageSize);
-        Log.d(Constant.TAG, "待回复列表参数：" + params.toString());
-        mReplyListPresenter.replyOrderList(params, Constant.PULL_TO_REFRESH);
     }
 
     @Override
@@ -146,11 +141,11 @@ public class ReplyListFragment extends BaseFragment implements ReplyListContract
         super.onResume();
         if (mReplyListPresenter == null) return;
         mReplyListPresenter.start();
-//        //在onResume中加载数据
-//        pageNo = 1;
-//        Map<String, String> params = getReplyOrderListParams(pageNo, pageSize);
-//        Log.d(Constant.TAG, "待回复列表参数：" + params.toString());
-//        mReplyListPresenter.replyOrderList(params, Constant.PULL_TO_REFRESH);
+        //在onResume中加载数据
+        pageNo = 1;
+        Map<String, String> params = getReplyOrderListParams(pageNo, pageSize);
+        Log.d(Constant.TAG, "待回复列表参数：" + params.toString());
+        mReplyListPresenter.replyOrderList(params, Constant.PULL_TO_REFRESH);
     }
 
     private Map<String, String> getReplyOrderListParams(int pageNo, int pageSize)

@@ -88,13 +88,6 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
         commonRv.setItemAnimator(new DefaultItemAnimator());
 
         CommonUtils.setSwipeLayoutProgressBackgroundColor(activity, commonSwipeRefreshLayout);
-
-
-        //在onResume中加载数据
-        pageNo = 1;
-        Map<String, String> params = getOrderListParams(pageNo, pageSize);
-        Log.d(Constant.TAG, "订单列表参数：" + params.toString());
-        mOrderListPresenter.orderList(params, Constant.PULL_TO_REFRESH);
     }
 
     @Override
@@ -203,11 +196,11 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
         super.onResume();
         if (mOrderListPresenter == null) return;
         mOrderListPresenter.start();
-//        //在onResume中加载数据
-//        pageNo = 1;
-//        Map<String, String> params = getOrderListParams(pageNo, pageSize);
-//        Log.d(Constant.TAG, "订单列表参数：" + params.toString());
-//        mOrderListPresenter.orderList(params, Constant.PULL_TO_REFRESH);
+        //在onResume中加载数据
+        pageNo = 1;
+        Map<String, String> params = getOrderListParams(pageNo, pageSize);
+        Log.d(Constant.TAG, "订单列表参数：" + params.toString());
+        mOrderListPresenter.orderList(params, Constant.PULL_TO_REFRESH);
     }
 
     @Override
@@ -270,7 +263,7 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
     @Override
     public void singleItemUpdate(int position, OrderListInfo.BodyBean.PageBean.ListBean order)
     {
-        orderListAdapter.singleItemUpdate(position,order);
+        orderListAdapter.singleItemUpdate(position, order);
     }
 
     @Override
@@ -296,28 +289,28 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
     public void onItemClick(View view, int position, final OrderListInfo.BodyBean.PageBean.ListBean order)
     {
         int id = view.getId();
-        Map<String,String> params = new HashMap<>();
-        params.put("loginName",CommonUtils.getLoginName(activity));
-        params.put("randomCode",CommonUtils.getRandomCode(activity));
-        params.put("id",order.getId());
+        Map<String, String> params = new HashMap<>();
+        params.put("loginName", CommonUtils.getLoginName(activity));
+        params.put("randomCode", CommonUtils.getRandomCode(activity));
+        params.put("id", order.getId());
         switch (id)
         {
             case R.id.item_order_cancle_btn:
-                mOrderListPresenter.orderStatusOperate(position, params,order,Constant.CANCLE);
+                mOrderListPresenter.orderStatusOperate(position, params, order, Constant.CANCLE);
                 break;
             case R.id.item_order_resubmit_btn:
-                mOrderListPresenter.orderStatusOperate(position, params,order,Constant.RESUBMIT);
+                mOrderListPresenter.orderStatusOperate(position, params, order, Constant.RESUBMIT);
                 break;
             case R.id.item_order_delivery_btn:
-                mOrderListPresenter.orderStatusOperate(position, params,order,Constant.DELIVERY);
+                mOrderListPresenter.orderStatusOperate(position, params, order, Constant.DELIVERY);
                 break;
             case R.id.item_order_cancle_after_delivery_btn:
-                mOrderListPresenter.orderStatusOperate(position, params,order,Constant.CANCLE_AFTER_DELIVERY);
+                mOrderListPresenter.orderStatusOperate(position, params, order, Constant.CANCLE_AFTER_DELIVERY);
                 break;
             case R.id.item_order_making_finish_btn:
                 params.put("language", CommonUtils.getSysLanguage());
-                params.put("order_id", ""+order.getOrderId());
-                mOrderListPresenter.orderStatusOperate(position, params,order,Constant.MAKING_FINISH);
+                params.put("order_id", "" + order.getOrderId());
+                mOrderListPresenter.orderStatusOperate(position, params, order, Constant.MAKING_FINISH);
                 break;
             case R.id.item_order_cardview:
                 if (order.getOrderType() == 1)

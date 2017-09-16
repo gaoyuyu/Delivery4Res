@@ -76,11 +76,6 @@ public class MyReplyListFragment extends BaseFragment implements  MyReplyListCon
 
         CommonUtils.setSwipeLayoutProgressBackgroundColor(activity, commonSwipeRefreshLayout);
 
-
-        pageNo = 1;
-        Map<String,String> params = getMyReplyListParams(pageNo,pageSize);
-        Log.d(Constant.TAG, "我的回复列表参数：" + params.toString());
-        mMyReplyListPresenter.myReplyList(params, Constant.PULL_TO_REFRESH);
     }
 
     @Override
@@ -136,11 +131,11 @@ public class MyReplyListFragment extends BaseFragment implements  MyReplyListCon
         super.onResume();
         if (mMyReplyListPresenter == null) return;
         mMyReplyListPresenter.start();
-//        //在onResume中加载数据
-//        pageNo = 1;
-//        Map<String,String> params = getMyReplyListParams(pageNo,pageSize);
-//        Log.d(Constant.TAG, "我的回复列表参数：" + params.toString());
-//        mMyReplyListPresenter.myReplyList(params, Constant.PULL_TO_REFRESH);
+        //在onResume中加载数据
+        pageNo = 1;
+        Map<String,String> params = getMyReplyListParams(pageNo,pageSize);
+        Log.d(Constant.TAG, "我的回复列表参数：" + params.toString());
+        mMyReplyListPresenter.myReplyList(params, Constant.PULL_TO_REFRESH);
     }
 
     public Map<String,String> getMyReplyListParams(int pageNo,int pageSize)
