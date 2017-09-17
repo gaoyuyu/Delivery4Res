@@ -142,12 +142,12 @@ public class RestaurantFragment extends BaseFragment implements View.OnClickList
 
 
         //测试数据
-        int x = (int) (Math.random() * 1000000000);
-        restPhone.setText(x + "0");
-        int y = (int) (Math.random() * 100);
-        restAddress.setText("random");
-        restApt.setText(y + "");
-        restRemark.setText(x + "  This is Test Data,PLEASE DO NOT ACCEPT THIS ORDER");
+//        int x = (int) (Math.random() * 1000000000);
+//        restPhone.setText(x + "0");
+//        int y = (int) (Math.random() * 100);
+//        restAddress.setText("random");
+//        restApt.setText(y + "");
+//        restRemark.setText(x + "  This is Test Data,PLEASE DO NOT ACCEPT THIS ORDER");
 
     }
 
