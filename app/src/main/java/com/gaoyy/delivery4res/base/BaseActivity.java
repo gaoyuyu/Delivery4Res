@@ -1,5 +1,6 @@
 package com.gaoyy.delivery4res.base;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -27,6 +28,9 @@ public abstract class BaseActivity extends AppCompatActivity
 
         //加载布局
         initContentView();
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//强制竖屏
+
         //初始化view
         assignViews();
         //初始化toolbar

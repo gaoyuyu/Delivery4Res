@@ -464,7 +464,11 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
 
     public void hideLoading()
     {
-        loading.dismiss();
+        if(loading != null)
+        {
+            loading.dismiss();
+        }
+
     }
 
 
