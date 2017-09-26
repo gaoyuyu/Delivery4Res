@@ -88,6 +88,8 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
 
     private CustomDialogFragment loading;
 
+    //是否从推送进入Ativity
+    private boolean isFormNotice;
 
     @Override
     protected void initContentView()
@@ -144,10 +146,11 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
     protected void configViews()
     {
         super.configViews();
+        isFormNotice = getIntent().getBundleExtra("notice") != null;
 
         String id = "";
         String orderId = "";
-        if(getIntent().getBundleExtra("notice") == null)
+        if (!isFormNotice)
         {
             order = (OrderListInfo.BodyBean.PageBean.ListBean) getIntent().getSerializableExtra("order");
             id = order.getId();
@@ -165,11 +168,11 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
                 {
                     String key = it.next().toString();
                     String value = json.optString(key);
-                    if(key.equals("order_id"))
+                    if (key.equals("order_id"))
                     {
                         orderId = value;
                     }
-                    if(key.equals("id"))
+                    if (key.equals("id"))
                     {
                         id = value;
                     }
@@ -181,14 +184,14 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
                 Log.e(Constant.TAG, "Get message extra JSON error!");
             }
             //餐厅接口无orderTime字段，默认30秒
-            ValueAnimator valueAnimator = ValueAnimator.ofInt(30,0);
+            ValueAnimator valueAnimator = ValueAnimator.ofInt(30, 0);
             valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
             {
                 @Override
                 public void onAnimationUpdate(ValueAnimator valueAnimator)
                 {
                     int currentOrderTime = (int) valueAnimator.getAnimatedValue();
-                    orderNewRefuseBtn.setText(getResources().getString(R.string.refuse_order_btn_text)+"（"+currentOrderTime+"）");
+                    orderNewRefuseBtn.setText(getResources().getString(R.string.refuse_order_btn_text) + "（" + currentOrderTime + "）");
                 }
             });
             valueAnimator.addListener(new AnimatorListenerAdapter()
@@ -233,7 +236,6 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
 
                     Log.e(Constant.TAG, "bean->" + data.toString());
 
-
                     itemCommonAddtime.setText("" + data.getAddTime());
                     itemCommonAddress.setText("" + data.getAddr().getArea_info());
                     itemCommonCustomer.setText("" + data.getAddr().getTrueName());
@@ -259,10 +261,11 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
                     //总计
                     orderNewSum.setText("" + data.getTotalPrice() + "");
                     //备注
-                    orderNewRemark.setText("");
+                    orderNewRemark.setText(data.getMsg() + "");
                     //期望送达时间
                     orderNewEaTime.setText("" + data.getAppointment_time());
 
+                    expectTimeList.add("");
                     expectTimeList.add("now");
                     expectTimeList.add("20min");
                     expectTimeList.add("40min");
@@ -280,17 +283,17 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
                      * flage  0-没接单 1-已接单
                      * 已接单-不显示拒绝按钮，接单按钮，预计送达时间
                      */
-                    if (1 == Integer.valueOf(orderNewInfo.getBody().getFlag()) )
-                    {
-                        orderNewOperationLayout.setVisibility(View.GONE);
-                        ((LinearLayout) (orderNewSpinner.getParent())).setVisibility(View.GONE);
-
-                    }
-                    else
-                    {
-                        orderNewOperationLayout.setVisibility(View.VISIBLE);
-                        ((LinearLayout) (orderNewSpinner.getParent())).setVisibility(View.VISIBLE);
-                    }
+//                    if (1 == Integer.valueOf(orderNewInfo.getBody().getFlag()) )
+//                    {
+//                        orderNewOperationLayout.setVisibility(View.GONE);
+//                        ((LinearLayout) (orderNewSpinner.getParent())).setVisibility(View.GONE);
+//
+//                    }
+//                    else
+//                    {
+//                        orderNewOperationLayout.setVisibility(View.VISIBLE);
+//                        ((LinearLayout) (orderNewSpinner.getParent())).setVisibility(View.VISIBLE);
+//                    }
 
                 }
             }
@@ -318,7 +321,7 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
         }
         else
         {
-            orderNewTip.setText("" + data.getTipPrice());
+            orderNewTip.setText("$" + data.getTipPrice());
         }
 
         //配送费
@@ -328,7 +331,7 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
         }
         else
         {
-            orderNewShip.setText("" + data.getShip_price());
+            orderNewShip.setText("$" + data.getShip_price());
         }
 
         //税1
@@ -338,7 +341,7 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
         }
         else
         {
-            orderNewTax.setText("" + data.getTaxation());
+            orderNewTax.setText("$" + data.getTaxation());
         }
 
         //税2
@@ -348,7 +351,7 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
         }
         else
         {
-            orderNewTaxTvq.setText("" + data.getTaxation_tvq());
+            orderNewTaxTvq.setText("$" + data.getTaxation_tvq());
         }
 
         //收益
@@ -358,7 +361,7 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
         }
         else
         {
-            orderNewIncome.setText("-" + data.getUseIncomePrice());
+            orderNewIncome.setText("-$" + data.getUseIncomePrice());
         }
 
         //代金券
@@ -368,7 +371,7 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
         }
         else
         {
-            orderNewCoupon.setText("-" + data.getCouponPrice());
+            orderNewCoupon.setText("-$" + data.getCouponPrice());
         }
 
         //商家满减
@@ -378,7 +381,7 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
         }
         else
         {
-            orderNewAcivity.setText("-" + data.getActivityPrice());
+            orderNewAcivity.setText("-$" + data.getActivityPrice());
         }
     }
 
@@ -417,10 +420,26 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
             case R.id.action_print_order:
                 Intent intent = new Intent(OrderNewActivity.this, PrintActivity.class);
                 intent.putExtra("orderNewInfo", orderNewInfo);
-                startActivity(intent);
+                startActivityForResult(intent, Constant.REQUEST_PRINT);
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constant.REQUEST_PRINT)
+        {
+            if (resultCode == RESULT_OK)
+            {
+                CommonUtils.showToast(this, R.string.print_complete);
+                //打印完成后关闭页面
+                finish();
+            }
+        }
     }
 
     @Override
@@ -431,7 +450,7 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
         {
             case R.id.order_new_refuse_btn:
                 AlertDialog.Builder dialog = new AlertDialog.Builder(OrderNewActivity.this);
-                dialog.setTitle(R.string.reply_order).setMessage(R.string.alert_confirm_refuse);
+                dialog.setTitle(R.string.dialog_reminder).setMessage(R.string.alert_confirm_refuse);
                 dialog.setPositiveButton(R.string.alert_confirm,
                         new DialogInterface.OnClickListener()
                         {
@@ -448,8 +467,7 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
                             {
                                 dialog.dismiss();
                             }
-                        });
-                orderRefuse();
+                        }).show();
                 break;
             case R.id.order_new_accept_btn:
                 orderAccept();
@@ -464,19 +482,22 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
 
     public void hideLoading()
     {
-        if(loading != null)
+        if (loading != null)
         {
             loading.dismiss();
         }
-
     }
-
 
     /**
      * 接单
      */
     private void orderAccept()
     {
+        if(String.valueOf(orderNewSpinner.getSelectedItem()).equals(""))
+        {
+            CommonUtils.showToast(this,R.string.es_arrival_time_check);
+            return;
+        }
         Map<String, String> params = new HashMap<>();
         params.put("id", order.getId());
         params.put("order_id", String.valueOf(order.getOrderId()));
@@ -496,11 +517,11 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
                 {
                     CommonInfo commonInfo = response.body();
                     CommonUtils.showToast(OrderNewActivity.this, commonInfo.getMsg());
-                    if(commonInfo.isSuccess())
+                    if (commonInfo.isSuccess())
                     {
                         Intent intent = new Intent(OrderNewActivity.this, PrintActivity.class);
                         intent.putExtra("orderNewInfo", orderNewInfo);
-                        startActivity(intent);
+                        startActivityForResult(intent, Constant.REQUEST_PRINT);
                     }
 
                 }
@@ -548,6 +569,9 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
                     {
                         orderNewOperationLayout.setVisibility(View.GONE);
                         ((LinearLayout) (orderNewSpinner.getParent())).setVisibility(View.GONE);
+                        //拒绝接单后finish页面
+                        finish();
+
                     }
                 }
                 else

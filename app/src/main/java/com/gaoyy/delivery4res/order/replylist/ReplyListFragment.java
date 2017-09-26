@@ -268,6 +268,6 @@ public class ReplyListFragment extends BaseFragment implements ReplyListContract
     @Override
     public void removeSingleItem(int position)
     {
-
+        replyOrderListAdapter.removeSingleItem(position);
     }
 }

@@ -125,5 +125,7 @@
     <string name="dialog_reminder">Reminder</string>
     <string name="dialog_reminder_message">You do not open the location permissions, please go to the phone settings interface, open the application positioning rights, and then login</string>
     <string name="dialog_setting">Setting</string>
+    <string name="print_complete">Print Complete</string>
+    <string name="es_arrival_time_check">please choose Estimated Arrival Time</string>
 
 </resources>

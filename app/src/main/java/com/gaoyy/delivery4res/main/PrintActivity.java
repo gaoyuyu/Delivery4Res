@@ -262,7 +262,7 @@ public class PrintActivity extends BaseActivity implements AdapterView.OnItemCli
                         .getMethod("createBond");
                 Log.d(Constant.TAG, "开始配对");
                 returnValue = (Boolean) createBondMethod.invoke(device);
-                Log.d(Constant.TAG, "returnValue-->"+returnValue);
+                Log.d(Constant.TAG, "returnValue-->" + returnValue);
 
             }
             else if (device.getBondState() == BluetoothDevice.BOND_BONDED)
@@ -287,6 +287,10 @@ public class PrintActivity extends BaseActivity implements AdapterView.OnItemCli
             bluetoothSocket.connect();
 
             printOrder();
+            //返回打印结果
+            setResult(RESULT_OK);
+            finish();
+
         }
         catch (IOException e)
         {
@@ -297,6 +301,7 @@ public class PrintActivity extends BaseActivity implements AdapterView.OnItemCli
 
     /**
      * 打印订单
+     *
      * @throws IOException
      */
     private void printOrder() throws IOException
@@ -309,56 +314,64 @@ public class PrintActivity extends BaseActivity implements AdapterView.OnItemCli
         PrintUtils.printText("\n");
         PrintUtils.selectCommand(PrintUtils.ALIGN_CENTER);
         PrintUtils.selectCommand(PrintUtils.DOUBLE_HEIGHT_WIDTH);
-        PrintUtils.printText(orderNewInfo.getBody().getStoreName()+"\n");
+        PrintUtils.printText(orderNewInfo.getBody().getStoreName() + "\n");
         PrintUtils.selectCommand(PrintUtils.NORMAL);
         PrintUtils.printText("--------------------------------\n");
         PrintUtils.selectCommand(PrintUtils.NORMAL);
         PrintUtils.selectCommand(PrintUtils.ALIGN_LEFT);
-        PrintUtils.printText("订单号："+orderNewInfo.getBody().getObj().getOrder_id()+"\n");
-        PrintUtils.printText("期望时间："+ orderNewInfo.getBody().getObj().getAppointment_time()+"\n");
+        PrintUtils.printText("订单号：" + orderNewInfo.getBody().getObj().getOrder_id() + "\n");
+        PrintUtils.printText("期望时间：" + orderNewInfo.getBody().getObj().getAppointment_time() + "\n");
         PrintUtils.printText("--------------------------------\n");
         PrintUtils.printText(PrintUtils.printThreeData("商品", "数量", "单价\n"));
 
         List<OrderNewInfo.BodyBean.ObjBean.GcsBean> goods = orderNewInfo.getBody().getObj().getGcs();
-        for(OrderNewInfo.BodyBean.ObjBean.GcsBean item : goods)
+        for (OrderNewInfo.BodyBean.ObjBean.GcsBean item : goods)
         {
-            PrintUtils.printText(PrintUtils.printThreeData(""+item.getGoods_name(), item.getCount()+"", item.getPrice()+"\n"));
+            PrintUtils.printText(PrintUtils.printThreeData("" + item.getGoods_name(), item.getCount() + "", "$"+item.getPrice() + "\n"));
         }
         PrintUtils.printText("--------------------------------\n");
 
         OrderNewInfo.BodyBean.ObjBean data = orderNewInfo.getBody().getObj();
         //小费
-        if (data.getTipPrice() != null)  PrintUtils.printText(PrintUtils.printTwoData("小费",  data.getTipPrice()+"\n"));
+        if (data.getTipPrice() != null && (Double) (data.getTipPrice()) != 0.0)
+            PrintUtils.printText(PrintUtils.printTwoData("小费", "$"+data.getTipPrice() + "\n"));
         //配送费
-        if (data.getShip_price() != null)  PrintUtils.printText(PrintUtils.printTwoData("配送费",  data.getShip_price()+"\n"));
+        if (data.getShip_price() != null && (Double) (data.getShip_price()) != 0.0)
+            PrintUtils.printText(PrintUtils.printTwoData("配送费", "$"+data.getShip_price() + "\n"));
         //税1
-        if (data.getTaxation() != null)  PrintUtils.printText(PrintUtils.printTwoData("税1",  data.getTaxation()+"\n"));
+        if (data.getTaxation() != null && (Double) (data.getTaxation()) != 0.0)
+            PrintUtils.printText(PrintUtils.printTwoData("税1", "$"+data.getTaxation() + "\n"));
         //税2
-        if (data.getTipPrice() != null)  PrintUtils.printText(PrintUtils.printTwoData("税2",  data.getTipPrice()+"\n"));
+        if (data.getTaxation_tvq() != null  && (Double) (data.getTaxation_tvq()) != 0.0)
+            PrintUtils.printText(PrintUtils.printTwoData("税2", "$"+data.getTaxation_tvq() + "\n"));
         //收益
-        if (data.getUseIncomePrice() != null)  PrintUtils.printText(PrintUtils.printTwoData("收益",  "-"+data.getUseIncomePrice()+"\n"));
+        if (data.getUseIncomePrice() != null  && (Double) (data.getUseIncomePrice()) != 0.0)
+            PrintUtils.printText(PrintUtils.printTwoData("收益", "-$" + data.getUseIncomePrice() + "\n"));
         //代金券
-        if (data.getCouponPrice() != null)  PrintUtils.printText(PrintUtils.printTwoData("代金券",  "-"+data.getCouponPrice()+"\n"));
+        if (data.getCouponPrice() != null  && (Double) (data.getCouponPrice()) != 0.0)
+            PrintUtils.printText(PrintUtils.printTwoData("代金券", "-$" + data.getCouponPrice() + "\n"));
         //商家满减
-        if (data.getActivityPrice() != null)  PrintUtils.printText(PrintUtils.printTwoData("商家满减",  "-"+data.getActivityPrice()+"\n"));
+        if (data.getActivityPrice() != null  && (Double) (data.getActivityPrice()) != 0.0)
+            PrintUtils.printText(PrintUtils.printTwoData("商家满减", "-$" + data.getActivityPrice() + "\n"));
 
         PrintUtils.printText("--------------------------------\n");
         PrintUtils.selectCommand(PrintUtils.ALIGN_CENTER);
         PrintUtils.selectCommand(PrintUtils.DOUBLE_HEIGHT_WIDTH);
-        PrintUtils.printText("合计："+orderNewInfo.getBody().getObj().getTotalPrice()+"\n");
+        PrintUtils.printText("合计：" + "$"+orderNewInfo.getBody().getObj().getTotalPrice() + "\n");
         PrintUtils.selectCommand(PrintUtils.NORMAL);
         PrintUtils.selectCommand(PrintUtils.ALIGN_LEFT);
         PrintUtils.printText("--------------------------------\n");
-        PrintUtils.printText("下单人："+orderNewInfo.getBody().getObj().getAddr().getTrueName()+"\n");
-        PrintUtils.printText("电话："+ orderNewInfo.getBody().getObj().getAddr().getMobile()+"\n");
-        PrintUtils.printText("地址："+orderNewInfo.getBody().getObj().getAddr().getArea_info()+"\n");
+        PrintUtils.printText("下单人：" + orderNewInfo.getBody().getObj().getAddr().getTrueName() + "\n");
+        PrintUtils.printText("电话：" + orderNewInfo.getBody().getObj().getAddr().getMobile() + "\n");
+        PrintUtils.printText("地址：" + orderNewInfo.getBody().getObj().getAddr().getArea_info() + "\n");
 
-        print1DCodeBy2(orderNewInfo.getBody().getObj().getOrder_id()+"",mOutputStream);
+        print1DCodeBy2(orderNewInfo.getBody().getObj().getOrder_id() + "", mOutputStream);
 
         PrintUtils.printText("\n\n\n\n\n");
     }
 
-    private void print1DCodeBy2(String content,OutputStream outputStream) {
+    private void print1DCodeBy2(String content, OutputStream outputStream)
+    {
         byte[] bytes = content.getBytes();
         byte[] cmd = new byte[bytes.length + 4];
         // 打印条码的指令
@@ -366,45 +379,50 @@ public class PrintActivity extends BaseActivity implements AdapterView.OnItemCli
         cmd[1] = 0x6B;// 107
         cmd[2] = 73;// 条码的类型 code39:69 code128:73 具体参考文档
         cmd[3] = (byte) bytes.length;// 条码数据的字节数
-        for (int i = 0; i < bytes.length; i++) {
+        for (int i = 0; i < bytes.length; i++)
+        {
             cmd[4 + i] = bytes[i];
         }
 
 //        initPrinter();// 一定要初始化，不然条码打不出来
 
-        byte[] initPrinter = { 0x1B, 0x40 };// 初始化
-        write(initPrinter,outputStream);
+        byte[] initPrinter = {0x1B, 0x40};// 初始化
+        write(initPrinter, outputStream);
 
         // 设置对齐方式
-        byte[] alignByte = { 0x1B, 0x61, 1 };// 0：左对齐；1：居中；2：右对齐
-        write(alignByte,outputStream);
+        byte[] alignByte = {0x1B, 0x61, 1};// 0：左对齐；1：居中；2：右对齐
+        write(alignByte, outputStream);
 
         // 设置条码的高度(注：高度与宽度要么全设置，要么全不设置)
-        byte[] setCodeHeigthByte = { 0x1D, 0x68, (byte) 150 };
-        write(setCodeHeigthByte,outputStream);
+        byte[] setCodeHeigthByte = {0x1D, 0x68, (byte) 150};
+        write(setCodeHeigthByte, outputStream);
         // 设置条码的宽度
-        byte[] setCodeWidthByte = { 0x1D, 0x77, 2 };
-        write(setCodeWidthByte,outputStream);
+        byte[] setCodeWidthByte = {0x1D, 0x77, 2};
+        write(setCodeWidthByte, outputStream);
 
         // 设置字符打印在条码下方
-        byte[] codeStrByte = { 0x1D, 0x48, 2 };
-        write(codeStrByte,outputStream);
+        byte[] codeStrByte = {0x1D, 0x48, 2};
+        write(codeStrByte, outputStream);
 
         // 打印条码
-        write(cmd,outputStream);
+        write(cmd, outputStream);
 
         // 设置换行
-        byte[] LF = { 0x0A, 0x0A };// 两行
-        write(LF,outputStream);
+        byte[] LF = {0x0A, 0x0A};// 两行
+        write(LF, outputStream);
     }
 
 
-    public void write(byte[] buffer,OutputStream outputStream) {
+    public void write(byte[] buffer, OutputStream outputStream)
+    {
         // TODO 打印
-        try {
+        try
+        {
             outputStream.write(buffer);
             outputStream.flush();
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }

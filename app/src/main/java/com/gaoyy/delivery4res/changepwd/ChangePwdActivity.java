@@ -12,7 +12,6 @@ public class ChangePwdActivity extends BaseActivity
 {
     private Toolbar changePwdToolbar;
 
-
     @Override
     protected void initContentView()
     {

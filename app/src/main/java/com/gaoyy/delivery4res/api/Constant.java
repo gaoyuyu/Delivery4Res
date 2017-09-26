@@ -37,4 +37,6 @@ public class Constant
     public static final int CANCLE= 108;
     public static final int MAKING_FINISH= 109;
 
+    public static final int REQUEST_PRINT = 110;
+
 }

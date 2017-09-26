@@ -68,6 +68,16 @@ public class ChangePwdFragment extends BaseFragment implements ChangePwdContract
     {
         CommonUtils.textInputLayoutSetting(changeOldpwd, changeOldpwdTextinputlayout, "Can't be empty");
         CommonUtils.textInputLayoutSetting(changeNewpwd, changeNewpwdTextinputlayout, "Can't be empty");
+        if (changeNewpwd.getText().toString().length() != 6)
+        {
+            changeNewpwdTextinputlayout.setErrorEnabled(true);
+            changeNewpwdTextinputlayout.setError("The password length should be a 6-digit array");
+        }
+        else
+        {
+            changeNewpwdTextinputlayout.setError(null);
+            changeNewpwdTextinputlayout.setErrorEnabled(false);
+        }
     }
 
     @Override
