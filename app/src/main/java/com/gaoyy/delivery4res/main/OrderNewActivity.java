@@ -91,6 +91,9 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
     //是否从推送进入Ativity
     private boolean isFormNotice;
 
+    private String id = "";
+    private String orderId = "";
+
     @Override
     protected void initContentView()
     {
@@ -147,9 +150,6 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
     {
         super.configViews();
         isFormNotice = getIntent().getBundleExtra("notice") != null;
-
-        String id = "";
-        String orderId = "";
         if (!isFormNotice)
         {
             order = (OrderListInfo.BodyBean.PageBean.ListBean) getIntent().getSerializableExtra("order");
@@ -259,7 +259,7 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
                     //设置价格
                     setPrice(data);
                     //总计
-                    orderNewSum.setText("" + data.getTotalPrice() + "");
+                    orderNewSum.setText("$" + data.getTotalPrice() + "");
                     //备注
                     orderNewRemark.setText(data.getMsg() + "");
                     //期望送达时间
@@ -283,17 +283,17 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
                      * flage  0-没接单 1-已接单
                      * 已接单-不显示拒绝按钮，接单按钮，预计送达时间
                      */
-//                    if (1 == Integer.valueOf(orderNewInfo.getBody().getFlag()) )
-//                    {
-//                        orderNewOperationLayout.setVisibility(View.GONE);
-//                        ((LinearLayout) (orderNewSpinner.getParent())).setVisibility(View.GONE);
-//
-//                    }
-//                    else
-//                    {
-//                        orderNewOperationLayout.setVisibility(View.VISIBLE);
-//                        ((LinearLayout) (orderNewSpinner.getParent())).setVisibility(View.VISIBLE);
-//                    }
+                    if (1 == Integer.valueOf(orderNewInfo.getBody().getFlag()) )
+                    {
+                        orderNewOperationLayout.setVisibility(View.GONE);
+                        ((LinearLayout) (orderNewSpinner.getParent())).setVisibility(View.GONE);
+
+                    }
+                    else
+                    {
+                        orderNewOperationLayout.setVisibility(View.VISIBLE);
+                        ((LinearLayout) (orderNewSpinner.getParent())).setVisibility(View.VISIBLE);
+                    }
 
                 }
             }
@@ -436,8 +436,13 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
             if (resultCode == RESULT_OK)
             {
                 CommonUtils.showToast(this, R.string.print_complete);
-                //打印完成后关闭页面
-                finish();
+                //打印完成后关闭页面，跳转到订单列表
+                finishToOrderList();
+            }else if(resultCode == RESULT_CANCELED)
+            {
+                CommonUtils.showToast(this, R.string.print_cancel);
+                //打印完成后关闭页面，跳转到订单列表
+                finishToOrderList();
             }
         }
     }
@@ -499,8 +504,8 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
             return;
         }
         Map<String, String> params = new HashMap<>();
-        params.put("id", order.getId());
-        params.put("order_id", String.valueOf(order.getOrderId()));
+        params.put("id", id);
+        params.put("order_id", orderId);
         params.put("finishedTime", orderNewSpinner.getSelectedItem() + "");
         params.put("loginName", CommonUtils.getLoginName(this));
         params.put("randomCode", CommonUtils.getRandomCode(this));
@@ -547,8 +552,8 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
     private void orderRefuse()
     {
         Map<String, String> params = new HashMap<>();
-        params.put("id", order.getId());
-        params.put("order_id", String.valueOf(order.getOrderId()));
+        params.put("id", id);
+        params.put("order_id", orderId);
         params.put("loginName", CommonUtils.getLoginName(this));
         params.put("randomCode", CommonUtils.getRandomCode(this));
         CommonUtils.httpDebugLogger("拒绝接单请求参数" + params.toString());
@@ -569,9 +574,8 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
                     {
                         orderNewOperationLayout.setVisibility(View.GONE);
                         ((LinearLayout) (orderNewSpinner.getParent())).setVisibility(View.GONE);
-                        //拒绝接单后finish页面
-                        finish();
-
+                        //拒绝接单后finish页面，跳转到订单列表
+                        finishToOrderList();
                     }
                 }
                 else
@@ -587,5 +591,17 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
                 CommonUtils.httpErrorLogger(t.toString());
             }
         });
+    }
+
+    /**
+     * finish后，跳转到订单列表
+     */
+    private void finishToOrderList()
+    {
+        finish();
+        Intent orderList = new Intent();
+        orderList.setAction("android.intent.action.DetailToMainReceiver");
+        orderList.putExtra("orderList",1);
+        sendBroadcast(orderList);
     }
 }

@@ -127,5 +127,7 @@
     <string name="dialog_setting">Setting</string>
     <string name="print_complete">Print Complete</string>
     <string name="es_arrival_time_check">please choose Estimated Arrival Time</string>
+    <string name="bluetooth_unsupport">This Device doesn\'t support bluetooth</string>
+    <string name="print_cancel">Print Cancel</string>
 
 </resources>

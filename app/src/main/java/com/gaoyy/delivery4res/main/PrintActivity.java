@@ -20,6 +20,7 @@ import com.gaoyy.delivery4res.R;
 import com.gaoyy.delivery4res.api.Constant;
 import com.gaoyy.delivery4res.api.bean.OrderNewInfo;
 import com.gaoyy.delivery4res.base.BaseActivity;
+import com.gaoyy.delivery4res.util.CommonUtils;
 import com.gaoyy.delivery4res.util.PrintUtils;
 
 import java.io.IOException;
@@ -159,6 +160,9 @@ public class PrintActivity extends BaseActivity implements AdapterView.OnItemCli
         if (bluetoothAdapter == null)
         {
             Log.e(Constant.TAG, "当前手机不支持蓝牙");
+            CommonUtils.showToast(this,R.string.bluetooth_unsupport);
+            setResult(RESULT_CANCELED);
+            finish();
         }
         else
         {
@@ -217,11 +221,13 @@ public class PrintActivity extends BaseActivity implements AdapterView.OnItemCli
     {
         super.onDestroy();
         unregisterReceiver(receiver);
-
-        //Activity不可见时停止扫描
-        if (bluetoothAdapter.isDiscovering())
+        if(bluetoothAdapter != null)
         {
-            bluetoothAdapter.cancelDiscovery();
+            //Activity不可见时停止扫描
+            if (bluetoothAdapter.isDiscovering())
+            {
+                bluetoothAdapter.cancelDiscovery();
+            }
         }
     }
 

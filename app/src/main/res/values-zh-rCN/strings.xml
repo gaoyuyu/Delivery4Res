@@ -122,6 +122,8 @@
     <string name="dialog_setting">去设置</string>
     <string name="print_complete">打印完成</string>
     <string name="es_arrival_time_check">请选择预计送达时间</string>
+    <string name="bluetooth_unsupport">当前手机不支持蓝牙</string>
+    <string name="print_cancel">打印取消</string>
 
 
 </resources>
