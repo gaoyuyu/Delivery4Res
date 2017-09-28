@@ -76,13 +76,14 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         vh.itemOrderFinishedTime.setText(order.getFinishedTime());
         vh.itemOrderStatusDate.setText(order.getCreateDate());
 
-
+        Log.d(Constant.TAG,"--getGoodsInfo->"+order.getGoodsInfo());
+        //在判断有无goodsinfo数据之前，先移除view
+        vh.itemOrderFoodList.removeAllViews();
         if (order.getGoodsInfo() != null)
         {
             String goodsInfo = String.valueOf(order.getGoodsInfo());
 
             String[] goods = goodsInfo.split(";");
-            vh.itemOrderFoodList.removeAllViews();
             for (int i = 0; i < goods.length; i++)
             {
                 Log.d(Constant.TAG, "goods " + i + "  " + goods[i]);
@@ -137,6 +138,8 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 Log.d(Constant.TAG, "adapter order status is Accept");
                 vh.itemOrderStatus.setBackgroundColor(context.getResources().getColor(android.R.color.holo_orange_dark));
                 vh.itemOrderStatus.setText(R.string.status_accept);
+
+                vh.itemOrderDriverNameLayout.setVisibility(View.VISIBLE);
 
                 //显示按钮组
                 vh.itemOrderOperationLayout.setVisibility(View.VISIBLE);

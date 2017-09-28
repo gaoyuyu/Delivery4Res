@@ -251,7 +251,6 @@ public class ReplyListFragment extends BaseFragment implements ReplyListContract
                     @Override
                     public void onClick(DialogInterface dialog, int which)
                     {
-                        CommonUtils.showToast(activity,et.getText().toString());
                         Map<String,String> params = new HashMap<String, String>();
                         params.put("loginName",CommonUtils.getLoginName(activity));
                         params.put("randomCode",CommonUtils.getRandomCode(activity));

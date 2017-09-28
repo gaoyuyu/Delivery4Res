@@ -338,9 +338,12 @@ public class PrintActivity extends BaseActivity implements AdapterView.OnItemCli
         PrintUtils.printText("--------------------------------\n");
 
         OrderNewInfo.BodyBean.ObjBean data = orderNewInfo.getBody().getObj();
-        //小费
-        if (data.getTipPrice() != null && (Double) (data.getTipPrice()) != 0.0)
-            PrintUtils.printText(PrintUtils.printTwoData("小费", "$"+data.getTipPrice() + "\n"));
+        if(!data.getDistribution_type().equals("Pick-Up"))
+        {
+            //小费
+            if (data.getTipPrice() != null && (Double) (data.getTipPrice()) != 0.0)
+                PrintUtils.printText(PrintUtils.printTwoData("小费", "$"+data.getTipPrice() + "\n"));
+        }
         //配送费
         if (data.getShip_price() != null && (Double) (data.getShip_price()) != 0.0)
             PrintUtils.printText(PrintUtils.printTwoData("配送费", "$"+data.getShip_price() + "\n"));
@@ -370,6 +373,8 @@ public class PrintActivity extends BaseActivity implements AdapterView.OnItemCli
         PrintUtils.printText("下单人：" + orderNewInfo.getBody().getObj().getAddr().getTrueName() + "\n");
         PrintUtils.printText("电话：" + orderNewInfo.getBody().getObj().getAddr().getMobile() + "\n");
         PrintUtils.printText("地址：" + orderNewInfo.getBody().getObj().getAddr().getArea_info() + "\n");
+        PrintUtils.printText("备注：" + orderNewInfo.getBody().getObj().getMsg() + "\n");
+
 
         print1DCodeBy2(orderNewInfo.getBody().getObj().getOrder_id() + "", mOutputStream);
 

@@ -166,7 +166,10 @@ public class ReplyOrderListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
      */
     public void removeSingleItem(int position)
     {
-        notifyItemRemoved(position);
+        Log.d(Constant.TAG,"remove-->"+position);
+        data.remove(position);//删除数据源
+        notifyItemRemoved(position);//刷新被删除的地方
+        notifyItemRangeChanged(position, getItemCount()); //刷新被删除数据，以及其后面的数据
     }
 
     public static class ReplyListViewHolder extends RecyclerView.ViewHolder

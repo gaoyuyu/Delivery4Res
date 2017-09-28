@@ -233,6 +233,17 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
                     orderNewInfo = response.body();
 
                     OrderNewInfo.BodyBean.ObjBean data = orderNewInfo.getBody().getObj();
+                    Log.e(Constant.TAG, "getDistribution_type->" + data.getDistribution_type());
+
+                    if(data.getDistribution_type().equals("Pick-Up"))
+                    {
+                        ((LinearLayout) (orderNewTip.getParent())).setVisibility(View.GONE);
+                    }
+                    else
+                    {
+                        ((LinearLayout) (orderNewTip.getParent())).setVisibility(View.VISIBLE);
+                    }
+
 
                     Log.e(Constant.TAG, "bean->" + data.toString());
 
