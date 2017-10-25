@@ -93,7 +93,6 @@
         <activity android:name=".myreplylist.MyReplyListActivity">
         </activity>
 
-
         <!-- 极光推送Receiver -->
         <receiver
             android:name=".receiver.MyReceiver"
@@ -110,6 +109,8 @@
             </intent-filter>
         </receiver>
 
+        <activity android:name=".mine.replylist.ReplyListActivity">
+        </activity>
     </application>
 
 </manifest>

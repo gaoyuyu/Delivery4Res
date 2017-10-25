@@ -48,6 +48,8 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
 
     private CustomDialogFragment loading;
 
+    private int isMA=-1;
+
     public OrderListFragment()
     {
         // Required empty public constructor
@@ -66,6 +68,13 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
         return R.layout.fragment_order_list;
     }
 
+    @Override
+    protected void getParamsData()
+    {
+        super.getParamsData();
+        isMA = getArguments().getInt("isMA");
+
+    }
 
     @Override
     protected void assignViews(View rootView)
@@ -146,6 +155,7 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
         params.put("randomCode", CommonUtils.getRandomCode(activity));
         params.put("pageNo", String.valueOf(pageNo));
         params.put("pageSize", String.valueOf(pageSize));
+        params.put("isMA", String.valueOf(isMA));
         String orderNo = getArguments().getString("orderNo");
         String driverPhone = getArguments().getString("driverPhone");
         String customerPhone = getArguments().getString("customerPhone");

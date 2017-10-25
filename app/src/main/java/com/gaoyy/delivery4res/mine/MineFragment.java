@@ -17,6 +17,7 @@ import com.gaoyy.delivery4res.base.CustomDialogFragment;
 import com.gaoyy.delivery4res.changepwd.ChangePwdActivity;
 import com.gaoyy.delivery4res.login.LoginActivity;
 import com.gaoyy.delivery4res.mine.messagelist.MessageListActivity;
+import com.gaoyy.delivery4res.mine.replylist.ReplyListActivity;
 import com.gaoyy.delivery4res.myreplylist.MyReplyListActivity;
 import com.gaoyy.delivery4res.util.CommonUtils;
 import com.gaoyy.delivery4res.util.DialogUtils;
@@ -35,6 +36,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener
     private RelativeLayout mineNewOrder;
     private RelativeLayout mineMyReply;
     private RelativeLayout mineMessage;
+    private RelativeLayout mineReply;
     private AppCompatButton mineSignOutBtn;
 
 
@@ -100,6 +102,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener
         mineNewOrder = (RelativeLayout) rootView.findViewById(R.id.mine_new_order);
         mineMyReply = (RelativeLayout) rootView.findViewById(R.id.mine_my_reply);
         mineMessage = (RelativeLayout) rootView.findViewById(R.id.mine_message);
+        mineReply = (RelativeLayout) rootView.findViewById(R.id.mine_reply);
         mineSignOutBtn = (AppCompatButton)rootView.findViewById(R.id.mine_sign_out_btn);
     }
 
@@ -121,6 +124,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener
         mineNewOrder.setOnClickListener(this);
         mineMyReply.setOnClickListener(this);
         mineMessage.setOnClickListener(this);
+        mineReply.setOnClickListener(this);
         mineSignOutBtn.setOnClickListener(this);
 
     }
@@ -160,6 +164,11 @@ public class MineFragment extends BaseFragment implements View.OnClickListener
                 Intent message = new Intent();
                 message.setClass(activity, MessageListActivity.class);
                 startActivity(message);
+                break;
+            case R.id.mine_reply:
+                Intent reply = new Intent();
+                reply.setClass(activity, ReplyListActivity.class);
+                startActivity(reply);
                 break;
             case R.id.mine_sign_out_btn:
                 String loginName = CommonUtils.getLoginName(activity);

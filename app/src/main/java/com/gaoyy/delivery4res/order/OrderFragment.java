@@ -14,8 +14,6 @@ import com.gaoyy.delivery4res.adapter.MainPagerAdapter;
 import com.gaoyy.delivery4res.base.BaseFragment;
 import com.gaoyy.delivery4res.order.orderlist.OrderListFragment;
 import com.gaoyy.delivery4res.order.orderlist.OrderListPresenter;
-import com.gaoyy.delivery4res.order.replylist.ReplyListFragment;
-import com.gaoyy.delivery4res.order.replylist.ReplyListPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +29,7 @@ public class OrderFragment extends BaseFragment
     private TabLayout orderTablayout;
 
 
-    private int[] orderTabType = {R.string.tab_all_list, R.string.tab_reply_list};
+    private int[] orderTabType = {R.string.tab_delivery_order_list, R.string.tab_ma_order_list};
 
     private MainPagerAdapter mainPagerAdapter;
     private List<Fragment> fragmentList = new ArrayList<>();
@@ -49,7 +47,7 @@ public class OrderFragment extends BaseFragment
 
     public void setToOrderList()
     {
-        orderViewpager.setCurrentItem(0,true);
+        orderViewpager.setCurrentItem(0, true);
     }
 
     @Override
@@ -80,15 +78,17 @@ public class OrderFragment extends BaseFragment
         super.configViews();
 
 
-        OrderListFragment orderListFragment = OrderListFragment.newInstance();
-        Bundle bundle = new Bundle();
-        orderListFragment.setArguments(bundle);
-        new OrderListPresenter(orderListFragment);
-        fragmentList.add(orderListFragment);
+        for (int i = 0; i < orderTabType.length; i++)
+        {
+            OrderListFragment orderListFragment = OrderListFragment.newInstance();
+            Bundle bundle = new Bundle();
+            //isMA=   0 |派送订单   1|商城订单
+            bundle.putInt("isMA", i);
+            orderListFragment.setArguments(bundle);
+            new OrderListPresenter(orderListFragment);
+            fragmentList.add(orderListFragment);
+        }
 
-        ReplyListFragment replyListFragment = new ReplyListFragment();
-        new ReplyListPresenter(replyListFragment);
-        fragmentList.add(replyListFragment);
 
         mainPagerAdapter = new MainPagerAdapter(activity, getChildFragmentManager(), orderTabType, fragmentList);
         orderViewpager.setAdapter(mainPagerAdapter);

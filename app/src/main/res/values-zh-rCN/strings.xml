@@ -81,7 +81,7 @@
 
 
     <string name="tab_all_list">全部订单</string>
-    <string name="tab_reply_list">待回复的</string>
+    <string name="tab_reply_list">待回复</string>
 
     <string name="menu_my_reply">我的回复</string>
     <string name="menu_message">站内消息</string>
@@ -124,6 +124,8 @@
     <string name="es_arrival_time_check">请选择预计送达时间</string>
     <string name="bluetooth_unsupport">当前手机不支持蓝牙</string>
     <string name="print_cancel">打印取消</string>
+    <string name="tab_delivery_order_list">派送订单</string>
+    <string name="tab_ma_order_list">商城订单</string>
 
 
 </resources>
