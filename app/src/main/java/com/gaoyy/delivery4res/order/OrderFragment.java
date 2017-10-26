@@ -20,9 +20,6 @@ import java.util.List;
 
 public class OrderFragment extends BaseFragment
 {
-    // TODO: 2017/9/6 0006  OrderFragment
-
-
     private LinearLayout contentOrder;
     private Toolbar orderToolbar;
     private ViewPager orderViewpager;

@@ -39,7 +39,7 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
     private int lastVisibleItem;
 
     private int pageNo = 1;
-    private int pageSize = 10;
+    private int pageSize = Constant.PAGE_SIZE;
     private int pageCount;
 
     private LinearLayoutManager linearLayoutManager;
