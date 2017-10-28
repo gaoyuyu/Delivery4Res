@@ -2,29 +2,97 @@ package com.gaoyy.delivery4res.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gaoyy.delivery4res.R;
-import com.gaoyy.delivery4res.api.Constant;
 import com.gaoyy.delivery4res.api.bean.ReplyOrderListInfo;
+import com.gaoyy.delivery4res.base.BaseViewHolder;
+import com.gaoyy.delivery4res.base.RecyclerBaseAdapter;
 
-import java.util.LinkedList;
 import java.util.List;
 
 /**
  * Created by gaoyy on 2017/9/12 0012.
  */
+public class ReplyOrderListAdapter extends RecyclerBaseAdapter<ReplyOrderListInfo.BodyBean.ListBean.ResultBean>
+{
+    private View goodsView;
 
+    public ReplyOrderListAdapter(Context context, List<ReplyOrderListInfo.BodyBean.ListBean.ResultBean> data)
+    {
+        super(context, R.layout.item_reply, data);
+    }
+
+    @Override
+    protected void bindData(BaseViewHolder holder, ReplyOrderListInfo.BodyBean.ListBean.ResultBean itemData, int position)
+    {
+        ((LinearLayout) (holder.getView(R.id.item_common_address).getParent())).setVisibility(View.GONE);
+        holder.setText(R.id.item_common_address, itemData.getAddTime())
+                .setText(R.id.item_common_customer, itemData.getBuyerName())
+                .setText(R.id.item_common_phone, itemData.getBuyerMobile())
+                .setText(R.id.item_common_no, itemData.getOrder_id());
+
+        List<ReplyOrderListInfo.BodyBean.ListBean.ResultBean.GcsBean> goods = itemData.getGcs();
+        LinearLayout itemCommonGoodsLayout = holder.getView(R.id.item_common_goods_layout);
+        itemCommonGoodsLayout.removeAllViews();
+
+        for (ReplyOrderListInfo.BodyBean.ListBean.ResultBean.GcsBean item : goods)
+        {
+            goodsView = mLayoutInflater.inflate(R.layout.item_food, itemCommonGoodsLayout, false);
+            TextView goodName = (TextView) goodsView.findViewById(R.id.item_food_name);
+            TextView goodCount = (TextView) goodsView.findViewById(R.id.item_food_count);
+            TextView goodPrice = (TextView) goodsView.findViewById(R.id.item_food_price);
+            goodName.setText("" + item.getGoods_name());
+            goodCount.setText("x" + item.getCount());
+            goodPrice.setText("$" + item.getPrice());
+            itemCommonGoodsLayout.addView(goodsView);
+        }
+
+        String orderEva = itemData.getOrderEva();
+        SpannableStringBuilder builder = new SpannableStringBuilder("用户评价：" + orderEva);
+        ForegroundColorSpan span = new ForegroundColorSpan(mContext.getResources().getColor(R.color.colorAccent));
+        builder.setSpan(span, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        TextView itemReplyContent = holder.getView(R.id.item_reply_content);
+        itemReplyContent.setText(builder);
+        AppCompatButton itemReplyBtn = holder.getView(R.id.item_reply_btn);
+
+        //设置btn的点击监听器
+        if (onItemClickListener != null)
+        {
+            itemReplyBtn.setOnClickListener(new BasicOnClickListener(holder, itemData));
+        }
+    }
+
+    private class BasicOnClickListener implements View.OnClickListener
+    {
+        private BaseViewHolder vh;
+        private ReplyOrderListInfo.BodyBean.ListBean.ResultBean reply;
+
+        public BasicOnClickListener(BaseViewHolder vh, ReplyOrderListInfo.BodyBean.ListBean.ResultBean reply)
+        {
+            this.vh = vh;
+            this.reply = reply;
+        }
+
+        @Override
+        public void onClick(View v)
+        {
+            switch (v.getId())
+            {
+                case R.id.item_reply_btn:
+                    onItemClickListener.onItemClick(vh.getView(R.id.item_reply_btn), vh.getLayoutPosition(), reply);
+                    break;
+            }
+        }
+    }
+}
+
+/*
 public class ReplyOrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
     private LayoutInflater inflater;
@@ -92,7 +160,6 @@ public class ReplyOrderListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         builder.setSpan(span, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         vh.itemReplyContent.setText(builder);
 
-
         //设置btn的点击监听器
         if (onItemClickListener != null)
         {
@@ -130,22 +197,11 @@ public class ReplyOrderListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         return data.size();
     }
 
-    /**
-     * 第一次加载
-     *
-     * @param s
-     */
     public void updateData(LinkedList<ReplyOrderListInfo.BodyBean.ListBean.ResultBean> s)
     {
         this.data = s;
         notifyDataSetChanged();
     }
-
-    /**
-     * 下拉加载更多
-     *
-     * @param newDatas
-     */
     public void addMoreItem(LinkedList<ReplyOrderListInfo.BodyBean.ListBean.ResultBean> newDatas)
     {
         Log.d(Constant.TAG, "newDatas-->" + newDatas.size());
@@ -159,11 +215,6 @@ public class ReplyOrderListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         notifyItemRangeChanged(getItemCount(), getItemCount() - newDatas.size());
     }
 
-    /**
-     * 移除单个item
-     *
-     * @param position
-     */
     public void removeSingleItem(int position)
     {
         Log.d(Constant.TAG,"remove-->"+position);
@@ -208,3 +259,4 @@ public class ReplyOrderListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
 }
+*/

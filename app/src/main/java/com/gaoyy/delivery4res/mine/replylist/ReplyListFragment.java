@@ -18,6 +18,7 @@ import com.gaoyy.delivery4res.api.Constant;
 import com.gaoyy.delivery4res.api.bean.ReplyOrderListInfo;
 import com.gaoyy.delivery4res.base.BaseFragment;
 import com.gaoyy.delivery4res.base.CustomDialogFragment;
+import com.gaoyy.delivery4res.base.OnItemClickListener;
 import com.gaoyy.delivery4res.util.CommonUtils;
 import com.gaoyy.delivery4res.util.DialogUtils;
 import com.pnikosis.materialishprogress.ProgressWheel;
@@ -26,7 +27,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-public class ReplyListFragment extends BaseFragment implements ReplyListContract.View, SwipeRefreshLayout.OnRefreshListener, ReplyOrderListAdapter.OnItemClickListener
+public class ReplyListFragment extends BaseFragment implements ReplyListContract.View, SwipeRefreshLayout.OnRefreshListener, OnItemClickListener
 {
     private static final String LOG_TAG = ReplyListFragment.class.getSimpleName();
     private ProgressWheel commonProgresswheel;
@@ -239,34 +240,42 @@ public class ReplyListFragment extends BaseFragment implements ReplyListContract
     }
 
     @Override
-    public void onItemClick(View view, final int position, final ReplyOrderListInfo.BodyBean.ListBean.ResultBean order)
-    {
-        View editView = LayoutInflater.from(activity).inflate(R.layout.dialog_reply,null);
-        final EditText et = (EditText) editView.findViewById(R.id.dialog_reply_edit);
-        AlertDialog.Builder dialog = new AlertDialog.Builder(activity);
-        dialog.setTitle(R.string.reply_order).setView(editView);
-        dialog.setPositiveButton(R.string.alert_confirm,
-                new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        Map<String,String> params = new HashMap<String, String>();
-                        params.put("loginName",CommonUtils.getLoginName(activity));
-                        params.put("randomCode",CommonUtils.getRandomCode(activity));
-                        params.put("content",et.getText().toString());
-                        params.put("order_id",order.getId()+"");
-                        params.put("language","zh");
-                        mReplyListPresenter.replyOrder(position,params);
-
-                    }
-                }).show();
-    }
-
-
-    @Override
     public void removeSingleItem(int position)
     {
         replyOrderListAdapter.removeSingleItem(position);
+    }
+
+    @Override
+    public void onItemClick(View view, final int position, Object itemData)
+    {
+        final ReplyOrderListInfo.BodyBean.ListBean.ResultBean order = (ReplyOrderListInfo.BodyBean.ListBean.ResultBean) itemData;
+
+        switch (view.getId())
+        {
+            case R.id.item_reply_btn:
+                View editView = LayoutInflater.from(activity).inflate(R.layout.dialog_reply, null);
+                final EditText et = (EditText) editView.findViewById(R.id.dialog_reply_edit);
+                AlertDialog.Builder dialog = new AlertDialog.Builder(activity);
+                dialog.setTitle(R.string.reply_order).setView(editView);
+                dialog.setPositiveButton(R.string.alert_confirm,
+                        new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                Map<String, String> params = new HashMap<String, String>();
+                                params.put("loginName", CommonUtils.getLoginName(activity));
+                                params.put("randomCode", CommonUtils.getRandomCode(activity));
+                                params.put("content", et.getText().toString());
+                                params.put("order_id", order.getId() + "");
+                                params.put("language", "zh");
+                                mReplyListPresenter.replyOrder(position, params);
+
+                            }
+                        }).show();
+                break;
+        }
+
+
     }
 }

@@ -17,6 +17,7 @@ import com.gaoyy.delivery4res.api.bean.OrderListInfo;
 import com.gaoyy.delivery4res.api.bean.RestInfo;
 import com.gaoyy.delivery4res.base.BaseFragment;
 import com.gaoyy.delivery4res.base.CustomDialogFragment;
+import com.gaoyy.delivery4res.base.OnItemClickListener;
 import com.gaoyy.delivery4res.main.MainActivity;
 import com.gaoyy.delivery4res.main.NewOrderDetailActivity;
 import com.gaoyy.delivery4res.main.OrderNewActivity;
@@ -29,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class OrderListFragment extends BaseFragment implements OrderListContract.View, SwipeRefreshLayout.OnRefreshListener, OrderListAdapter.OnItemClickListener
+public class OrderListFragment extends BaseFragment implements OrderListContract.View, SwipeRefreshLayout.OnRefreshListener, OnItemClickListener
 {
     private static final String LOG_TAG = OrderListFragment.class.getSimpleName();
     private OrderListContract.Presenter mOrderListPresenter;
@@ -296,8 +297,9 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
     }
 
     @Override
-    public void onItemClick(View view, int position, final OrderListInfo.BodyBean.PageBean.ListBean order)
+    public void onItemClick(View view, int position, Object itemData)
     {
+        OrderListInfo.BodyBean.PageBean.ListBean order = (OrderListInfo.BodyBean.PageBean.ListBean) itemData;
         int id = view.getId();
         Map<String, String> params = new HashMap<>();
         params.put("loginName", CommonUtils.getLoginName(activity));
