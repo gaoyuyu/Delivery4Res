@@ -60,14 +60,14 @@ public class PrintActivity extends BaseActivity implements AdapterView.OnItemCli
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 // Add the name and address to an array adapter to show in a ListView
 
-                if (device.getBondState() == BluetoothDevice.BOND_NONE)
-                {
+//                if (device.getBondState() == BluetoothDevice.BOND_NONE)
+//                {
                     String str = "打印设备|" + device.getName() + "|" + device.getAddress();
                     Log.e(Constant.TAG, "==receiver found device  未配对==>" + device.getName() + "===" + device.getAddress());
                     if (deviceList.indexOf(str) == -1)// 防止重复添加
                         deviceList.add(str); // 获取设备名称和mac地址
                     arrayAdapter.notifyDataSetChanged();
-                }
+//                }
 
             }
             else if (BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action))

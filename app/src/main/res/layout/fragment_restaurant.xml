@@ -116,6 +116,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
+                    android:visibility="gone"
                     android:orientation="horizontal">
 
                     <TextView
@@ -139,6 +140,7 @@
                     android:id="@+id/rest_remark_textinputlayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:layout_margin="5dp">
 
 

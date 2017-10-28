@@ -129,7 +129,7 @@
     <string name="es_arrival_time_check">please choose Estimated Arrival Time</string>
     <string name="bluetooth_unsupport">This Device doesn\'t support bluetooth</string>
     <string name="print_cancel">Print Cancel</string>
-    <string name="tab_delivery_order_list">派送订单</string>
-    <string name="tab_ma_order_list">商城订单</string>
+    <string name="tab_delivery_order_list">Delivery Orders</string>
+    <string name="tab_ma_order_list">MA Orders</string>
 
 </resources>
