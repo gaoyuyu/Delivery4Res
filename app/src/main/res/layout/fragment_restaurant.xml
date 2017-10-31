@@ -97,7 +97,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/customer_finished_time"
+                        android:text="@string/customer_prepare_time"
                         android:textColor="@color/text_basic_color"
                         android:textSize="18sp"/>
 
@@ -116,7 +116,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:visibility="gone"
                     android:orientation="horizontal">
 
                     <TextView
@@ -140,7 +139,6 @@
                     android:id="@+id/rest_remark_textinputlayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
                     android:layout_margin="5dp">
 
 

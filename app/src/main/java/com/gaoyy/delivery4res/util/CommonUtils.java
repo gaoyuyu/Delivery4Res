@@ -276,5 +276,15 @@ public class CommonUtils
         Log.e(Constant.TAG, "[-HTTP LOG-]" + "==========" + msg + "==========");
     }
 
+    /**
+     * 保留2位小数
+     * @return
+     */
+    public static String deci2(Object d)
+    {
+        Double b = (Double) d;
+        return String.format("%.2f",b);
+    }
+
 
 }

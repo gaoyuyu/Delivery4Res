@@ -19,6 +19,7 @@ import com.gaoyy.delivery4res.api.Constant;
 import com.gaoyy.delivery4res.api.RetrofitService;
 import com.gaoyy.delivery4res.api.bean.GeocodeInfo;
 import com.gaoyy.delivery4res.base.BaseActivity;
+import com.gaoyy.delivery4res.base.OnItemClickListener;
 import com.gaoyy.delivery4res.util.CommonUtils;
 import com.pnikosis.materialishprogress.ProgressWheel;
 
@@ -29,7 +30,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SearchLocationActivity extends BaseActivity implements SearchListAdapter.OnItemClickListener, View.OnClickListener
+public class SearchLocationActivity extends BaseActivity implements OnItemClickListener, View.OnClickListener
 {
     private Toolbar searchToolbar;
     private ProgressWheel searchProgressWheel;
@@ -170,19 +171,6 @@ public class SearchLocationActivity extends BaseActivity implements SearchListAd
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onItemClick(View view, int position, GeocodeInfo.ResultsBean place)
-    {
-        switch (view.getId())
-        {
-            case R.id.item_search_layout:
-                Intent intent = new Intent();
-                intent.putExtra("place", place.getFormatted_address());
-                setResult(RESULT_OK, intent);
-                finish();
-                break;
-        }
-    }
 
     @Override
     public void onClick(View view)
@@ -192,6 +180,21 @@ public class SearchLocationActivity extends BaseActivity implements SearchListAd
             case R.id.search_check:
                 Intent intent = new Intent();
                 intent.putExtra("place", searchEdit.getText().toString());
+                setResult(RESULT_OK, intent);
+                finish();
+                break;
+        }
+    }
+
+    @Override
+    public void onItemClick(View view, int position, Object itemData)
+    {
+        GeocodeInfo.ResultsBean place = (GeocodeInfo.ResultsBean) itemData;
+        switch (view.getId())
+        {
+            case R.id.item_search_layout:
+                Intent intent = new Intent();
+                intent.putExtra("place", place.getFormatted_address());
                 setResult(RESULT_OK, intent);
                 finish();
                 break;

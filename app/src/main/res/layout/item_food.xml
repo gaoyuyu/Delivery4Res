@@ -12,8 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:padding="5dp"
-        android:text="麦当劳"
-        android:textColor="@android:color/darker_gray"
+        android:textColor="@color/black"
         android:textSize="15sp"/>
 
     <TextView
@@ -23,7 +22,6 @@
         android:layout_weight="1"
         android:gravity="center"
         android:padding="5dp"
-        android:text="x1"
         android:textColor="@android:color/darker_gray"
         android:textSize="15sp"/>
 
@@ -34,7 +32,6 @@
         android:layout_weight="1"
         android:gravity="right"
         android:padding="5dp"
-        android:text="$23.00"
         android:textColor="@android:color/darker_gray"
         android:textSize="15sp"/>
 
