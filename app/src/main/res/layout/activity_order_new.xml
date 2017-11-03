@@ -313,7 +313,22 @@
                             android:textColor="@color/text_basic_color"
                             />
 
+                        <TextView
+                            android:id="@+id/order_new_estime"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textColor="@color/text_basic_color"
+                            android:paddingRight="5dp"
+                            android:gravity="center|end"
+                            android:text="20min"/>
+
                     </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@android:color/darker_gray"/>
                 </LinearLayout>
 
 

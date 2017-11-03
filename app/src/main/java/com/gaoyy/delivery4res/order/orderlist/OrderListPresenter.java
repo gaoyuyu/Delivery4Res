@@ -68,6 +68,7 @@ public class OrderListPresenter implements OrderListContract.Presenter
                         LinkedList<OrderListInfo.BodyBean.PageBean.ListBean> orderList = orderListInfo.getBody().getPage().getList();
                         if (refreshTag == Constant.PULL_TO_REFRESH)
                         {
+                            Log.d(Constant.TAG,"==下拉刷新=数据量="+orderList.size());
                             mOrderListView.showOrderList(orderList, orderListInfo.getBody().getPage().getCount());
                         }
                         else

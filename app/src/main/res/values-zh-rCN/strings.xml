@@ -15,7 +15,7 @@
     <string name="customer_phone">客人电话</string>
     <string name="customer_address">客人地址</string>
     <string name="customer_apt">客人公寓号</string>
-    <string name="customer_prepare_time">预计备餐时间</string>
+    <string name="customer_finished_time">完成时间</string>
     <string name="door_bell">门铃坏了</string>
     <string name="customer_remark">请输入其它备注信息</string>
     <string name="action_send_order">提交订单</string>
@@ -101,7 +101,7 @@
     <string name="username">用户：</string>
     <string name="order_new_no">编号：</string>
     <string name="remark">备注：</string>
-    <string name="es_arrival_time">预计送达时间</string>
+    <string name="es_arrival_time">预计备餐时间</string>
     <string name="expect_arrvial_time">期望送达：</string>
     <string name="tip_price">小费</string>
     <string name="ship_price">配送费</string>
@@ -122,7 +122,7 @@
     <string name="dialog_reminder_message">你没有开启定位权限，请到手机设置界面开启本应用的定位权限再登录</string>
     <string name="dialog_setting">去设置</string>
     <string name="print_complete">打印完成</string>
-    <string name="es_arrival_time_check">请选择预计送达时间</string>
+    <string name="es_arrival_time_check">请选择预计备餐时间</string>
     <string name="bluetooth_unsupport">当前手机不支持蓝牙</string>
     <string name="print_cancel">打印取消</string>
     <string name="tab_delivery_order_list">派送订单</string>

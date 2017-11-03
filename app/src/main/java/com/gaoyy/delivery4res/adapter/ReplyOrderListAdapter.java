@@ -32,7 +32,7 @@ public class ReplyOrderListAdapter extends RecyclerBaseAdapter<ReplyOrderListInf
     protected void bindData(BaseViewHolder holder, ReplyOrderListInfo.BodyBean.ListBean.ResultBean itemData, int position)
     {
         ((LinearLayout) (holder.getView(R.id.item_common_address).getParent())).setVisibility(View.GONE);
-        holder.setText(R.id.item_common_address, itemData.getAddTime())
+        holder.setText(R.id.item_common_addtime, itemData.getAddTime())
                 .setText(R.id.item_common_customer, itemData.getBuyerName())
                 .setText(R.id.item_common_phone, itemData.getBuyerMobile())
                 .setText(R.id.item_common_no, itemData.getOrder_id());
