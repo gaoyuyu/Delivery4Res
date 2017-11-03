@@ -128,5 +128,6 @@
     <string name="print_cancel">Print Cancel</string>
     <string name="tab_delivery_order_list">Delivery Orders</string>
     <string name="tab_ma_order_list">MA Orders</string>
+    <string name="auto_login">Automatic login</string>
 
 </resources>

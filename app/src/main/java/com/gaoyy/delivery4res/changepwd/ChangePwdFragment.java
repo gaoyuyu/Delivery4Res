@@ -157,6 +157,8 @@ public class ChangePwdFragment extends BaseFragment implements ChangePwdContract
     @Override
     public void redirectToLogin()
     {
+        //修改完密码后将自动登录置为false
+        CommonUtils.setUpAutoLogin(activity,false);
         Intent login = new Intent(activity, LoginActivity.class);
         startActivity(login);
     }

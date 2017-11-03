@@ -127,6 +127,7 @@
     <string name="print_cancel">打印取消</string>
     <string name="tab_delivery_order_list">派送订单</string>
     <string name="tab_ma_order_list">商城订单</string>
+    <string name="auto_login">自动登录</string>
 
 
 </resources>

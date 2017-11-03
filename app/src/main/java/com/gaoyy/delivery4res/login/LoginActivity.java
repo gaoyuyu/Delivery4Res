@@ -58,7 +58,7 @@ public class LoginActivity extends BaseActivity
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
         {
             // Android M Permission check
-            if (ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
             {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION))
                 {
@@ -77,7 +77,6 @@ public class LoginActivity extends BaseActivity
             }
         }
 
-
         LoginFragment loginFragment = (LoginFragment) getSupportFragmentManager().findFragmentById(R.id.login_content);
         if (loginFragment == null)
         {
@@ -85,8 +84,6 @@ public class LoginActivity extends BaseActivity
             ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), loginFragment, R.id.login_content);
         }
         new LoginPresenter(loginFragment);
-
-
     }
 
     private void showRequestPermissionDialog()

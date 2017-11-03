@@ -206,6 +206,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener
                     CommonUtils.showToast(activity, msg);
                     if (errorCode.equals("-1"))
                     {
+                        CommonUtils.setUpAutoLogin(activity,false);
                         Intent intent = new Intent();
                         intent.setClass(activity, LoginActivity.class);
                         startActivity(intent);
