@@ -86,7 +86,7 @@ public class RestaurantFragment extends BaseFragment implements View.OnClickList
         restRemarkTextinputlayout = (TextInputLayout) rootView.findViewById(R.id.rest_remark_textinputlayout);
         restRemark = (TextInputEditText) rootView.findViewById(R.id.rest_remark);
         restBtn = (AppCompatButton) rootView.findViewById(R.id.rest_btn);
-        restToolbar = (Toolbar)rootView.findViewById(R.id.rest_toolbar);
+        restToolbar = (Toolbar) rootView.findViewById(R.id.rest_toolbar);
 
     }
 
@@ -116,7 +116,7 @@ public class RestaurantFragment extends BaseFragment implements View.OnClickList
     {
         super.configViews();
 
-        // TODO: 2017/5/14 0014 设置不自动弹出输入法
+        // 设置不自动弹出输入法
         restPhone.clearFocus();
         restAddress.clearFocus();
         restAddress.setFocusable(false);

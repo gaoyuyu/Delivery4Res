@@ -11,6 +11,7 @@ import android.view.View;
 import com.gaoyy.delivery4res.R;
 import com.gaoyy.delivery4res.adapter.MyReplyListAdapter;
 import com.gaoyy.delivery4res.api.Constant;
+import com.gaoyy.delivery4res.api.RetrofitService;
 import com.gaoyy.delivery4res.api.bean.MyReplyListInfo;
 import com.gaoyy.delivery4res.base.BaseFragment;
 import com.gaoyy.delivery4res.util.CommonUtils;
@@ -18,6 +19,8 @@ import com.gaoyy.delivery4res.util.CommonUtils;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+
+import retrofit2.Call;
 
 public class MyReplyListFragment extends BaseFragment implements  MyReplyListContract.View, SwipeRefreshLayout.OnRefreshListener
 {
@@ -37,7 +40,7 @@ public class MyReplyListFragment extends BaseFragment implements  MyReplyListCon
     private MyReplyListAdapter myReplyListAdapter;
     private LinkedList<MyReplyListInfo.BodyBean.ListBean.ResultBean> myReplyList = new LinkedList<>();
 
-
+    private Call<MyReplyListInfo> call;
     public MyReplyListFragment()
     {
         // Required empty public constructor
@@ -75,7 +78,6 @@ public class MyReplyListFragment extends BaseFragment implements  MyReplyListCon
         commonRv.setItemAnimator(new DefaultItemAnimator());
 
         CommonUtils.setSwipeLayoutProgressBackgroundColor(activity, commonSwipeRefreshLayout);
-
     }
 
     @Override
@@ -110,7 +112,8 @@ public class MyReplyListFragment extends BaseFragment implements  MyReplyListCon
                     {
                         Map<String, String> params = getMyReplyListParams(pageNo, pageSize);
                         Log.d(Constant.TAG, "上拉加载更多，传递参数-->" + params.toString());
-                        mMyReplyListPresenter.myReplyList(params, Constant.UP_TO_LOAD_MORE);
+                        call = RetrofitService.sApiService.myReplyList(params);
+                        mMyReplyListPresenter.myReplyList(call,params, Constant.UP_TO_LOAD_MORE);
                     }
                 }
             }
@@ -135,7 +138,8 @@ public class MyReplyListFragment extends BaseFragment implements  MyReplyListCon
         pageNo = 1;
         Map<String,String> params = getMyReplyListParams(pageNo,pageSize);
         Log.d(Constant.TAG, "我的回复列表参数：" + params.toString());
-        mMyReplyListPresenter.myReplyList(params, Constant.PULL_TO_REFRESH);
+        call = RetrofitService.sApiService.myReplyList(params);
+        mMyReplyListPresenter.myReplyList(call,params, Constant.PULL_TO_REFRESH);
     }
 
     public Map<String,String> getMyReplyListParams(int pageNo,int pageSize)
@@ -212,6 +216,7 @@ public class MyReplyListFragment extends BaseFragment implements  MyReplyListCon
         pageNo = 1;
         Map<String, String> params = getMyReplyListParams(pageNo, pageSize);
         Log.d(Constant.TAG, "下拉刷新，传递参数-->" + params.toString());
-        mMyReplyListPresenter.myReplyList(params, Constant.PULL_TO_REFRESH);
+        call = RetrofitService.sApiService.myReplyList(params);
+        mMyReplyListPresenter.myReplyList(call,params, Constant.PULL_TO_REFRESH);
     }
 }

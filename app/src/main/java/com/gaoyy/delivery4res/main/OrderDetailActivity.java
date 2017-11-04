@@ -41,7 +41,6 @@ import retrofit2.Response;
 
 public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallback
 {
-
     private Toolbar orderDetailToolbar;
     private TextView orderDetailStartPoint;
     private TextView orderDetailDistination;
@@ -51,7 +50,6 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
     private TextView orderDetailOther;
 
     private GoogleMap mMap;
-
 
     //数据
     private String startDeliveryTime;
@@ -70,6 +68,9 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
     //客人经纬度
     private double customerAddrLat;
     private double customerAddrLng;
+
+    private Call<CommonInfo> saveOrderCall;
+    private Call<GeocodeInfo> geocodeCall;
 
     @Override
     protected void initContentView()
@@ -95,7 +96,6 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
     {
         super.initToolbar(orderDetailToolbar, R.string.toolbar_title_order_detail, true, -1);
     }
-
 
     @Override
     protected void configViews()
@@ -167,11 +167,11 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
         params.put("customerLongitude", String.valueOf(customerAddrLng));
         params.put("customerLatitude", String.valueOf(customerAddrLat));
         params.put("finishedTime", finishedTime);
-        Call<CommonInfo> call = RetrofitService.sApiService.orderSave(params);
+        saveOrderCall = RetrofitService.sApiService.orderSave(params);
         final CustomDialogFragment loading = DialogUtils.showLoadingDialog(this);
         CommonUtils.httpDebugLogger("保存订单请求");
         Log.d(Constant.TAG, "提交订单 参数==>" + params.toString());
-        call.enqueue(new Callback<CommonInfo>()
+        saveOrderCall.enqueue(new Callback<CommonInfo>()
         {
             @Override
             public void onResponse(Call<CommonInfo> call, Response<CommonInfo> response)
@@ -206,7 +206,7 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
                                         // TODO: 2017/9/9 0009 订单l列表
                                         Intent orderList = new Intent();
                                         orderList.setAction("android.intent.action.DetailToMainReceiver");
-                                        orderList.putExtra("orderList",1);
+                                        orderList.putExtra("orderList", 1);
                                         sendBroadcast(orderList);
 
                                         break;
@@ -216,7 +216,7 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
                                         finish();
                                         Intent clearInfo = new Intent();
                                         clearInfo.setAction("android.intent.action.DetailToMainReceiver");
-                                        clearInfo.putExtra("clearInfo",2);
+                                        clearInfo.putExtra("clearInfo", 2);
                                         sendBroadcast(clearInfo);
                                         break;
                                     default:
@@ -245,10 +245,10 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
         mMap = googleMap;
         configMapUiSettings();
 
-        Call<GeocodeInfo> call = RetrofitService.sGoogleMapApiService.getLatLng(customerAddr, Constant.GOOGLE_MAP_KEY);
+        geocodeCall = RetrofitService.sGoogleMapApiService.getLatLng(customerAddr, Constant.GOOGLE_MAP_KEY);
         final CustomDialogFragment loading = DialogUtils.showLoadingDialog(this);
         CommonUtils.httpDebugLogger("谷歌地图-根据位置获取经纬度");
-        call.enqueue(new Callback<GeocodeInfo>()
+        geocodeCall.enqueue(new Callback<GeocodeInfo>()
         {
             @Override
             public void onResponse(Call<GeocodeInfo> call, Response<GeocodeInfo> response)
@@ -321,5 +321,14 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
         mUiSettings.setTiltGesturesEnabled(true);
         mUiSettings.setRotateGesturesEnabled(true);
         mUiSettings.setMapToolbarEnabled(true);
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        //取消网络请求
+        if (saveOrderCall != null) saveOrderCall.cancel();
+        if (geocodeCall != null) geocodeCall.cancel();
     }
 }

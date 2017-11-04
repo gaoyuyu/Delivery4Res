@@ -35,10 +35,9 @@ public class ChangePwdPresenter implements ChangePwdContract.Presenter
 
 
     @Override
-    public void changePwd(Map<String, String> params)
+    public void changePwd(Call<CommonInfo> call,Map<String, String> params)
     {
         CommonUtils.httpDebugLogger("修改密码请求");
-        Call<CommonInfo> call = RetrofitService.sApiService.changePwd(params);
         mChangePwdView.showLoading();
         call.enqueue(new Callback<CommonInfo>()
         {

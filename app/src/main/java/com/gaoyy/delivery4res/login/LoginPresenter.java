@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.gaoyy.delivery4res.R;
 import com.gaoyy.delivery4res.api.Constant;
-import com.gaoyy.delivery4res.api.RetrofitService;
 import com.gaoyy.delivery4res.api.bean.RestInfo;
 import com.gaoyy.delivery4res.util.CommonUtils;
 
@@ -32,9 +31,8 @@ public class LoginPresenter implements LoginContract.Presenter
     }
 
     @Override
-    public void login(Map<String, String> params)
+    public void login(Call<RestInfo> call,Map<String, String> params)
     {
-        Call<RestInfo> call = RetrofitService.sApiService.login(params);
         CommonUtils.httpDebugLogger("登录请求");
         CommonUtils.httpDebugLogger("登录请求参数："+params);
         mLoginView.showLoading();

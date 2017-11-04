@@ -15,6 +15,8 @@ import android.widget.EditText;
 import com.gaoyy.delivery4res.R;
 import com.gaoyy.delivery4res.adapter.ReplyOrderListAdapter;
 import com.gaoyy.delivery4res.api.Constant;
+import com.gaoyy.delivery4res.api.RetrofitService;
+import com.gaoyy.delivery4res.api.bean.CommonInfo;
 import com.gaoyy.delivery4res.api.bean.ReplyOrderListInfo;
 import com.gaoyy.delivery4res.base.BaseFragment;
 import com.gaoyy.delivery4res.base.CustomDialogFragment;
@@ -26,6 +28,8 @@ import com.pnikosis.materialishprogress.ProgressWheel;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+
+import retrofit2.Call;
 
 public class ReplyListFragment extends BaseFragment implements ReplyListContract.View, SwipeRefreshLayout.OnRefreshListener, OnItemClickListener
 {
@@ -45,6 +49,9 @@ public class ReplyListFragment extends BaseFragment implements ReplyListContract
     private LinkedList<ReplyOrderListInfo.BodyBean.ListBean.ResultBean> replyOrderList = new LinkedList<>();
     private ReplyListContract.Presenter mReplyListPresenter;
     private CustomDialogFragment loading;
+
+    private Call<ReplyOrderListInfo> replyOrderListCall;
+    private Call<CommonInfo> replyOrderCall;
 
 
     public ReplyListFragment()
@@ -120,7 +127,8 @@ public class ReplyListFragment extends BaseFragment implements ReplyListContract
                     {
                         Map<String, String> params = getReplyOrderListParams(pageNo, pageSize);
                         Log.d(Constant.TAG, "上拉加载更多，传递参数-->" + params.toString());
-                        mReplyListPresenter.replyOrderList(params, Constant.UP_TO_LOAD_MORE);
+                        replyOrderListCall = RetrofitService.sApiService.replyOrderList(params);
+                        mReplyListPresenter.replyOrderList(replyOrderListCall, params, Constant.UP_TO_LOAD_MORE);
                     }
                 }
             }
@@ -146,7 +154,8 @@ public class ReplyListFragment extends BaseFragment implements ReplyListContract
         pageNo = 1;
         Map<String, String> params = getReplyOrderListParams(pageNo, pageSize);
         Log.d(Constant.TAG, "待回复列表参数：" + params.toString());
-        mReplyListPresenter.replyOrderList(params, Constant.PULL_TO_REFRESH);
+        replyOrderListCall = RetrofitService.sApiService.replyOrderList(params);
+        mReplyListPresenter.replyOrderList(replyOrderListCall, params, Constant.PULL_TO_REFRESH);
     }
 
     private Map<String, String> getReplyOrderListParams(int pageNo, int pageSize)
@@ -236,7 +245,8 @@ public class ReplyListFragment extends BaseFragment implements ReplyListContract
         pageNo = 1;
         Map<String, String> params = getReplyOrderListParams(pageNo, pageSize);
         Log.d(Constant.TAG, "下拉刷新，传递参数-->" + params.toString());
-        mReplyListPresenter.replyOrderList(params, Constant.PULL_TO_REFRESH);
+        replyOrderListCall = RetrofitService.sApiService.replyOrderList(params);
+        mReplyListPresenter.replyOrderList(replyOrderListCall, params, Constant.PULL_TO_REFRESH);
     }
 
     @Override
@@ -269,13 +279,22 @@ public class ReplyListFragment extends BaseFragment implements ReplyListContract
                                 params.put("content", et.getText().toString());
                                 params.put("order_id", order.getId() + "");
                                 params.put("language", "zh");
-                                mReplyListPresenter.replyOrder(position, params);
+                                replyOrderCall = RetrofitService.sApiService.replyOrderSave(params);
+                                mReplyListPresenter.replyOrder(replyOrderCall, position, params);
 
                             }
                         }).show();
                 break;
         }
+    }
 
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+        //取消网络请求
+        if (replyOrderListCall != null) replyOrderListCall.cancel();
+        if (replyOrderCall != null) replyOrderCall.cancel();
 
     }
 }

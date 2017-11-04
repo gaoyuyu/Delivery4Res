@@ -37,9 +37,8 @@ public class OrderListPresenter implements OrderListContract.Presenter
     }
 
     @Override
-    public void orderList(Map<String, String> params, final int refreshTag)
+    public void orderList(Call<OrderListInfo> call, Map<String, String> params, final int refreshTag)
     {
-        Call<OrderListInfo> call = RetrofitService.sApiService.orderList(params);
         CommonUtils.httpDebugLogger("餐厅订单列表");
 
         mOrderListView.refreshing();
@@ -68,7 +67,7 @@ public class OrderListPresenter implements OrderListContract.Presenter
                         LinkedList<OrderListInfo.BodyBean.PageBean.ListBean> orderList = orderListInfo.getBody().getPage().getList();
                         if (refreshTag == Constant.PULL_TO_REFRESH)
                         {
-                            Log.d(Constant.TAG,"==下拉刷新=数据量="+orderList.size());
+                            Log.d(Constant.TAG, "==下拉刷新=数据量=" + orderList.size());
                             mOrderListView.showOrderList(orderList, orderListInfo.getBody().getPage().getCount());
                         }
                         else
@@ -100,37 +99,27 @@ public class OrderListPresenter implements OrderListContract.Presenter
     }
 
     @Override
-    public void orderStatusOperate(final int position, Map<String, String> params, final OrderListInfo.BodyBean.PageBean.ListBean order, final int operation)
+    public void orderStatusOperate(Call<OrderOperationStatusInfo> call, final int position, final OrderListInfo.BodyBean.PageBean.ListBean order, final int operation)
     {
-        Call<OrderOperationStatusInfo> call = null;
-
         String log = "";
         switch (operation)
         {
             case Constant.CANCLE:
                 log = "饭店订单取消";
-                call = RetrofitService.sApiService.orderCancle(params);
                 break;
             case Constant.CANCLE_AFTER_DELIVERY:
-                log="饭店退单请求";
-                call = RetrofitService.sApiService.orderBack(params);
+                log = "饭店退单请求";
                 break;
             case Constant.RESUBMIT:
-                log="饭店resubmit请求";
-                call = RetrofitService.sApiService.orderResubmit(params);
+                log = "饭店resubmit请求";
                 break;
             case Constant.DELIVERY:
-                log="饭店及司机订单派送请求";
-                call = RetrofitService.sApiService.orderSend(params);
+                log = "饭店及司机订单派送请求";
                 break;
             case Constant.MAKING_FINISH:
-                log="制作完成请求";
-                call = RetrofitService.sApiService.orderMakeComplete(params);
+                log = "制作完成请求";
                 break;
         }
-
-        CommonUtils.httpDebugLogger(log);
-        CommonUtils.httpDebugLogger(log+"参数" + params.toString());
         mOrderListView.showLoading();
         final String finalLog = log;
         call.enqueue(new Callback<OrderOperationStatusInfo>()
@@ -153,7 +142,7 @@ public class OrderListPresenter implements OrderListContract.Presenter
                     mOrderListView.showToast(oosi.getMsg());
                     if (oosi.isSuccess() && oosi.getErrorCode().equals("-1"))
                     {
-                        if(operation != Constant.MAKING_FINISH)
+                        if (operation != Constant.MAKING_FINISH)
                         {
                             int status = oosi.getBody().getStatus();
                             //设置订单状态
@@ -170,7 +159,7 @@ public class OrderListPresenter implements OrderListContract.Presenter
                 }
                 else
                 {
-                    mOrderListView.showToast(finalLog +"失败");
+                    mOrderListView.showToast(finalLog + "失败");
                 }
             }
 

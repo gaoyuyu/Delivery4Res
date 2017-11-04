@@ -69,7 +69,6 @@ public class LoginActivity extends BaseActivity
                     Log.e(Constant.TAG, "获取定位权限");
                     ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, Constant.REQUEST_ACCESS_COARSE_LOCATION);
                 }
-
             }
             else
             {

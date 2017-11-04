@@ -18,7 +18,5 @@ package com.gaoyy.delivery4res.base;
 
 public interface BasePresenter
 {
-
     void start();
-
 }

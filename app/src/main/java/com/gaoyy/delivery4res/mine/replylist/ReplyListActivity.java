@@ -43,8 +43,6 @@ public class ReplyListActivity extends BaseActivity
             ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), replyListFragment, R.id.reply_list_content);
         }
         new ReplyListPresenter(replyListFragment);
-
-
     }
 
     @Override

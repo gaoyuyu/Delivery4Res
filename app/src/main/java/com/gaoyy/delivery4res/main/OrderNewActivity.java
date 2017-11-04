@@ -78,16 +78,16 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
     private TextView itemCommonNo;
     private LinearLayout itemCommonGoodsLayout;
 
-
     private OrderListInfo.BodyBean.PageBean.ListBean order;
 
-
     private List<String> expectTimeList = new ArrayList<>();
-
 
     private OrderNewInfo orderNewInfo;
 
     private CustomDialogFragment loading;
+
+    private Call<OrderNewInfo> newOrderDetailCall;
+    private Call<CommonInfo> acceptCall, refuseCall;
 
     //是否从推送进入Ativity
     private boolean isFormNotice;
@@ -222,10 +222,10 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
         params.put("language", CommonUtils.getSysLanguage());
 
         CommonUtils.httpDebugLogger("最新订单参数-->" + params.toString());
-        Call<OrderNewInfo> call = RetrofitService.sApiService.newOrderDetail(params);
+        newOrderDetailCall = RetrofitService.sApiService.newOrderDetail(params);
 
         setLoadingVisible();
-        call.enqueue(new Callback<OrderNewInfo>()
+        newOrderDetailCall.enqueue(new Callback<OrderNewInfo>()
         {
             @Override
             public void onResponse(Call<OrderNewInfo> call, Response<OrderNewInfo> response)
@@ -237,7 +237,7 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
                     OrderNewInfo.BodyBean.ObjBean data = orderNewInfo.getBody().getObj();
                     Log.e(Constant.TAG, "getDistribution_type->" + data.getDistribution_type());
 
-                    if(data.getDistribution_type().equals("Pick-Up"))
+                    if (data.getDistribution_type().equals("Pick-Up"))
                     {
                         ((LinearLayout) (orderNewTip.getParent())).setVisibility(View.GONE);
                     }
@@ -297,10 +297,10 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
                      * flage  0-没接单 1-已接单
                      * 已接单-不显示拒绝按钮，接单按钮，预计送达时间
                      */
-                    if (1 == Integer.valueOf(orderNewInfo.getBody().getFlag()) )
+                    if (1 == Integer.valueOf(orderNewInfo.getBody().getFlag()))
                     {
                         orderNewOperationLayout.setVisibility(View.GONE);
-                        if(data.getEstimatedTime() == null)
+                        if (data.getEstimatedTime() == null)
                         {
                             ((LinearLayout) (orderNewSpinner.getParent())).setVisibility(View.GONE);
                         }
@@ -353,7 +353,7 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
         }
         else
         {
-            orderNewShip.setText("$" +  CommonUtils.deci2(data.getShip_price()));
+            orderNewShip.setText("$" + CommonUtils.deci2(data.getShip_price()));
         }
 
         //税1
@@ -363,7 +363,7 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
         }
         else
         {
-            orderNewTax.setText("$" +  CommonUtils.deci2(data.getTaxation()));
+            orderNewTax.setText("$" + CommonUtils.deci2(data.getTaxation()));
         }
 
         //税2
@@ -373,7 +373,7 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
         }
         else
         {
-            orderNewTaxTvq.setText("$" +  CommonUtils.deci2(data.getTaxation_tvq()));
+            orderNewTaxTvq.setText("$" + CommonUtils.deci2(data.getTaxation_tvq()));
         }
 
         //收益
@@ -383,7 +383,7 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
         }
         else
         {
-            orderNewIncome.setText("-$" +  CommonUtils.deci2(data.getUseIncomePrice()));
+            orderNewIncome.setText("-$" + CommonUtils.deci2(data.getUseIncomePrice()));
         }
 
         //代金券
@@ -393,7 +393,7 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
         }
         else
         {
-            orderNewCoupon.setText("-$" +  CommonUtils.deci2(data.getCouponPrice()));
+            orderNewCoupon.setText("-$" + CommonUtils.deci2(data.getCouponPrice()));
         }
 
         //商家满减
@@ -403,7 +403,7 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
         }
         else
         {
-            orderNewAcivity.setText("-$" +  CommonUtils.deci2(data.getActivityPrice()));
+            orderNewAcivity.setText("-$" + CommonUtils.deci2(data.getActivityPrice()));
         }
     }
 
@@ -460,7 +460,8 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
                 CommonUtils.showToast(this, R.string.print_complete);
                 //打印完成后关闭页面，跳转到订单列表
                 finishToOrderList();
-            }else if(resultCode == RESULT_CANCELED)
+            }
+            else if (resultCode == RESULT_CANCELED)
             {
                 CommonUtils.showToast(this, R.string.print_cancel);
                 //打印完成后关闭页面，跳转到订单列表
@@ -520,9 +521,9 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
      */
     private void orderAccept()
     {
-        if(String.valueOf(orderNewSpinner.getSelectedItem()).equals(""))
+        if (String.valueOf(orderNewSpinner.getSelectedItem()).equals(""))
         {
-            CommonUtils.showToast(this,R.string.es_arrival_time_check);
+            CommonUtils.showToast(this, R.string.es_arrival_time_check);
             return;
         }
         Map<String, String> params = new HashMap<>();
@@ -532,9 +533,9 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
         params.put("loginName", CommonUtils.getLoginName(this));
         params.put("randomCode", CommonUtils.getRandomCode(this));
         CommonUtils.httpDebugLogger("接受订单请求参数" + params.toString());
-        Call<CommonInfo> refuse = RetrofitService.sApiService.orderAccept(params);
+        acceptCall = RetrofitService.sApiService.orderAccept(params);
         showLoading();
-        refuse.enqueue(new Callback<CommonInfo>()
+        acceptCall.enqueue(new Callback<CommonInfo>()
         {
             @Override
             public void onResponse(Call<CommonInfo> call, Response<CommonInfo> response)
@@ -579,10 +580,10 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
         params.put("loginName", CommonUtils.getLoginName(this));
         params.put("randomCode", CommonUtils.getRandomCode(this));
         CommonUtils.httpDebugLogger("拒绝接单请求参数" + params.toString());
-        Call<CommonInfo> refuse = RetrofitService.sApiService.orderRefuse(params);
+        refuseCall = RetrofitService.sApiService.orderRefuse(params);
 
         showLoading();
-        refuse.enqueue(new Callback<CommonInfo>()
+        refuseCall.enqueue(new Callback<CommonInfo>()
         {
             @Override
             public void onResponse(Call<CommonInfo> call, Response<CommonInfo> response)
@@ -623,7 +624,17 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
         finish();
         Intent orderList = new Intent();
         orderList.setAction("android.intent.action.DetailToMainReceiver");
-        orderList.putExtra("orderList",1);
+        orderList.putExtra("orderList", 1);
         sendBroadcast(orderList);
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        //取消网络请求
+        if (newOrderDetailCall != null) newOrderDetailCall.cancel();
+        if (acceptCall != null) acceptCall.cancel();
+        if (refuseCall != null) refuseCall.cancel();
     }
 }

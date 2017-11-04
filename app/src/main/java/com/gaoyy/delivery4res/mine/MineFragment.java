@@ -126,7 +126,6 @@ public class MineFragment extends BaseFragment implements View.OnClickListener
         mineMessage.setOnClickListener(this);
         mineReply.setOnClickListener(this);
         mineSignOutBtn.setOnClickListener(this);
-
     }
 
     @Override

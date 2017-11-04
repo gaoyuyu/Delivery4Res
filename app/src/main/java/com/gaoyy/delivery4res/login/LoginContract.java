@@ -8,6 +8,8 @@ import com.gaoyy.delivery4res.base.BaseView;
 import java.util.List;
 import java.util.Map;
 
+import retrofit2.Call;
+
 public class LoginContract
 {
     interface View extends BaseView<Presenter>
@@ -39,6 +41,6 @@ public class LoginContract
 
     interface Presenter extends BasePresenter
     {
-        void login(Map<String, String> params);
+        void login(Call<RestInfo> call,Map<String, String> params);
     }
 }

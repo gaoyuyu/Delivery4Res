@@ -38,8 +38,6 @@ public class MessageListActivity extends BaseActivity
     protected void configViews()
     {
         super.configViews();
-
-
         MessageListFragment messageListFragment = (MessageListFragment) getSupportFragmentManager().findFragmentById(R.id.message_list_content);
         if (messageListFragment == null)
         {
@@ -47,52 +45,8 @@ public class MessageListActivity extends BaseActivity
             ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), messageListFragment, R.id.message_list_content);
         }
         new MessageListPresenter(messageListFragment);
-/*
-
-        OkHttpClient client = new OkHttpClient();
-
-        RequestBody formBody = new FormBody.Builder()
-                .add("loginName", CommonUtils.getLoginName(this))
-                .add("randomCode", CommonUtils.getRandomCode(this))
-                .add("pageNo", "1")
-                .add("pageSize", "1")
-                .add("language", "zh")
-                .build();
-
-        Request request = new Request.Builder()
-                .url("http://www.menualliance.com/jeeplus25/a/sys/user/pc/messageList")
-                .post(formBody)
-                .build();
-
-        client.newCall(request).enqueue(new okhttp3.Callback()
-        {
-            @Override
-            public void onFailure(okhttp3.Call call, IOException e)
-            {
-
-            }
-
-            @Override
-            public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException
-            {
-                try (ResponseBody responseBody = response.body())
-                {
-                    if (!response.isSuccessful())
-                        throw new IOException("Unexpected code " + response);
-
-                    Headers responseHeaders = response.headers();
-                    for (int i = 0, size = responseHeaders.size(); i < size; i++)
-                    {
-                        System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
-                    }
-
-                    System.out.println(responseBody.string());
-                }
-            }
-        });
-        */
-
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {

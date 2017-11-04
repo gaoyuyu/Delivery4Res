@@ -11,6 +11,7 @@ import android.view.View;
 import com.gaoyy.delivery4res.R;
 import com.gaoyy.delivery4res.adapter.MessageListAdapter;
 import com.gaoyy.delivery4res.api.Constant;
+import com.gaoyy.delivery4res.api.RetrofitService;
 import com.gaoyy.delivery4res.api.bean.MessageListInfo;
 import com.gaoyy.delivery4res.base.BaseFragment;
 import com.gaoyy.delivery4res.util.CommonUtils;
@@ -19,7 +20,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-public class MessageListFragment extends BaseFragment implements  MessageListContract.View, SwipeRefreshLayout.OnRefreshListener
+import retrofit2.Call;
+
+public class MessageListFragment extends BaseFragment implements MessageListContract.View, SwipeRefreshLayout.OnRefreshListener
 {
     private MessageListContract.Presenter mMessageListPresenter;
     private SwipeRefreshLayout commonSwipeRefreshLayout;
@@ -35,6 +38,7 @@ public class MessageListFragment extends BaseFragment implements  MessageListCon
     private MessageListAdapter messageListAdapter;
     private LinkedList<MessageListInfo.BodyBean.ListBean.ResultBean> messageList = new LinkedList<>();
 
+    private Call<MessageListInfo> call;
 
 
     public MessageListFragment()
@@ -72,11 +76,11 @@ public class MessageListFragment extends BaseFragment implements  MessageListCon
 
         CommonUtils.setSwipeLayoutProgressBackgroundColor(activity, commonSwipeRefreshLayout);
 
-
         pageNo = 1;
-        Map<String,String> params = getMessageListParams(pageNo,pageSize);
+        Map<String, String> params = getMessageListParams(pageNo, pageSize);
         Log.d(Constant.TAG, "站内消息列表参数：" + params.toString());
-        mMessageListPresenter.messageList(params, Constant.PULL_TO_REFRESH);
+        call = RetrofitService.sApiService.messageList(params);
+        mMessageListPresenter.messageList(call, params, Constant.PULL_TO_REFRESH);
     }
 
     @Override
@@ -111,7 +115,8 @@ public class MessageListFragment extends BaseFragment implements  MessageListCon
                     {
                         Map<String, String> params = getMessageListParams(pageNo, pageSize);
                         Log.d(Constant.TAG, "上拉加载更多，传递参数-->" + params.toString());
-                        mMessageListPresenter.messageList(params, Constant.UP_TO_LOAD_MORE);
+                        call = RetrofitService.sApiService.messageList(params);
+                        mMessageListPresenter.messageList(call, params, Constant.UP_TO_LOAD_MORE);
                     }
                 }
             }
@@ -124,6 +129,7 @@ public class MessageListFragment extends BaseFragment implements  MessageListCon
             }
         });
     }
+
     @Override
     public void onResume()
     {
@@ -131,11 +137,12 @@ public class MessageListFragment extends BaseFragment implements  MessageListCon
         if (mMessageListPresenter == null) return;
         mMessageListPresenter.start();
     }
-    public Map<String,String> getMessageListParams(int pageNo,int pageSize)
+
+    public Map<String, String> getMessageListParams(int pageNo, int pageSize)
     {
         Map<String, String> params = new HashMap<>();
-        params.put("loginName",CommonUtils.getLoginName(activity));
-        params.put("randomCode",CommonUtils.getRandomCode(activity));
+        params.put("loginName", CommonUtils.getLoginName(activity));
+        params.put("randomCode", CommonUtils.getRandomCode(activity));
         params.put("pageNo", String.valueOf(pageNo));
         params.put("pageSize", String.valueOf(pageSize));
         params.put("language", CommonUtils.getSysLanguage());
@@ -203,6 +210,14 @@ public class MessageListFragment extends BaseFragment implements  MessageListCon
         pageNo = 1;
         Map<String, String> params = getMessageListParams(pageNo, pageSize);
         Log.d(Constant.TAG, "下拉刷新，传递参数-->" + params.toString());
-        mMessageListPresenter.messageList(params, Constant.PULL_TO_REFRESH);
+        call = RetrofitService.sApiService.messageList(params);
+        mMessageListPresenter.messageList(call, params, Constant.PULL_TO_REFRESH);
+    }
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+        if (call != null) call.cancel();
     }
 }

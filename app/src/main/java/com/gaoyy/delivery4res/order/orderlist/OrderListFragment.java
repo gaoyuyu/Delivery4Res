@@ -13,7 +13,9 @@ import android.view.View;
 import com.gaoyy.delivery4res.R;
 import com.gaoyy.delivery4res.adapter.OrderListAdapter;
 import com.gaoyy.delivery4res.api.Constant;
+import com.gaoyy.delivery4res.api.RetrofitService;
 import com.gaoyy.delivery4res.api.bean.OrderListInfo;
+import com.gaoyy.delivery4res.api.bean.OrderOperationStatusInfo;
 import com.gaoyy.delivery4res.api.bean.RestInfo;
 import com.gaoyy.delivery4res.base.BaseFragment;
 import com.gaoyy.delivery4res.base.CustomDialogFragment;
@@ -28,6 +30,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import retrofit2.Call;
 
 
 public class OrderListFragment extends BaseFragment implements OrderListContract.View, SwipeRefreshLayout.OnRefreshListener, OnItemClickListener
@@ -49,7 +53,9 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
 
     private CustomDialogFragment loading;
 
-    private int isMA=-1;
+    private int isMA = -1;
+    private Call<OrderOperationStatusInfo> statusCall;
+    private Call<OrderListInfo> orderListCall;
 
     public OrderListFragment()
     {
@@ -132,7 +138,8 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
                     {
                         Map<String, String> params = getOrderListParams(pageNo, pageSize);
                         Log.d(Constant.TAG, "上拉加载更多，传递参数-->" + params.toString());
-                        mOrderListPresenter.orderList(params, Constant.UP_TO_LOAD_MORE);
+                        orderListCall = RetrofitService.sApiService.orderList(params);
+                        mOrderListPresenter.orderList(orderListCall, params, Constant.UP_TO_LOAD_MORE);
                     }
                 }
             }
@@ -211,7 +218,8 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
         pageNo = 1;
         Map<String, String> params = getOrderListParams(pageNo, pageSize);
         Log.d(Constant.TAG, "订单列表参数：" + params.toString());
-        mOrderListPresenter.orderList(params, Constant.PULL_TO_REFRESH);
+        orderListCall = RetrofitService.sApiService.orderList(params);
+        mOrderListPresenter.orderList(orderListCall, params, Constant.PULL_TO_REFRESH);
     }
 
     @Override
@@ -293,7 +301,8 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
         pageNo = 1;
         Map<String, String> params = getOrderListParams(pageNo, pageSize);
         Log.d(Constant.TAG, "下拉刷新，传递参数-->" + params.toString());
-        mOrderListPresenter.orderList(params, Constant.PULL_TO_REFRESH);
+        orderListCall = RetrofitService.sApiService.orderList(params);
+        mOrderListPresenter.orderList(orderListCall, params, Constant.PULL_TO_REFRESH);
     }
 
     @Override
@@ -308,21 +317,21 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
         switch (id)
         {
             case R.id.item_order_cancle_btn:
-                mOrderListPresenter.orderStatusOperate(position, params, order, Constant.CANCLE);
+                mOrderListPresenter.orderStatusOperate(getStatusCall(Constant.CANCLE, params), position, order, Constant.CANCLE);
                 break;
             case R.id.item_order_resubmit_btn:
-                mOrderListPresenter.orderStatusOperate(position, params, order, Constant.RESUBMIT);
+                mOrderListPresenter.orderStatusOperate(getStatusCall(Constant.RESUBMIT, params), position, order, Constant.RESUBMIT);
                 break;
             case R.id.item_order_delivery_btn:
-                mOrderListPresenter.orderStatusOperate(position, params, order, Constant.DELIVERY);
+                mOrderListPresenter.orderStatusOperate(getStatusCall(Constant.DELIVERY, params), position, order, Constant.DELIVERY);
                 break;
             case R.id.item_order_cancle_after_delivery_btn:
-                mOrderListPresenter.orderStatusOperate(position, params, order, Constant.CANCLE_AFTER_DELIVERY);
+                mOrderListPresenter.orderStatusOperate(getStatusCall(Constant.CANCLE_AFTER_DELIVERY, params), position, order, Constant.CANCLE_AFTER_DELIVERY);
                 break;
             case R.id.item_order_making_finish_btn:
                 params.put("language", CommonUtils.getSysLanguage());
                 params.put("order_id", "" + order.getOrderId());
-                mOrderListPresenter.orderStatusOperate(position, params, order, Constant.MAKING_FINISH);
+                mOrderListPresenter.orderStatusOperate(getStatusCall(Constant.MAKING_FINISH, params), position, order, Constant.MAKING_FINISH);
                 break;
             case R.id.item_order_cardview:
                 if (order.getOrderType() == 1)
@@ -339,5 +348,44 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
                 }
                 break;
         }
+    }
+
+    private Call<OrderOperationStatusInfo> getStatusCall(int operation, Map<String, String> params)
+    {
+        String log = "";
+        switch (operation)
+        {
+            case Constant.CANCLE:
+                log = "饭店订单取消";
+                statusCall = RetrofitService.sApiService.orderCancle(params);
+                break;
+            case Constant.CANCLE_AFTER_DELIVERY:
+                log = "饭店退单请求";
+                statusCall = RetrofitService.sApiService.orderBack(params);
+                break;
+            case Constant.RESUBMIT:
+                log = "饭店resubmit请求";
+                statusCall = RetrofitService.sApiService.orderResubmit(params);
+                break;
+            case Constant.DELIVERY:
+                log = "饭店及司机订单派送请求";
+                statusCall = RetrofitService.sApiService.orderSend(params);
+                break;
+            case Constant.MAKING_FINISH:
+                log = "制作完成请求";
+                statusCall = RetrofitService.sApiService.orderMakeComplete(params);
+                break;
+        }
+        CommonUtils.httpDebugLogger(log);
+        CommonUtils.httpDebugLogger(log + "参数" + params.toString());
+        return statusCall;
+    }
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+        if (statusCall != null) statusCall.cancel();
+        if (orderListCall != null) orderListCall.cancel();
     }
 }

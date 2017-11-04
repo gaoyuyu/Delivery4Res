@@ -21,7 +21,6 @@ import retrofit2.Response;
 
 public class MyReplyListPresenter implements MyReplyListContract.Presenter
 {
-
     private MyReplyListContract.View mMyReplyListView;
 
     public MyReplyListPresenter(MyReplyListContract.View mMyReplyListView)
@@ -37,12 +36,10 @@ public class MyReplyListPresenter implements MyReplyListContract.Presenter
     }
 
     @Override
-    public void myReplyList(Map<String, String> params, final int refreshTag)
+    public void myReplyList(Call<MyReplyListInfo> call ,Map<String, String> params, final int refreshTag)
     {
-        Call<MyReplyListInfo> call = RetrofitService.sApiService.myReplyList(params);
         CommonUtils.httpDebugLogger("我的回复列表");
         mMyReplyListView.refreshing();
-
         call.enqueue(new Callback<MyReplyListInfo>()
         {
             @Override

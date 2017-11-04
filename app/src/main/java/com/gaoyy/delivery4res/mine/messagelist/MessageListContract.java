@@ -7,6 +7,8 @@ import com.gaoyy.delivery4res.base.BaseView;
 import java.util.LinkedList;
 import java.util.Map;
 
+import retrofit2.Call;
+
 /**
  * Created by gaoyy on 2017/9/9 0009.
  */
@@ -42,6 +44,6 @@ public class MessageListContract
 
     interface Presenter extends BasePresenter
     {
-        void  messageList(Map<String,String> params, int refreshTag);
+        void  messageList(Call<MessageListInfo> call,Map<String,String> params, int refreshTag);
     }
 }

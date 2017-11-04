@@ -20,7 +20,6 @@ import retrofit2.Response;
 public class MessageListPresenter implements MessageListContract.Presenter
 {
 
-
     private MessageListContract.View mMessageListView;
 
     public MessageListPresenter(MessageListContract.View mMessageListView)
@@ -36,9 +35,8 @@ public class MessageListPresenter implements MessageListContract.Presenter
     }
 
     @Override
-    public void messageList(Map<String, String> params, final int refreshTag)
+    public void messageList(Call<MessageListInfo> call,Map<String, String> params, final int refreshTag)
     {
-        Call<MessageListInfo> call = RetrofitService.sApiService.messageList(params);
         CommonUtils.httpDebugLogger("站内消息列表");
         mMessageListView.refreshing();
 

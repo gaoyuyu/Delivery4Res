@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 
 import com.gaoyy.delivery4res.R;
 import com.gaoyy.delivery4res.api.Constant;
+import com.gaoyy.delivery4res.api.RetrofitService;
 import com.gaoyy.delivery4res.api.bean.RestInfo;
 import com.gaoyy.delivery4res.base.BaseFragment;
 import com.gaoyy.delivery4res.base.CustomDialogFragment;
@@ -39,6 +40,7 @@ import java.util.Set;
 
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
+import retrofit2.Call;
 
 public class LoginFragment extends BaseFragment implements LoginContract.View, View.OnClickListener, CompoundButton.OnCheckedChangeListener
 {
@@ -52,9 +54,9 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
     private AppCompatButton loginBtn;
     private LinearLayout loginLayout;
     private CheckBox loginAutoCb;
+    private Call<RestInfo> call;
 
     private CustomDialogFragment loading;
-
 
     public LoginFragment()
     {
@@ -102,7 +104,8 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
             params.put("pwd", CommonUtils.getPwd(activity));
             params.put("appType", "1");
             CommonUtils.httpDebugLogger("自动登录==" + params.toString());
-            mLoginPresenter.login(params);
+            call = RetrofitService.sApiService.login(params);
+            mLoginPresenter.login(call, params);
         }
     }
 
@@ -171,6 +174,14 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
         super.onResume();
         if (mLoginPresenter == null) return;
         mLoginPresenter.start();
+    }
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+        //取消网络请求
+        if (call != null) call.cancel();
     }
 
     @Override
@@ -322,7 +333,8 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
                     params.put("pwd", loginPassword.getText().toString());
                     //appType=1餐厅端
                     params.put("appType", "1");
-                    mLoginPresenter.login(params);
+                    call = RetrofitService.sApiService.login(params);
+                    mLoginPresenter.login(call, params);
                 }
                 break;
         }
@@ -340,7 +352,7 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean checked)
     {
-        CommonUtils.setUpAutoLogin(activity,checked);
+        CommonUtils.setUpAutoLogin(activity, checked);
     }
 
 }

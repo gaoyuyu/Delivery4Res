@@ -37,9 +37,8 @@ public class ReplyListPresenter implements ReplyListContract.Presenter
     }
 
     @Override
-    public void replyOrderList(Map<String, String> params, final int refreshTag)
+    public void replyOrderList(Call<ReplyOrderListInfo> call, Map<String, String> params, final int refreshTag)
     {
-        Call<ReplyOrderListInfo> call = RetrofitService.sApiService.replyOrderList(params);
         CommonUtils.httpDebugLogger("待回复列表");
         mReplyListView.refreshing();
         call.enqueue(new Callback<ReplyOrderListInfo>()
@@ -77,8 +76,6 @@ public class ReplyListPresenter implements ReplyListContract.Presenter
                         mReplyListView.showToast(R.string.network_error);
                     }
                 }
-
-
             }
 
             @Override
@@ -97,9 +94,8 @@ public class ReplyListPresenter implements ReplyListContract.Presenter
     }
 
     @Override
-    public void replyOrder(final int position, Map<String, String> params)
+    public void replyOrder(Call<CommonInfo> call, final int position, Map<String, String> params)
     {
-        Call<CommonInfo> call = RetrofitService.sApiService.replyOrderSave(params);
         CommonUtils.httpDebugLogger("回复订单");
         CommonUtils.httpDebugLogger("回复订单参数：" + params.toString());
         mReplyListView.showLoading();
@@ -118,7 +114,7 @@ public class ReplyListPresenter implements ReplyListContract.Presenter
                 {
                     CommonInfo commonInfo = response.body();
                     mReplyListView.showToast(commonInfo.getMsg());
-                    if(commonInfo.isSuccess())
+                    if (commonInfo.isSuccess())
                     {
                         //移除item
                         mReplyListView.removeSingleItem(position);

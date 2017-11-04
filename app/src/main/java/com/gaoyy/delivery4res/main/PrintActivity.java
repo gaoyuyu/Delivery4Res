@@ -60,14 +60,11 @@ public class PrintActivity extends BaseActivity implements AdapterView.OnItemCli
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 // Add the name and address to an array adapter to show in a ListView
 
-//                if (device.getBondState() == BluetoothDevice.BOND_NONE)
-//                {
-                    String str = "打印设备|" + device.getName() + "|" + device.getAddress();
-                    Log.e(Constant.TAG, "==receiver found device  未配对==>" + device.getName() + "===" + device.getAddress());
-                    if (deviceList.indexOf(str) == -1)// 防止重复添加
-                        deviceList.add(str); // 获取设备名称和mac地址
-                    arrayAdapter.notifyDataSetChanged();
-//                }
+                String str = "打印设备|" + device.getName() + "|" + device.getAddress();
+                Log.e(Constant.TAG, "==receiver found device  未配对==>" + device.getName() + "===" + device.getAddress());
+                if (deviceList.indexOf(str) == -1)// 防止重复添加
+                    deviceList.add(str); // 获取设备名称和mac地址
+                arrayAdapter.notifyDataSetChanged();
 
             }
             else if (BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action))
@@ -160,7 +157,7 @@ public class PrintActivity extends BaseActivity implements AdapterView.OnItemCli
         if (bluetoothAdapter == null)
         {
             Log.e(Constant.TAG, "当前手机不支持蓝牙");
-            CommonUtils.showToast(this,R.string.bluetooth_unsupport);
+            CommonUtils.showToast(this, R.string.bluetooth_unsupport);
             setResult(RESULT_CANCELED);
             finish();
         }
@@ -221,7 +218,7 @@ public class PrintActivity extends BaseActivity implements AdapterView.OnItemCli
     {
         super.onDestroy();
         unregisterReceiver(receiver);
-        if(bluetoothAdapter != null)
+        if (bluetoothAdapter != null)
         {
             //Activity不可见时停止扫描
             if (bluetoothAdapter.isDiscovering())
@@ -333,40 +330,40 @@ public class PrintActivity extends BaseActivity implements AdapterView.OnItemCli
         List<OrderNewInfo.BodyBean.ObjBean.GcsBean> goods = orderNewInfo.getBody().getObj().getGcs();
         for (OrderNewInfo.BodyBean.ObjBean.GcsBean item : goods)
         {
-            PrintUtils.printText(PrintUtils.printThreeData("" + item.getGoods_name(), item.getCount() + "", "$"+item.getPrice() + "\n"));
+            PrintUtils.printText(PrintUtils.printThreeData("" + item.getGoods_name(), item.getCount() + "", "$" + item.getPrice() + "\n"));
         }
         PrintUtils.printText("--------------------------------\n");
 
         OrderNewInfo.BodyBean.ObjBean data = orderNewInfo.getBody().getObj();
-        if(!data.getDistribution_type().equals("Pick-Up"))
+        if (!data.getDistribution_type().equals("Pick-Up"))
         {
             //小费
             if (data.getTipPrice() != null && (Double) (data.getTipPrice()) != 0.0)
-                PrintUtils.printText(PrintUtils.printTwoData("小费", "$"+data.getTipPrice() + "\n"));
+                PrintUtils.printText(PrintUtils.printTwoData("小费", "$" + data.getTipPrice() + "\n"));
         }
         //配送费
         if (data.getShip_price() != null && (Double) (data.getShip_price()) != 0.0)
-            PrintUtils.printText(PrintUtils.printTwoData("配送费", "$"+data.getShip_price() + "\n"));
+            PrintUtils.printText(PrintUtils.printTwoData("配送费", "$" + data.getShip_price() + "\n"));
         //税1
         if (data.getTaxation() != null && (Double) (data.getTaxation()) != 0.0)
-            PrintUtils.printText(PrintUtils.printTwoData("税1", "$"+data.getTaxation() + "\n"));
+            PrintUtils.printText(PrintUtils.printTwoData("税1", "$" + data.getTaxation() + "\n"));
         //税2
-        if (data.getTaxation_tvq() != null  && (Double) (data.getTaxation_tvq()) != 0.0)
-            PrintUtils.printText(PrintUtils.printTwoData("税2", "$"+data.getTaxation_tvq() + "\n"));
+        if (data.getTaxation_tvq() != null && (Double) (data.getTaxation_tvq()) != 0.0)
+            PrintUtils.printText(PrintUtils.printTwoData("税2", "$" + data.getTaxation_tvq() + "\n"));
         //收益
-        if (data.getUseIncomePrice() != null  && (Double) (data.getUseIncomePrice()) != 0.0)
+        if (data.getUseIncomePrice() != null && (Double) (data.getUseIncomePrice()) != 0.0)
             PrintUtils.printText(PrintUtils.printTwoData("收益", "-$" + data.getUseIncomePrice() + "\n"));
         //代金券
-        if (data.getCouponPrice() != null  && (Double) (data.getCouponPrice()) != 0.0)
+        if (data.getCouponPrice() != null && (Double) (data.getCouponPrice()) != 0.0)
             PrintUtils.printText(PrintUtils.printTwoData("代金券", "-$" + data.getCouponPrice() + "\n"));
         //商家满减
-        if (data.getActivityPrice() != null  && (Double) (data.getActivityPrice()) != 0.0)
+        if (data.getActivityPrice() != null && (Double) (data.getActivityPrice()) != 0.0)
             PrintUtils.printText(PrintUtils.printTwoData("商家满减", "-$" + data.getActivityPrice() + "\n"));
 
         PrintUtils.printText("--------------------------------\n");
         PrintUtils.selectCommand(PrintUtils.ALIGN_CENTER);
         PrintUtils.selectCommand(PrintUtils.DOUBLE_HEIGHT_WIDTH);
-        PrintUtils.printText("合计：" + "$"+orderNewInfo.getBody().getObj().getTotalPrice() + "\n");
+        PrintUtils.printText("合计：" + "$" + orderNewInfo.getBody().getObj().getTotalPrice() + "\n");
         PrintUtils.selectCommand(PrintUtils.NORMAL);
         PrintUtils.selectCommand(PrintUtils.ALIGN_LEFT);
         PrintUtils.printText("--------------------------------\n");

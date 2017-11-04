@@ -7,6 +7,8 @@ import com.gaoyy.delivery4res.base.BaseView;
 import java.util.LinkedList;
 import java.util.Map;
 
+import retrofit2.Call;
+
 /**
  * Created by gaoyy on 2017/9/13 0013.
  */
@@ -43,6 +45,6 @@ public class MyReplyListContract
 
     interface Presenter extends BasePresenter
     {
-        void  myReplyList(Map<String,String> params, int refreshTag);
+        void  myReplyList(Call<MyReplyListInfo> call,Map<String,String> params, int refreshTag);
     }
 }

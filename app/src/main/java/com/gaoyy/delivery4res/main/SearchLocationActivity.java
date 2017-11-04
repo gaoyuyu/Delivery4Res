@@ -41,6 +41,8 @@ public class SearchLocationActivity extends BaseActivity implements OnItemClickL
     private List<GeocodeInfo.ResultsBean> placeList = new ArrayList<>();
     private LinearLayoutManager linearLayoutManager;
 
+    private Call<GeocodeInfo> call;
+
 
     @Override
     protected void initContentView()
@@ -108,7 +110,7 @@ public class SearchLocationActivity extends BaseActivity implements OnItemClickL
                 if (!editable.toString().equals(""))
                 {
                     String address = editable.toString();
-                    Call<GeocodeInfo> call = RetrofitService.sGoogleMapApiService.query(address, Constant.GOOGLE_MAP_KEY, "CA");
+                    call = RetrofitService.sGoogleMapApiService.query(address, Constant.GOOGLE_MAP_KEY, "CA");
                     CommonUtils.httpDebugLogger("谷歌地图-位置模糊查询");
                     searchProgressWheel.setVisibility(View.VISIBLE);
                     searchRv.setVisibility(View.GONE);
@@ -122,7 +124,7 @@ public class SearchLocationActivity extends BaseActivity implements OnItemClickL
                             if (response.isSuccessful() && response.body() != null)
                             {
                                 GeocodeInfo geocodeInfo = response.body();
-                                CommonUtils.httpDebugLogger("[status]"+geocodeInfo.getStatus());
+                                CommonUtils.httpDebugLogger("[status]" + geocodeInfo.getStatus());
                                 if (geocodeInfo.getStatus().equals("OK"))
                                 {
                                     List<GeocodeInfo.ResultsBean> list = geocodeInfo.getResults();
@@ -199,5 +201,12 @@ public class SearchLocationActivity extends BaseActivity implements OnItemClickL
                 finish();
                 break;
         }
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        if (call != null) call.cancel();
     }
 }

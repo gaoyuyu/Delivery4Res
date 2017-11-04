@@ -12,6 +12,8 @@ import android.view.View;
 
 import com.gaoyy.delivery4res.R;
 import com.gaoyy.delivery4res.api.Constant;
+import com.gaoyy.delivery4res.api.RetrofitService;
+import com.gaoyy.delivery4res.api.bean.CommonInfo;
 import com.gaoyy.delivery4res.base.BaseFragment;
 import com.gaoyy.delivery4res.base.CustomDialogFragment;
 import com.gaoyy.delivery4res.login.LoginActivity;
@@ -20,6 +22,8 @@ import com.gaoyy.delivery4res.util.DialogUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import retrofit2.Call;
 
 public class ChangePwdFragment extends BaseFragment implements ChangePwdContract.View
 {
@@ -32,6 +36,8 @@ public class ChangePwdFragment extends BaseFragment implements ChangePwdContract
 
     private ChangePwdContract.Presenter mChangePwdPresenter;
     private CustomDialogFragment loading;
+
+    private Call<CommonInfo> call;
 
     public ChangePwdFragment()
     {
@@ -103,12 +109,11 @@ public class ChangePwdFragment extends BaseFragment implements ChangePwdContract
                     params.put("randomCode", CommonUtils.getRandomCode(activity));
                     params.put("password", changeOldpwd.getText().toString());
                     params.put("newPassword", changeNewpwd.getText().toString());
-                    mChangePwdPresenter.changePwd(params);
+                    call = RetrofitService.sApiService.changePwd(params);
+                    mChangePwdPresenter.changePwd(call, params);
                 }
                 break;
         }
-
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -117,8 +122,16 @@ public class ChangePwdFragment extends BaseFragment implements ChangePwdContract
     public void onResume()
     {
         super.onResume();
-        if(mChangePwdPresenter == null) return;
+        if (mChangePwdPresenter == null) return;
         mChangePwdPresenter.start();
+    }
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+        //取消请求
+        if (call != null) call.cancel();
     }
 
     @Override
@@ -158,7 +171,7 @@ public class ChangePwdFragment extends BaseFragment implements ChangePwdContract
     public void redirectToLogin()
     {
         //修改完密码后将自动登录置为false
-        CommonUtils.setUpAutoLogin(activity,false);
+        CommonUtils.setUpAutoLogin(activity, false);
         Intent login = new Intent(activity, LoginActivity.class);
         startActivity(login);
     }

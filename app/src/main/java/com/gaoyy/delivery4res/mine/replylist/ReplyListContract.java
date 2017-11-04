@@ -1,11 +1,14 @@
 package com.gaoyy.delivery4res.mine.replylist;
 
+import com.gaoyy.delivery4res.api.bean.CommonInfo;
 import com.gaoyy.delivery4res.api.bean.ReplyOrderListInfo;
 import com.gaoyy.delivery4res.base.BasePresenter;
 import com.gaoyy.delivery4res.base.BaseView;
 
 import java.util.LinkedList;
 import java.util.Map;
+
+import retrofit2.Call;
 
 /**
  * Created by gaoyy on 2017/9/12 0012.
@@ -50,7 +53,8 @@ public class ReplyListContract
 
     interface Presenter extends BasePresenter
     {
-        void replyOrderList(Map<String, String> params, int refreshTag);
-        void replyOrder(int position,Map<String,String> params);
+        void replyOrderList(Call<ReplyOrderListInfo> call, Map<String, String> params, int refreshTag);
+
+        void replyOrder(Call<CommonInfo> call, int position, Map<String, String> params);
     }
 }

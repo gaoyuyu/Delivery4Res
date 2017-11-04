@@ -47,8 +47,6 @@ public class RetrofitService
 
         sApiService = apiRetrofit.create(Api.class);
 
-
-
         Retrofit mapRetrofit = new Retrofit.Builder()
                 .baseUrl(Constant.GOOGLE_MAP_API_BASE)
                 .client(okHttpClient)

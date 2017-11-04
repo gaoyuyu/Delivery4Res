@@ -29,9 +29,6 @@ import java.util.List;
 
 public class MainActivity extends BaseActivity implements MineFragment.OnFragmentInteractionListener
 {
-
-    // TODO: 2017/9/6 0006  去掉drawer
-
     private RelativeLayout contentMain;
     private ViewPager mainViewpager;
     private TabLayout mainTablayout;
@@ -120,10 +117,8 @@ public class MainActivity extends BaseActivity implements MineFragment.OnFragmen
 
         fragmentList.add(restaurantFragment);
 
-
         Fragment orderFragment = OrderFragment.newInstance();
         fragmentList.add(orderFragment);
-
 
         Fragment fragment = MineFragment.newInstance();
         fragmentList.add(fragment);
