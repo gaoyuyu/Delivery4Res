@@ -19,7 +19,7 @@ import com.gaoyy.delivery4res.api.bean.OrderOperationStatusInfo;
 import com.gaoyy.delivery4res.api.bean.RestInfo;
 import com.gaoyy.delivery4res.base.BaseFragment;
 import com.gaoyy.delivery4res.base.CustomDialogFragment;
-import com.gaoyy.delivery4res.base.OnItemClickListener;
+import com.gaoyy.delivery4res.base.recycler.OnItemClickListener;
 import com.gaoyy.delivery4res.main.MainActivity;
 import com.gaoyy.delivery4res.main.NewOrderDetailActivity;
 import com.gaoyy.delivery4res.main.OrderNewActivity;

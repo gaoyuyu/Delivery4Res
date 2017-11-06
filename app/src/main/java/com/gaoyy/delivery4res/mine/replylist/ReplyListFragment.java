@@ -20,7 +20,7 @@ import com.gaoyy.delivery4res.api.bean.CommonInfo;
 import com.gaoyy.delivery4res.api.bean.ReplyOrderListInfo;
 import com.gaoyy.delivery4res.base.BaseFragment;
 import com.gaoyy.delivery4res.base.CustomDialogFragment;
-import com.gaoyy.delivery4res.base.OnItemClickListener;
+import com.gaoyy.delivery4res.base.recycler.OnItemClickListener;
 import com.gaoyy.delivery4res.util.CommonUtils;
 import com.gaoyy.delivery4res.util.DialogUtils;
 import com.pnikosis.materialishprogress.ProgressWheel;

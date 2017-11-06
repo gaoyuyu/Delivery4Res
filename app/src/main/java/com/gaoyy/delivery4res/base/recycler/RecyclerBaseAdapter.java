@@ -1,4 +1,4 @@
-package com.gaoyy.delivery4res.base;
+package com.gaoyy.delivery4res.base.recycler;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

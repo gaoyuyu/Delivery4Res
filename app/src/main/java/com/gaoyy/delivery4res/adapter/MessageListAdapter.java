@@ -4,8 +4,8 @@ import android.content.Context;
 
 import com.gaoyy.delivery4res.R;
 import com.gaoyy.delivery4res.api.bean.MessageListInfo;
-import com.gaoyy.delivery4res.base.BaseViewHolder;
-import com.gaoyy.delivery4res.base.RecyclerBaseAdapter;
+import com.gaoyy.delivery4res.base.recycler.BaseViewHolder;
+import com.gaoyy.delivery4res.base.recycler.RecyclerBaseAdapter;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.gaoyy.delivery4res.base;
+package com.gaoyy.delivery4res.base.recycler;
 
 import android.view.View;
 

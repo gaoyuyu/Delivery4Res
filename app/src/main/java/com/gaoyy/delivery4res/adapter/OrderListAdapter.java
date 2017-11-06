@@ -12,8 +12,8 @@ import com.gaoyy.delivery4res.R;
 import com.gaoyy.delivery4res.api.Constant;
 import com.gaoyy.delivery4res.api.bean.OrderListInfo;
 import com.gaoyy.delivery4res.api.bean.RestInfo;
-import com.gaoyy.delivery4res.base.BaseViewHolder;
-import com.gaoyy.delivery4res.base.RecyclerBaseAdapter;
+import com.gaoyy.delivery4res.base.recycler.BaseViewHolder;
+import com.gaoyy.delivery4res.base.recycler.RecyclerBaseAdapter;
 import com.gaoyy.delivery4res.main.MainActivity;
 
 import java.util.List;

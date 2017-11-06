@@ -19,7 +19,7 @@ import com.gaoyy.delivery4res.api.Constant;
 import com.gaoyy.delivery4res.api.RetrofitService;
 import com.gaoyy.delivery4res.api.bean.GeocodeInfo;
 import com.gaoyy.delivery4res.base.BaseActivity;
-import com.gaoyy.delivery4res.base.OnItemClickListener;
+import com.gaoyy.delivery4res.base.recycler.OnItemClickListener;
 import com.gaoyy.delivery4res.util.CommonUtils;
 import com.pnikosis.materialishprogress.ProgressWheel;
 

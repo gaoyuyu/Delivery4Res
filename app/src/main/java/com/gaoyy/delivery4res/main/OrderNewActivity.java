@@ -266,7 +266,8 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
                         TextView goodPrice = (TextView) root.findViewById(R.id.item_food_price);
                         goodName.setText("" + item.getGoods_name());
                         goodCount.setText("x" + item.getCount());
-                        goodPrice.setText("$" + item.getPrice());
+                        //保留2位小数
+                        goodPrice.setText("$" + CommonUtils.deci2(Double.valueOf(item.getPrice())));
                         itemCommonGoodsLayout.addView(root);
                     }
                     //设置价格

@@ -29,7 +29,6 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/username_hint"
                 android:inputType="textEmailAddress"
-                android:text="maimai"
                 android:textColor="@color/text_basic_color"/>
 
             <requestFocus/>
@@ -51,7 +50,6 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/password_hint"
                 android:inputType="textPassword"
-                android:text="111111"
                 android:textColor="@color/text_basic_color"/>
 
         </android.support.design.widget.TextInputLayout>
