@@ -195,7 +195,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener
             @Override
             public void onResponse(Call<CommonInfo> call, Response<CommonInfo> response)
             {
-                loading.dismiss();
+                loading.dismissAllowingStateLoss();
                 if (response.isSuccessful() && response.body() != null)
                 {
                     CommonInfo logoutInfo = response.body();
@@ -217,7 +217,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener
             @Override
             public void onFailure(Call<CommonInfo> call, Throwable t)
             {
-                loading.dismiss();
+                loading.dismissAllowingStateLoss();
                 CommonUtils.httpErrorLogger(t.toString());
                 if (!call.isCanceled())
                 {

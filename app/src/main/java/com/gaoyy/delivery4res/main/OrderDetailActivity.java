@@ -176,7 +176,7 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
             @Override
             public void onResponse(Call<CommonInfo> call, Response<CommonInfo> response)
             {
-                loading.dismiss();
+                loading.dismissAllowingStateLoss();
                 Log.d(Constant.TAG, response.isSuccessful() + "");
                 Log.d(Constant.TAG, response.body() + "");
                 Log.d(Constant.TAG, response.message());
@@ -232,7 +232,7 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
             @Override
             public void onFailure(Call<CommonInfo> call, Throwable t)
             {
-                loading.dismiss();
+                loading.dismissAllowingStateLoss();
                 CommonUtils.httpErrorLogger(t.toString());
                 if (!call.isCanceled())
                 {
@@ -256,7 +256,7 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
             @Override
             public void onResponse(Call<GeocodeInfo> call, Response<GeocodeInfo> response)
             {
-                loading.dismiss();
+                loading.dismissAllowingStateLoss();
                 if (response.isSuccessful() && response.body() != null)
                 {
                     GeocodeInfo geocodeInfo = response.body();
@@ -297,7 +297,7 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
             @Override
             public void onFailure(Call<GeocodeInfo> call, Throwable t)
             {
-                loading.dismiss();
+                loading.dismissAllowingStateLoss();
                 CommonUtils.httpErrorLogger(t.toString());
                 if (!call.isCanceled())
                 {

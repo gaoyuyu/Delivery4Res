@@ -235,7 +235,7 @@ public class ReplyListFragment extends BaseFragment implements ReplyListContract
     {
         if (loading != null)
         {
-            loading.dismiss();
+            loading.dismissAllowingStateLoss();
         }
     }
 

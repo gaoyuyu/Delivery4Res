@@ -513,7 +513,7 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
     {
         if (loading != null)
         {
-            loading.dismiss();
+            loading.dismissAllowingStateLoss();
         }
     }
 

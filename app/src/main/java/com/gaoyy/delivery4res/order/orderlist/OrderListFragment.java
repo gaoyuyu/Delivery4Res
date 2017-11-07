@@ -276,7 +276,7 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
     @Override
     public void hideLoding()
     {
-        loading.dismiss();
+        loading.dismissAllowingStateLoss();
     }
 
     @Override

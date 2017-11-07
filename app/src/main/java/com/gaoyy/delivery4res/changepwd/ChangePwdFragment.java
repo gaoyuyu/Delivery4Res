@@ -151,7 +151,7 @@ public class ChangePwdFragment extends BaseFragment implements ChangePwdContract
     {
         if (loading != null)
         {
-            loading.dismiss();
+            loading.dismissAllowingStateLoss();
         }
     }
 
