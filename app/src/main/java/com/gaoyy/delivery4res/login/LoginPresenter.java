@@ -27,14 +27,14 @@ public class LoginPresenter implements LoginContract.Presenter
     @Override
     public void start()
     {
-        Log.i(Constant.TAG,"Login start");
+        Log.i(Constant.TAG, "Login start");
     }
 
     @Override
-    public void login(Call<RestInfo> call,Map<String, String> params)
+    public void login(Call<RestInfo> call, Map<String, String> params)
     {
         CommonUtils.httpDebugLogger("登录请求");
-        CommonUtils.httpDebugLogger("登录请求参数："+params);
+        CommonUtils.httpDebugLogger("登录请求参数：" + params);
         mLoginView.showLoading();
         call.enqueue(new Callback<RestInfo>()
         {
@@ -51,10 +51,13 @@ public class LoginPresenter implements LoginContract.Presenter
                     RestInfo restInfo = response.body();
                     String msg = restInfo.getMsg();
                     String errorCode = restInfo.getErrorCode();
-                    CommonUtils.httpDebugLogger("[isSuccess="+restInfo.isSuccess()+"][errorCode=" + errorCode + "][msg=" + msg + "]");
+                    CommonUtils.httpDebugLogger("[isSuccess=" + restInfo.isSuccess() + "][errorCode=" + errorCode + "][msg=" + msg + "]");
+
+
+                    Log.d(Constant.TAG, "errorCode-->" + errorCode);
                     mLoginView.showToast(msg);
 
-                    if(errorCode.equals("-1"))
+                    if (errorCode.equals("-1"))
                     {
                         //保存用户信息
                         mLoginView.saveUserInfo(restInfo.getBody().getUser());
@@ -70,11 +73,13 @@ public class LoginPresenter implements LoginContract.Presenter
                          * 跳转到MainActivity,需要传参
                          *   remarkDict，finishedTime，dictStatus
                          */
-                        mLoginView.redirectToMain(remarkDict,finishedTime,dictStatus);
+                        mLoginView.redirectToMain(remarkDict, finishedTime, dictStatus);
                     }
-                    else if(errorCode.equals("-2"))
+                    else
                     {
-                        //登录失败
+                        //登录失败，无论是否自动登陆，都将自动登陆标识置为false，重新登陆
+                        mLoginView.setAutoLoginToFalse();
+
                     }
                 }
             }
@@ -88,7 +93,10 @@ public class LoginPresenter implements LoginContract.Presenter
                 }
                 mLoginView.hideLoading();
                 CommonUtils.httpErrorLogger(t.toString());
-                mLoginView.showToast(R.string.network_error);
+                if(!call.isCanceled())
+                {
+                    mLoginView.showToast(R.string.network_error);
+                }
             }
         });
 

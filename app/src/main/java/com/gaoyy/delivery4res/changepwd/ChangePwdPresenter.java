@@ -2,7 +2,6 @@ package com.gaoyy.delivery4res.changepwd;
 
 
 import com.gaoyy.delivery4res.R;
-import com.gaoyy.delivery4res.api.RetrofitService;
 import com.gaoyy.delivery4res.api.bean.CommonInfo;
 import com.gaoyy.delivery4res.util.CommonUtils;
 
@@ -35,7 +34,7 @@ public class ChangePwdPresenter implements ChangePwdContract.Presenter
 
 
     @Override
-    public void changePwd(Call<CommonInfo> call,Map<String, String> params)
+    public void changePwd(Call<CommonInfo> call, Map<String, String> params)
     {
         CommonUtils.httpDebugLogger("修改密码请求");
         mChangePwdView.showLoading();
@@ -54,7 +53,7 @@ public class ChangePwdPresenter implements ChangePwdContract.Presenter
                     CommonInfo commonInfo = response.body();
                     String msg = commonInfo.getMsg();
                     String errorCode = commonInfo.getErrorCode();
-                    CommonUtils.httpDebugLogger("[isSuccess="+commonInfo.isSuccess()+"][errorCode=" + errorCode + "][msg=" + msg + "]");
+                    CommonUtils.httpDebugLogger("[isSuccess=" + commonInfo.isSuccess() + "][errorCode=" + errorCode + "][msg=" + msg + "]");
 
                     mChangePwdView.showToast(msg);
 
@@ -74,7 +73,10 @@ public class ChangePwdPresenter implements ChangePwdContract.Presenter
                 }
                 mChangePwdView.hideLoading();
                 CommonUtils.httpErrorLogger(t.toString());
-                mChangePwdView.showToast(R.string.network_error);
+                if (!call.isCanceled())
+                {
+                    mChangePwdView.showToast(R.string.network_error);
+                }
             }
         });
     }

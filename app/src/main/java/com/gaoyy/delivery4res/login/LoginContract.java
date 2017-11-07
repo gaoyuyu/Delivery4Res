@@ -20,6 +20,7 @@ public class LoginContract
         void hideLoading();
         void showToast(String msg);
         void showToast(int msgId);
+        void setAutoLoginToFalse();
 
         /**
          * 保存用户信息

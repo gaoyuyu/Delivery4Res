@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.gaoyy.delivery4res.R;
 import com.gaoyy.delivery4res.api.Constant;
-import com.gaoyy.delivery4res.api.RetrofitService;
 import com.gaoyy.delivery4res.api.bean.OrderListInfo;
 import com.gaoyy.delivery4res.api.bean.OrderOperationStatusInfo;
 import com.gaoyy.delivery4res.util.CommonUtils;
@@ -93,7 +92,10 @@ public class OrderListPresenter implements OrderListContract.Presenter
                 //停止刷新
                 mOrderListView.finishRefesh();
                 CommonUtils.httpErrorLogger(t.toString());
-                mOrderListView.showToast(R.string.network_error);
+                if (!call.isCanceled())
+                {
+                    mOrderListView.showToast(R.string.network_error);
+                }
             }
         });
     }
@@ -172,7 +174,10 @@ public class OrderListPresenter implements OrderListContract.Presenter
                 }
                 mOrderListView.hideLoding();
                 CommonUtils.httpErrorLogger(t.toString());
-                mOrderListView.showToast(R.string.network_error);
+                if (!call.isCanceled())
+                {
+                    mOrderListView.showToast(R.string.network_error);
+                }
             }
         });
     }

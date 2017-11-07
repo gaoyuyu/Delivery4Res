@@ -107,6 +107,9 @@ public class CustomDialogFragment extends DialogFragment implements DialogInterf
         }
     }
 
+
+
+
     /**
      * 创建loading框
      *

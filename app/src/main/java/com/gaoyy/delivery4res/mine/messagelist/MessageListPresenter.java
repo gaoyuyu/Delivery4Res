@@ -2,7 +2,6 @@ package com.gaoyy.delivery4res.mine.messagelist;
 
 import com.gaoyy.delivery4res.R;
 import com.gaoyy.delivery4res.api.Constant;
-import com.gaoyy.delivery4res.api.RetrofitService;
 import com.gaoyy.delivery4res.api.bean.MessageListInfo;
 import com.gaoyy.delivery4res.util.CommonUtils;
 
@@ -89,7 +88,10 @@ public class MessageListPresenter implements MessageListContract.Presenter
                 //停止刷新
                 mMessageListView.finishRefesh();
                 CommonUtils.httpErrorLogger(t.toString());
-                mMessageListView.showToast(R.string.network_error);
+                if (!call.isCanceled())
+                {
+                    mMessageListView.showToast(R.string.network_error);
+                }
             }
         });
     }

@@ -99,6 +99,7 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
         if (isAutoLogin == Constant.AUTO_LOGIN)
         {
             loginLayout.setVisibility(View.GONE);
+            loginPassword.setText(CommonUtils.getPwd(activity));
             Map<String, String> params = new HashMap<>();
             params.put("loginName", CommonUtils.getLoginName(activity));
             params.put("pwd", CommonUtils.getPwd(activity));
@@ -106,6 +107,11 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
             CommonUtils.httpDebugLogger("自动登录==" + params.toString());
             call = RetrofitService.sApiService.login(params);
             mLoginPresenter.login(call, params);
+        }
+        else
+        {
+            loginLayout.setVisibility(View.VISIBLE);
+            loginPassword.setText("");
         }
     }
 
@@ -193,7 +199,7 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
     @Override
     public void showLoading()
     {
-        loading = DialogUtils.showLoadingDialog(activity);
+        loading = DialogUtils.showLoadingDialog(activity, activity.getResources().getString(R.string.logining));
     }
 
     @Override
@@ -201,7 +207,7 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
     {
         if (loading != null)
         {
-            loading.dismiss();
+            loading.dismissAllowingStateLoss();
         }
     }
 
@@ -215,6 +221,17 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
     public void showToast(int msgId)
     {
         CommonUtils.showToast(activity, msgId);
+    }
+
+    @Override
+    public void setAutoLoginToFalse()
+    {
+        CommonUtils.setUpAutoLogin(activity,false);
+        //同时跳转登录界面
+        Intent intent = new Intent();
+        intent.setClass(activity, LoginActivity.class);
+        startActivity(intent);
+
     }
 
     @Override

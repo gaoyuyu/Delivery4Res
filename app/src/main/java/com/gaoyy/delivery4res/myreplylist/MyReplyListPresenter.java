@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.gaoyy.delivery4res.R;
 import com.gaoyy.delivery4res.api.Constant;
-import com.gaoyy.delivery4res.api.RetrofitService;
 import com.gaoyy.delivery4res.api.bean.MyReplyListInfo;
 import com.gaoyy.delivery4res.util.CommonUtils;
 
@@ -89,7 +88,10 @@ public class MyReplyListPresenter implements MyReplyListContract.Presenter
                 //停止刷新
                 mMyReplyListView.finishRefesh();
                 CommonUtils.httpErrorLogger(t.toString());
-                mMyReplyListView.showToast(R.string.network_error);
+                if (!call.isCanceled())
+                {
+                    mMyReplyListView.showToast(R.string.network_error);
+                }
             }
         });
 

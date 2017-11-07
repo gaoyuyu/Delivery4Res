@@ -143,7 +143,10 @@ public class SearchLocationActivity extends BaseActivity implements OnItemClickL
                             searchProgressWheel.setVisibility(View.GONE);
                             searchRv.setVisibility(View.VISIBLE);
                             CommonUtils.httpErrorLogger(t.toString());
-                            CommonUtils.showToast(SearchLocationActivity.this, getResources().getString(R.string.network_error));
+                            if (!call.isCanceled())
+                            {
+                                CommonUtils.showToast(SearchLocationActivity.this, getResources().getString(R.string.network_error));
+                            }
                         }
                     });
                 }

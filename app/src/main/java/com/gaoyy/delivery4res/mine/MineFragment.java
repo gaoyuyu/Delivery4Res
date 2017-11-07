@@ -219,7 +219,10 @@ public class MineFragment extends BaseFragment implements View.OnClickListener
             {
                 loading.dismiss();
                 CommonUtils.httpErrorLogger(t.toString());
-                CommonUtils.showToast(activity, getResources().getString(R.string.network_error));
+                if (!call.isCanceled())
+                {
+                    CommonUtils.showToast(activity, getResources().getString(R.string.network_error));
+                }
             }
         });
     }
