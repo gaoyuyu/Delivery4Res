@@ -186,11 +186,11 @@ public class RestaurantFragment extends BaseFragment implements View.OnClickList
      */
     private void validate()
     {
-        CommonUtils.textInputLayoutSetting(restPhone, restPhoneTextinputlayout, "Can't be empty");
+        CommonUtils.textInputLayoutSetting(restPhone, restPhoneTextinputlayout, getResources().getString(R.string.check_customer_phone));
         if (restPhone.getText().toString().length() != 10)
         {
             restPhoneTextinputlayout.setErrorEnabled(true);
-            restPhoneTextinputlayout.setError("The phone number should be a 10-digit array");
+            restPhoneTextinputlayout.setError(getResources().getString(R.string.check_phone_length));
         }
         else
         {
@@ -200,7 +200,7 @@ public class RestaurantFragment extends BaseFragment implements View.OnClickList
         if (restAddress.getText().toString().equals("Click To Seach") || restAddress.getText().toString().equals(""))
         {
             restAddressTextinputlayout.setErrorEnabled(true);
-            restAddressTextinputlayout.setError("Can't be empty");
+            restAddressTextinputlayout.setError(getResources().getString(R.string.check_address));
         }
         else
         {

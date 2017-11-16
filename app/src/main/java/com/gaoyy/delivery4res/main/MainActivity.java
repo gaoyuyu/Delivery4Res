@@ -11,7 +11,6 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gaoyy.delivery4res.R;
@@ -29,7 +28,6 @@ import java.util.List;
 
 public class MainActivity extends BaseActivity implements MineFragment.OnFragmentInteractionListener
 {
-    private RelativeLayout contentMain;
     private ViewPager mainViewpager;
     private TabLayout mainTablayout;
 
@@ -79,7 +77,6 @@ public class MainActivity extends BaseActivity implements MineFragment.OnFragmen
     protected void assignViews()
     {
         super.assignViews();
-        contentMain = (RelativeLayout) findViewById(R.id.content_main);
         mainViewpager = (ViewPager) findViewById(R.id.main_viewpager);
         mainTablayout = (TabLayout) findViewById(R.id.main_tablayout);
 

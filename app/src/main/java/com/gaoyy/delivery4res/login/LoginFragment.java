@@ -362,8 +362,8 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
      */
     private void validate()
     {
-        CommonUtils.textInputLayoutSetting(loginUsername, loginUsernameTextinputlayout, "username mustn't be empty");
-        CommonUtils.textInputLayoutSetting(loginPassword, loginPasswordTextinputlayout, "password mustn't be empty");
+        CommonUtils.textInputLayoutSetting(loginUsername, loginUsernameTextinputlayout, getResources().getString(R.string.check_user));
+        CommonUtils.textInputLayoutSetting(loginPassword, loginPasswordTextinputlayout, getResources().getString(R.string.check_pwd));
     }
 
     @Override
