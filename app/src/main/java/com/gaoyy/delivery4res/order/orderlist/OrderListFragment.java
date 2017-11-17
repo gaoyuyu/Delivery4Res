@@ -163,7 +163,7 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
         params.put("randomCode", CommonUtils.getRandomCode(activity));
         params.put("pageNo", String.valueOf(pageNo));
         params.put("pageSize", String.valueOf(pageSize));
-        params.put("isMA", String.valueOf(isMA));
+        params.put("isplatformDt", String.valueOf(isMA));
         String orderNo = getArguments().getString("orderNo");
         String driverPhone = getArguments().getString("driverPhone");
         String customerPhone = getArguments().getString("customerPhone");
@@ -317,6 +317,7 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
         switch (id)
         {
             case R.id.item_order_cancle_btn:
+                params.put("order_id",String.valueOf(order.getOrderId()));
                 mOrderListPresenter.orderStatusOperate(getStatusCall(Constant.CANCLE, params), position, order, Constant.CANCLE);
                 break;
             case R.id.item_order_resubmit_btn:

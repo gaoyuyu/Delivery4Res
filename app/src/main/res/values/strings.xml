@@ -13,7 +13,7 @@
     <string name="customer_phone">Customers Phone Number</string>
     <string name="customer_address">Customers Address</string>
     <string name="customer_apt">Customers Apartment Number</string>
-    <string name="customer_finished_time">FinishedTime</string>
+    <string name="customer_ready_in">Ready In</string>
     <string name="door_bell">door bell not working</string>
     <string name="customer_remark">Input Note, please</string>
     <string name="action_send_order">Send Order</string>
@@ -23,8 +23,8 @@
     <string name="starting_point">Starting Point：</string>
     <string name="destination">Destination：</string>
     <string name="customer_phone_short">Cust.Phone：</string>
-    <string name="notes">Notes：</string>
-    <string name="notes_short">Notes</string>
+    <string name="notes">Comments：</string>
+    <string name="notes_short">Comments</string>
     <string name="others">Others：</string>
     <string name="action_submit_order">submit</string>
     <string name="order_submit_success">Operation Successfully Completed</string>
@@ -147,6 +147,6 @@
     <string name="ticket_purchaser">Name:</string>
     <string name="ticket_tel">Telephone:</string>
     <string name="ticket_will_be_paid">Order will be paid:</string>
-    <string name="ticket_bottom_text">Thanks for ordering from Menu Alliance</string>
+    <string name="ticket_bottom_text">Thanks for ordering from</string>
 
 </resources>

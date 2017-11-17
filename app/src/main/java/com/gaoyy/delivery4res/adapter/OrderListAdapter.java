@@ -111,24 +111,20 @@ public class OrderListAdapter extends RecyclerBaseAdapter<OrderListInfo.BodyBean
             //Wait
             if ((orderStatus == value) && (value == 0))
             {
-                itemOrderStatus.setBackgroundColor(mContext.getResources().getColor(android.R.color.holo_green_light));
-                itemOrderStatus.setText(R.string.status_wait);
-                itemOrderDriverNameLayout.setVisibility(View.GONE);
+                //这里需要显示为状态：1-Accept
+                itemOrderStatus.setBackgroundColor(mContext.getResources().getColor(android.R.color.holo_orange_dark));
+                itemOrderStatus.setText(R.string.status_accept);
+
+                itemOrderDriverNameLayout.setVisibility(View.VISIBLE);
+
                 //显示按钮组
                 itemOrderOperationLayout.setVisibility(View.VISIBLE);
-                //显示Cancle按钮和resubmit按钮
+                //显示Cancle按钮和Finish按钮
                 itemOrderCancleBtn.setVisibility(View.VISIBLE);
-                if (itemData.getIsTimeout() == 1)
-                {
-                    itemOrderResubmitBtn.setVisibility(View.VISIBLE);
-                }
-                else
-                {
-                    itemOrderResubmitBtn.setVisibility(View.GONE);
-                }
+                itemOrderResubmitBtn.setVisibility(View.GONE);
                 itemOrderDeliveryBtn.setVisibility(View.GONE);
                 itemOrderCancleAfterDeliveryBtn.setVisibility(View.GONE);
-                itemOrderMakingFinishBtn.setVisibility(View.GONE);
+                itemOrderMakingFinishBtn.setVisibility(View.VISIBLE);
             }
             //Accept
             else if ((orderStatus == value) && (value == 1))
@@ -209,25 +205,20 @@ public class OrderListAdapter extends RecyclerBaseAdapter<OrderListInfo.BodyBean
             //Making
             else if ((orderStatus == value) && (value == 7))
             {
-                itemOrderStatus.setBackgroundColor(mContext.getResources().getColor(android.R.color.holo_blue_light));
-                itemOrderStatus.setText(R.string.status_making);
-                //DistributionType 配送方式 Pick-up 自提，Delivery 配送
-                if ((itemData.getOrderType() == 1) && (itemData.getDistributionType().equals("Pick-Up")))
-                {
-                    //显示Finish按钮
-                    itemOrderCancleBtn.setVisibility(View.GONE);
-                    itemOrderResubmitBtn.setVisibility(View.GONE);
-                    itemOrderDeliveryBtn.setVisibility(View.GONE);
-                    itemOrderCancleAfterDeliveryBtn.setVisibility(View.GONE);
-                    itemOrderMakingFinishBtn.setVisibility(View.VISIBLE);
-                    //显示按钮组
-                    itemOrderOperationLayout.setVisibility(View.VISIBLE);
-                }
-                else
-                {
-                    //不显示按钮
-                    itemOrderOperationLayout.setVisibility(View.GONE);
-                }
+                //这里需要显示为状态：1-Accept
+                itemOrderStatus.setBackgroundColor(mContext.getResources().getColor(android.R.color.holo_orange_dark));
+                itemOrderStatus.setText(R.string.status_accept);
+
+                itemOrderDriverNameLayout.setVisibility(View.VISIBLE);
+
+                //显示按钮组
+                itemOrderOperationLayout.setVisibility(View.VISIBLE);
+                //显示Cancle按钮和Finish按钮
+                itemOrderCancleBtn.setVisibility(View.VISIBLE);
+                itemOrderResubmitBtn.setVisibility(View.GONE);
+                itemOrderDeliveryBtn.setVisibility(View.GONE);
+                itemOrderCancleAfterDeliveryBtn.setVisibility(View.GONE);
+                itemOrderMakingFinishBtn.setVisibility(View.VISIBLE);
             }
         }
     }

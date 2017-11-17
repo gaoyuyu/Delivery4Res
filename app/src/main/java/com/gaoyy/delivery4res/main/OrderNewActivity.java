@@ -267,7 +267,7 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
                         goodName.setText("" + item.getGoods_name());
                         goodCount.setText("x" + item.getCount());
                         //保留2位小数
-                        goodPrice.setText("$" + CommonUtils.deci2(Double.valueOf(item.getPrice())));
+                        goodPrice.setText("$" + CommonUtils.deci2(item.getPrice()));
                         itemCommonGoodsLayout.addView(root);
                     }
                     //设置价格
@@ -344,6 +344,7 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
         }
         else
         {
+            ((TextView)((LinearLayout)(orderNewTip.getParent())).getChildAt(0)).setText(getResources().getString(R.string.tip_price)+"("+data.getTipRate()+"%)");
             orderNewTip.setText("$" + CommonUtils.deci2(data.getTipPrice()));
         }
 
@@ -364,6 +365,8 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
         }
         else
         {
+            ((TextView)((LinearLayout)(orderNewTax.getParent())).getChildAt(0)).setText(getResources().getString(R.string.taxation)+"("+data.getTaxrate()+"%)");
+
             orderNewTax.setText("$" + CommonUtils.deci2(data.getTaxation()));
         }
 
@@ -374,6 +377,7 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
         }
         else
         {
+            ((TextView)((LinearLayout)(orderNewTax.getParent())).getChildAt(0)).setText(getResources().getString(R.string.taxation_tvq)+"("+data.getTaxrate_tvq()+"%)");
             orderNewTaxTvq.setText("$" + CommonUtils.deci2(data.getTaxation_tvq()));
         }
 
