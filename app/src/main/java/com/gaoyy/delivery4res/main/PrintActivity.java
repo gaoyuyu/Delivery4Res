@@ -340,17 +340,17 @@ public class PrintActivity extends BaseActivity implements AdapterView.OnItemCli
         {
             //小费
             if (data.getTipPrice() != null && (Double) (data.getTipPrice()) != 0.0)
-                PrintUtils.printText(PrintUtils.printTwoData(getResources().getString(R.string.tip_price), "$" + data.getTipPrice() + "\n"));
+                PrintUtils.printText(PrintUtils.printTwoData(getResources().getString(R.string.tip_price)+"(" + data.getTipRate() + "%)", "$" + data.getTipPrice() + "\n"));
         }
         //配送费
         if (data.getShip_price() != null && (Double) (data.getShip_price()) != 0.0)
             PrintUtils.printText(PrintUtils.printTwoData(getResources().getString(R.string.ship_price), "$" + data.getShip_price() + "\n"));
         //税1
         if (data.getTaxation() != null && (Double) (data.getTaxation()) != 0.0)
-            PrintUtils.printText(PrintUtils.printTwoData(getResources().getString(R.string.taxation), "$" + data.getTaxation() + "\n"));
+            PrintUtils.printText(PrintUtils.printTwoData(getResources().getString(R.string.taxation)+"(" + data.getTaxrate() + "%)", "$" + data.getTaxation() + "\n"));
         //税2
         if (data.getTaxation_tvq() != null && (Double) (data.getTaxation_tvq()) != 0.0)
-            PrintUtils.printText(PrintUtils.printTwoData(getResources().getString(R.string.taxation_tvq), "$" + data.getTaxation_tvq() + "\n"));
+            PrintUtils.printText(PrintUtils.printTwoData(getResources().getString(R.string.taxation_tvq)+"(" + data.getTaxrate_tvq() + "%)", "$" + data.getTaxation_tvq() + "\n"));
         //收益
         if (data.getUseIncomePrice() != null && (Double) (data.getUseIncomePrice()) != 0.0)
             PrintUtils.printText(PrintUtils.printTwoData(getResources().getString(R.string.income_price), "-$" + data.getUseIncomePrice() + "\n"));
@@ -378,7 +378,7 @@ public class PrintActivity extends BaseActivity implements AdapterView.OnItemCli
         PrintUtils.printText(getResources().getString(R.string.ticket_top_title)  + "\n");
         print1DCodeBy2(orderNewInfo.getBody().getObj().getOrder_id() + "", mOutputStream);
 
-        PrintUtils.printText("\n\n\n\n\n");
+        PrintUtils.printText("\n");
     }
 
     private void print1DCodeBy2(String content, OutputStream outputStream)

@@ -273,7 +273,18 @@ public class OrderListInfo
                 private Object orderGoods;
                 private int orderType;
                 private String distributionType;
+                private String isplatformDt;
                 private String price;
+
+                public String getIsplatformDt()
+                {
+                    return isplatformDt;
+                }
+
+                public void setIsplatformDt(String isplatformDt)
+                {
+                    this.isplatformDt = isplatformDt;
+                }
 
                 public String getId()
                 {

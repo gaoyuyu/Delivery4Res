@@ -163,7 +163,7 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
         params.put("randomCode", CommonUtils.getRandomCode(activity));
         params.put("pageNo", String.valueOf(pageNo));
         params.put("pageSize", String.valueOf(pageSize));
-        params.put("isplatformDt", String.valueOf(isMA));
+        params.put("isMA", String.valueOf(isMA));
         String orderNo = getArguments().getString("orderNo");
         String driverPhone = getArguments().getString("driverPhone");
         String customerPhone = getArguments().getString("customerPhone");

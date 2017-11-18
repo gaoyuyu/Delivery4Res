@@ -344,7 +344,7 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
         }
         else
         {
-            ((TextView)((LinearLayout)(orderNewTip.getParent())).getChildAt(0)).setText(getResources().getString(R.string.tip_price)+"("+data.getTipRate()+"%)");
+            ((TextView) ((LinearLayout) (orderNewTip.getParent())).getChildAt(0)).setText(getResources().getString(R.string.tip_price) + "(" + data.getTipRate() + "%)");
             orderNewTip.setText("$" + CommonUtils.deci2(data.getTipPrice()));
         }
 
@@ -365,7 +365,7 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
         }
         else
         {
-            ((TextView)((LinearLayout)(orderNewTax.getParent())).getChildAt(0)).setText(getResources().getString(R.string.taxation)+"("+data.getTaxrate()+"%)");
+            ((TextView) ((LinearLayout) (orderNewTax.getParent())).getChildAt(0)).setText(getResources().getString(R.string.taxation) + "(" + data.getTaxrate() + "%)");
 
             orderNewTax.setText("$" + CommonUtils.deci2(data.getTaxation()));
         }
@@ -377,7 +377,7 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
         }
         else
         {
-            ((TextView)((LinearLayout)(orderNewTax.getParent())).getChildAt(0)).setText(getResources().getString(R.string.taxation_tvq)+"("+data.getTaxrate_tvq()+"%)");
+            ((TextView) ((LinearLayout) (orderNewTaxTvq.getParent())).getChildAt(0)).setText(getResources().getString(R.string.taxation_tvq) + "(" + data.getTaxrate_tvq() + "%)");
             orderNewTaxTvq.setText("$" + CommonUtils.deci2(data.getTaxation_tvq()));
         }
 
@@ -552,9 +552,17 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
                     CommonUtils.showToast(OrderNewActivity.this, commonInfo.getMsg());
                     if (commonInfo.isSuccess())
                     {
-                        Intent intent = new Intent(OrderNewActivity.this, PrintActivity.class);
-                        intent.putExtra("orderNewInfo", orderNewInfo);
-                        startActivityForResult(intent, Constant.REQUEST_PRINT);
+                        if (!isFormNotice)
+                        {
+                            Intent intent = new Intent(OrderNewActivity.this, PrintActivity.class);
+                            intent.putExtra("orderNewInfo", orderNewInfo);
+                            startActivityForResult(intent, Constant.REQUEST_PRINT);
+                        }
+                        else
+                        {
+                            finish();
+                        }
+
                     }
 
                 }
