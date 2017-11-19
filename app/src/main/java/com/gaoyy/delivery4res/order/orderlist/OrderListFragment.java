@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.gaoyy.delivery4res.R;
 import com.gaoyy.delivery4res.adapter.OrderListAdapter;
 import com.gaoyy.delivery4res.api.Constant;
@@ -19,7 +20,6 @@ import com.gaoyy.delivery4res.api.bean.OrderOperationStatusInfo;
 import com.gaoyy.delivery4res.api.bean.RestInfo;
 import com.gaoyy.delivery4res.base.BaseFragment;
 import com.gaoyy.delivery4res.base.CustomDialogFragment;
-import com.gaoyy.delivery4res.base.recycler.OnItemClickListener;
 import com.gaoyy.delivery4res.main.MainActivity;
 import com.gaoyy.delivery4res.main.NewOrderDetailActivity;
 import com.gaoyy.delivery4res.main.OrderNewActivity;
@@ -34,7 +34,7 @@ import java.util.Map;
 import retrofit2.Call;
 
 
-public class OrderListFragment extends BaseFragment implements OrderListContract.View, SwipeRefreshLayout.OnRefreshListener, OnItemClickListener
+public class OrderListFragment extends BaseFragment implements OrderListContract.View, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.OnItemClickListener, BaseQuickAdapter.OnItemChildClickListener, BaseQuickAdapter.RequestLoadMoreListener
 {
     private static final String LOG_TAG = OrderListFragment.class.getSimpleName();
     private OrderListContract.Presenter mOrderListPresenter;
@@ -96,7 +96,7 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
     protected void configViews()
     {
         super.configViews();
-        orderListAdapter = new OrderListAdapter(activity, orderList);
+        orderListAdapter = new OrderListAdapter(orderList);
         commonRv.setAdapter(orderListAdapter);
         //设置布局
         linearLayoutManager = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false);
@@ -110,49 +110,14 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
     protected void setListener()
     {
         super.setListener();
-
         commonSwipeRefreshLayout.setOnRefreshListener(this);
-        commonRv.setOnScrollListener(new RecyclerView.OnScrollListener()
-        {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState)
-            {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == orderListAdapter.getItemCount())
-                {
-                    //总共有多少页
-                    int pageSum = 0;
-                    pageNo = pageNo + 1;
-
-                    if (pageCount % pageSize == 0)
-                    {
-                        pageSum = pageCount / pageSize;
-                    }
-                    else
-                    {
-                        pageSum = pageCount / pageSize + 1;
-                    }
-                    Log.d(Constant.TAG, "page sum-->" + pageSum);
-                    Log.d(Constant.TAG, "page No-->" + pageNo);
-                    if (pageNo <= pageSum)
-                    {
-                        Map<String, String> params = getOrderListParams(pageNo, pageSize);
-                        Log.d(Constant.TAG, "上拉加载更多，传递参数-->" + params.toString());
-                        orderListCall = RetrofitService.sApiService.orderList(params);
-                        mOrderListPresenter.orderList(orderListCall, params, Constant.UP_TO_LOAD_MORE);
-                    }
-                }
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy)
-            {
-                super.onScrolled(recyclerView, dx, dy);
-                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
-            }
-        });
+        orderListAdapter.setOnLoadMoreListener(this, commonRv);
+        //设置第一次加载不回凋setOnLoadMoreListener
+        orderListAdapter.disableLoadMoreIfNotFullPage();
         //设置item的点击事件
         orderListAdapter.setOnItemClickListener(this);
+        //设置item中的btn的点击事件
+        orderListAdapter.setOnItemChildClickListener(this);
     }
 
     @NonNull
@@ -232,14 +197,20 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
     @Override
     public void showOrderList(LinkedList<OrderListInfo.BodyBean.PageBean.ListBean> orderList, int count)
     {
-        orderListAdapter.updateData(orderList);
+        orderListAdapter.setNewData(orderList);
+        //当第一页数据小于page size时显示“没有更多数据”
+        if (orderList.size() < Constant.PAGE_SIZE)
+        {
+            orderListAdapter.loadMoreEnd(false);
+        }
         pageCount = count;
     }
 
     @Override
     public void loadMoreOrderList(LinkedList<OrderListInfo.BodyBean.PageBean.ListBean> orderList, int count)
     {
-        orderListAdapter.addMoreItem(orderList);
+        orderListAdapter.addData(orderList);
+        orderListAdapter.loadMoreComplete();
         pageCount = count;
     }
 
@@ -282,7 +253,37 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
     @Override
     public void singleItemUpdate(int position, OrderListInfo.BodyBean.PageBean.ListBean order)
     {
-        orderListAdapter.singleItemUpdate(position, order);
+        orderListAdapter.setData(position, order);
+    }
+
+    @Override
+    public void setEnableLoadMore(boolean enable)
+    {
+        orderListAdapter.setEnableLoadMore(enable);
+    }
+
+    @Override
+    public void handleStatus(boolean isSuccess, int status)
+    {
+        if (isSuccess)
+        {
+            if (status == Constant.NO_DATA)
+            {
+                orderListAdapter.setEmptyView(R.layout.empty_view);
+            }
+        }
+        else
+        {
+            if (status == Constant.PULL_TO_REFRESH)
+            {
+                orderListAdapter.setEmptyView(R.layout.error_view);
+            }
+            else if(status == Constant.UP_TO_LOAD_MORE)
+            {
+                orderListAdapter.loadMoreFail();
+                commonRv.smoothScrollToPosition(orderListAdapter.getItemCount());
+            }
+        }
     }
 
     @Override
@@ -303,52 +304,6 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
         Log.d(Constant.TAG, "下拉刷新，传递参数-->" + params.toString());
         orderListCall = RetrofitService.sApiService.orderList(params);
         mOrderListPresenter.orderList(orderListCall, params, Constant.PULL_TO_REFRESH);
-    }
-
-    @Override
-    public void onItemClick(View view, int position, Object itemData)
-    {
-        OrderListInfo.BodyBean.PageBean.ListBean order = (OrderListInfo.BodyBean.PageBean.ListBean) itemData;
-        int id = view.getId();
-        Map<String, String> params = new HashMap<>();
-        params.put("loginName", CommonUtils.getLoginName(activity));
-        params.put("randomCode", CommonUtils.getRandomCode(activity));
-        params.put("id", order.getId());
-        switch (id)
-        {
-            case R.id.item_order_cancle_btn:
-                params.put("order_id",String.valueOf(order.getOrderId()));
-                mOrderListPresenter.orderStatusOperate(getStatusCall(Constant.CANCLE, params), position, order, Constant.CANCLE);
-                break;
-            case R.id.item_order_resubmit_btn:
-                mOrderListPresenter.orderStatusOperate(getStatusCall(Constant.RESUBMIT, params), position, order, Constant.RESUBMIT);
-                break;
-            case R.id.item_order_delivery_btn:
-                mOrderListPresenter.orderStatusOperate(getStatusCall(Constant.DELIVERY, params), position, order, Constant.DELIVERY);
-                break;
-            case R.id.item_order_cancle_after_delivery_btn:
-                mOrderListPresenter.orderStatusOperate(getStatusCall(Constant.CANCLE_AFTER_DELIVERY, params), position, order, Constant.CANCLE_AFTER_DELIVERY);
-                break;
-            case R.id.item_order_making_finish_btn:
-                params.put("language", CommonUtils.getSysLanguage());
-                params.put("order_id", "" + order.getOrderId());
-                mOrderListPresenter.orderStatusOperate(getStatusCall(Constant.MAKING_FINISH, params), position, order, Constant.MAKING_FINISH);
-                break;
-            case R.id.item_order_cardview:
-                if (order.getOrderType() == 1)
-                {
-                    Intent intent = new Intent(activity, OrderNewActivity.class);
-                    intent.putExtra("order", order);
-                    startActivity(intent);
-                }
-                else
-                {
-                    Intent intent = new Intent(activity, NewOrderDetailActivity.class);
-                    intent.putExtra("order", order);
-                    startActivity(intent);
-                }
-                break;
-        }
     }
 
     private Call<OrderOperationStatusInfo> getStatusCall(int operation, Map<String, String> params)
@@ -388,5 +343,99 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
         super.onPause();
         if (statusCall != null) statusCall.cancel();
         if (orderListCall != null) orderListCall.cancel();
+    }
+
+    @Override
+    public void onItemClick(BaseQuickAdapter adapter, View view, int position)
+    {
+        OrderListInfo.BodyBean.PageBean.ListBean order = (OrderListInfo.BodyBean.PageBean.ListBean) view.getTag();
+        if (order.getOrderType() == 1)
+        {
+            Intent intent = new Intent(activity, OrderNewActivity.class);
+            intent.putExtra("order", order);
+            startActivity(intent);
+        }
+        else
+        {
+            Intent intent = new Intent(activity, NewOrderDetailActivity.class);
+            intent.putExtra("order", order);
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onItemChildClick(BaseQuickAdapter adapter, View view, int position)
+    {
+        OrderListInfo.BodyBean.PageBean.ListBean order = (OrderListInfo.BodyBean.PageBean.ListBean) view.getTag();
+        int id = view.getId();
+        Map<String, String> params = new HashMap<>();
+        params.put("loginName", CommonUtils.getLoginName(activity));
+        params.put("randomCode", CommonUtils.getRandomCode(activity));
+        params.put("id", order.getId());
+        switch (id)
+        {
+            case R.id.item_order_cancle_btn:
+                params.put("order_id", String.valueOf(order.getOrderId()));
+                mOrderListPresenter.orderStatusOperate(getStatusCall(Constant.CANCLE, params), position, order, Constant.CANCLE);
+                break;
+            case R.id.item_order_resubmit_btn:
+                mOrderListPresenter.orderStatusOperate(getStatusCall(Constant.RESUBMIT, params), position, order, Constant.RESUBMIT);
+                break;
+            case R.id.item_order_delivery_btn:
+                mOrderListPresenter.orderStatusOperate(getStatusCall(Constant.DELIVERY, params), position, order, Constant.DELIVERY);
+                break;
+            case R.id.item_order_cancle_after_delivery_btn:
+                mOrderListPresenter.orderStatusOperate(getStatusCall(Constant.CANCLE_AFTER_DELIVERY, params), position, order, Constant.CANCLE_AFTER_DELIVERY);
+                break;
+            case R.id.item_order_making_finish_btn:
+                params.put("language", CommonUtils.getSysLanguage());
+                params.put("order_id", "" + order.getOrderId());
+                mOrderListPresenter.orderStatusOperate(getStatusCall(Constant.MAKING_FINISH, params), position, order, Constant.MAKING_FINISH);
+                break;
+        }
+    }
+
+    @Override
+    public void onLoadMoreRequested()
+    {
+        String value = "";
+        //0 |派送订单   1|商城订单
+        if (String.valueOf(isMA).equals("0"))
+        {
+            value = "派送订单";
+        }
+        else if (String.valueOf(isMA).equals("1"))
+        {
+            value = "商城订单";
+        }
+        Log.d(Constant.TAG, value + "===onLoadMoreRequested");
+
+        //总共有多少页
+        int pageSum = 0;
+        pageNo = pageNo + 1;
+
+        if (pageCount % pageSize == 0)
+        {
+            pageSum = pageCount / pageSize;
+        }
+        else
+        {
+            pageSum = pageCount / pageSize + 1;
+        }
+        Log.d(Constant.TAG, "page sum-->" + pageSum);
+        Log.d(Constant.TAG, "page No-->" + pageNo);
+        if (pageNo <= pageSum)
+        {
+            Map<String, String> params = getOrderListParams(pageNo, pageSize);
+            Log.d(Constant.TAG, "上拉加载更多，传递参数-->" + params.toString());
+            orderListCall = RetrofitService.sApiService.orderList(params);
+            mOrderListPresenter.orderList(orderListCall, params, Constant.UP_TO_LOAD_MORE);
+        }
+        else
+        {
+            //数据加载完毕，显示“没有更多数据”
+            orderListAdapter.loadMoreEnd(false);
+        }
+
     }
 }

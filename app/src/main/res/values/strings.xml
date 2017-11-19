@@ -148,5 +148,6 @@
     <string name="ticket_tel">Telephone:</string>
     <string name="ticket_will_be_paid">Order will be paid:</string>
     <string name="ticket_bottom_text">Thanks for ordering from</string>
+    <string name="no_data">There is no data，Try to Pull to Refresh</string>
 
 </resources>

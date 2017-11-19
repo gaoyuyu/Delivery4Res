@@ -50,6 +50,9 @@ public class OrderListContract
 
         void singleItemUpdate(int position, OrderListInfo.BodyBean.PageBean.ListBean order);
 
+        void setEnableLoadMore(boolean enable);
+
+        void handleStatus(boolean isSuccess,int status);
 
     }
 

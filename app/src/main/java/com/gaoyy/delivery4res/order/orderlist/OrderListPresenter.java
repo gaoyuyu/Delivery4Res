@@ -39,8 +39,14 @@ public class OrderListPresenter implements OrderListContract.Presenter
     public void orderList(Call<OrderListInfo> call, Map<String, String> params, final int refreshTag)
     {
         CommonUtils.httpDebugLogger("餐厅订单列表");
+        if(refreshTag == Constant.PULL_TO_REFRESH)
+        {
+            //下拉刷新中
+            mOrderListView.refreshing();
+        }
 
-        mOrderListView.refreshing();
+        //这里的作用是防止下拉刷新的时候还可以上拉加载
+        mOrderListView.setEnableLoadMore(false);
 
         call.enqueue(new Callback<OrderListInfo>()
         {
@@ -51,9 +57,10 @@ public class OrderListPresenter implements OrderListContract.Presenter
                 {
                     return;
                 }
-
                 //停止刷新
                 mOrderListView.finishRefesh();
+                //刷新完毕，开启上拉加载
+                mOrderListView.setEnableLoadMore(true);
 
                 if (response.isSuccessful() && response.body() != null)
                 {
@@ -67,9 +74,16 @@ public class OrderListPresenter implements OrderListContract.Presenter
                         if (refreshTag == Constant.PULL_TO_REFRESH)
                         {
                             Log.d(Constant.TAG, "==下拉刷新=数据量=" + orderList.size());
-                            mOrderListView.showOrderList(orderList, orderListInfo.getBody().getPage().getCount());
+                            if(orderList.size() == 0)
+                            {
+                                mOrderListView.handleStatus(true,Constant.NO_DATA);
+                            }
+                            else
+                            {
+                                mOrderListView.showOrderList(orderList, orderListInfo.getBody().getPage().getCount());
+                            }
                         }
-                        else
+                        else if (refreshTag == Constant.UP_TO_LOAD_MORE)
                         {
                             mOrderListView.loadMoreOrderList(orderList, orderListInfo.getBody().getPage().getCount());
                         }
@@ -78,6 +92,7 @@ public class OrderListPresenter implements OrderListContract.Presenter
                     else
                     {
                         mOrderListView.showToast(msg);
+                        mOrderListView.handleStatus(false,refreshTag);
                     }
                 }
             }
@@ -91,10 +106,16 @@ public class OrderListPresenter implements OrderListContract.Presenter
                 }
                 //停止刷新
                 mOrderListView.finishRefesh();
+                //刷新完毕，开启上拉加载
+                mOrderListView.setEnableLoadMore(true);
+
+                mOrderListView.handleStatus(false,refreshTag);
+
                 CommonUtils.httpErrorLogger(t.toString());
+
                 if (!call.isCanceled())
                 {
-                    mOrderListView.showToast(R.string.network_error);
+//                    mOrderListView.showToast(R.string.network_error);
                 }
             }
         });
