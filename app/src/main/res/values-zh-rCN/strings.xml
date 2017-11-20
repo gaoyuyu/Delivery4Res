@@ -149,6 +149,7 @@
     <string name="ticket_will_be_paid">Order will be paid:</string>
     <string name="ticket_bottom_text">Thanks for ordering from</string>
     <string name="no_data">暂无数据，请下拉刷新</string>
+    <string name="subtotal">Subtotal</string>
 
 
 </resources>

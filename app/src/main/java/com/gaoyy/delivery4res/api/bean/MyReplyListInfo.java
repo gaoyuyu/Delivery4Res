@@ -191,7 +191,7 @@ public class MyReplyListInfo
                 private Object courier_statistics_id;
                 private boolean deleteStatus;
                 private int goodsCount;
-                private int goods_amount;
+                private Object goods_amount;
                 private int id;
                 private boolean is_courierstatistics;
                 private boolean is_platformstatistics;
@@ -276,12 +276,12 @@ public class MyReplyListInfo
                     this.goodsCount = goodsCount;
                 }
 
-                public int getGoods_amount()
+                public Object getGoods_amount()
                 {
                     return goods_amount;
                 }
 
-                public void setGoods_amount(int goods_amount)
+                public void setGoods_amount(Object goods_amount)
                 {
                     this.goods_amount = goods_amount;
                 }
@@ -439,7 +439,7 @@ public class MyReplyListInfo
                     private String goods_name;
                     private Object goods_photo;
                     private int id;
-                    private int price;
+                    private Object price;
                     private Object spec_info;
 
                     public String getAddTime()
@@ -522,12 +522,12 @@ public class MyReplyListInfo
                         this.id = id;
                     }
 
-                    public int getPrice()
+                    public Object getPrice()
                     {
                         return price;
                     }
 
-                    public void setPrice(int price)
+                    public void setPrice(Object price)
                     {
                         this.price = price;
                     }

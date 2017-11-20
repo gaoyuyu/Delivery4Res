@@ -40,8 +40,6 @@ public class MineFragment extends BaseFragment implements View.OnClickListener
     private AppCompatButton mineSignOutBtn;
 
 
-
-
     //通信监听
     private OnFragmentInteractionListener onFragmentInteractionListener;
 
@@ -61,7 +59,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener
         }
         else
         {
-            throw new RuntimeException(context.toString()+ " must implement OnFragmentInteractionListener<"+MineFragment.class.getSimpleName()+">");
+            throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener<" + MineFragment.class.getSimpleName() + ">");
         }
     }
 
@@ -84,7 +82,6 @@ public class MineFragment extends BaseFragment implements View.OnClickListener
     }
 
 
-
     @Override
     protected int getFragmentLayoutId()
     {
@@ -103,7 +100,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener
         mineMyReply = (RelativeLayout) rootView.findViewById(R.id.mine_my_reply);
         mineMessage = (RelativeLayout) rootView.findViewById(R.id.mine_message);
         mineReply = (RelativeLayout) rootView.findViewById(R.id.mine_reply);
-        mineSignOutBtn = (AppCompatButton)rootView.findViewById(R.id.mine_sign_out_btn);
+        mineSignOutBtn = (AppCompatButton) rootView.findViewById(R.id.mine_sign_out_btn);
     }
 
     @Override
@@ -205,7 +202,10 @@ public class MineFragment extends BaseFragment implements View.OnClickListener
                     CommonUtils.showToast(activity, msg);
                     if (errorCode.equals("-1"))
                     {
-                        CommonUtils.setUpAutoLogin(activity,false);
+                        //取消自动登陆
+                        CommonUtils.setUpAutoLogin(activity, false);
+                        //设置别名为空，不接受推送
+                        CommonUtils.setJpushAlias(activity, "");
                         Intent intent = new Intent();
                         intent.setClass(activity, LoginActivity.class);
                         startActivity(intent);

@@ -28,6 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/username_hint"
+                android:text="znn1"
                 android:inputType="textEmailAddress"
                 android:textColor="@color/text_basic_color"/>
 
@@ -49,6 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/password_hint"
+                android:text="123456"
                 android:inputType="textPassword"
                 android:textColor="@color/text_basic_color"/>
 

@@ -31,8 +31,27 @@ public class MyReplyListAdapter extends RecyclerBaseAdapter<MyReplyListInfo.Body
 
         holder.setText(R.id.item_common_addtime,itemData.getAddTime())
                 .setText(R.id.item_common_customer,itemData.getBuyerName())
-        .setText(R.id.item_common_phone,itemData.getBuyerMobile())
-        .setText(R.id.item_common_no,itemData.getOrder_id());
+                .setText(R.id.item_common_phone,itemData.getBuyerMobile())
+                .setText(R.id.item_common_no,itemData.getOrder_id());
+
+        TextView addTimeTv = holder.getView(R.id.item_common_addtime);
+        TextView customerTv = holder.getView(R.id.item_common_customer);
+        TextView phoneTv = holder.getView(R.id.item_common_phone);
+        TextView noTv = holder.getView(R.id.item_common_no);
+
+        LinearLayout parent = (LinearLayout) addTimeTv.getParent();
+        //由于默认的布局不能满足设计稿，现做以下操作
+        //先移除View
+        parent.removeView(addTimeTv);
+        parent.removeView((LinearLayout)(customerTv.getParent()));
+        parent.removeView((LinearLayout)(phoneTv.getParent()));
+        parent.removeView((LinearLayout)(noTv.getParent()));
+        //再添加View
+        parent.addView(addTimeTv);
+        parent.addView((LinearLayout)(customerTv.getParent()));
+        parent.addView((LinearLayout)(phoneTv.getParent()));
+        parent.addView((LinearLayout)(noTv.getParent()));
+
 
         List<MyReplyListInfo.BodyBean.ListBean.ResultBean.GcsBean> goods = itemData.getGcs();
         LinearLayout itemCommonGoodsLayout = holder.getView(R.id.item_common_goods_layout);

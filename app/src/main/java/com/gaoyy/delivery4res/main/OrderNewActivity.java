@@ -66,6 +66,7 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
     private TextView orderNewEaTime;
     private Spinner orderNewSpinner;
     private TextView orderNewEsTime;
+    private TextView orderNewSubtotal;
     private LinearLayout orderNewOperationLayout;
     private AppCompatButton orderNewRefuseBtn;
     private AppCompatButton orderNewAcceptBtn;
@@ -121,6 +122,7 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
         orderNewEaTime = (TextView) findViewById(R.id.order_new_ea_time);
         orderNewSpinner = (Spinner) findViewById(R.id.order_new_spinner);
         orderNewEsTime = (TextView) findViewById(R.id.order_new_estime);
+        orderNewSubtotal = (TextView) findViewById(R.id.order_new_subtotal);
         orderNewOperationLayout = (LinearLayout) findViewById(R.id.order_new_operation_layout);
         orderNewRefuseBtn = (AppCompatButton) findViewById(R.id.order_new_refuse_btn);
         orderNewAcceptBtn = (AppCompatButton) findViewById(R.id.order_new_accept_btn);
@@ -246,7 +248,6 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
                         ((LinearLayout) (orderNewTip.getParent())).setVisibility(View.VISIBLE);
                     }
 
-
                     Log.e(Constant.TAG, "bean->" + data.toString());
 
                     itemCommonAddtime.setText("" + data.getAddTime());
@@ -258,6 +259,8 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
                     List<OrderNewInfo.BodyBean.ObjBean.GcsBean> goods = data.getGcs();
                     itemCommonGoodsLayout.removeAllViews();
 
+                    double sub = 0;
+
                     for (OrderNewInfo.BodyBean.ObjBean.GcsBean item : goods)
                     {
                         View root = LayoutInflater.from(OrderNewActivity.this).inflate(R.layout.item_food, itemCommonGoodsLayout, false);
@@ -266,10 +269,13 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
                         TextView goodPrice = (TextView) root.findViewById(R.id.item_food_price);
                         goodName.setText("" + item.getGoods_name());
                         goodCount.setText("x" + item.getCount());
+                        double itemSub = (item.getCount()) * ((double)item.getPrice());
+                        sub+= itemSub;
                         //保留2位小数
                         goodPrice.setText("$" + CommonUtils.deci2(item.getPrice()));
                         itemCommonGoodsLayout.addView(root);
                     }
+                    orderNewSubtotal.setText("$"+CommonUtils.deci2(sub));
                     //设置价格
                     setPrice(data);
                     //总计

@@ -139,7 +139,9 @@ public abstract class BaseActivity extends AppCompatActivity
             }
             else
             {
+                CommonUtils.setJpushAlias(this, "");
                 ExitApplication.getInstanse().exit();
+                //设置别名为空，不接受推送，必须在killProcess之前
                 android.os.Process.killProcess(android.os.Process.myPid());
             }
 
