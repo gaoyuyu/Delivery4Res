@@ -12,6 +12,7 @@ import com.gaoyy.delivery4res.R;
 import com.gaoyy.delivery4res.api.bean.MyReplyListInfo;
 import com.gaoyy.delivery4res.base.recycler.BaseViewHolder;
 import com.gaoyy.delivery4res.base.recycler.RecyclerBaseAdapter;
+import com.gaoyy.delivery4res.util.CommonUtils;
 
 import java.util.List;
 
@@ -65,7 +66,7 @@ public class MyReplyListAdapter extends RecyclerBaseAdapter<MyReplyListInfo.Body
             TextView goodPrice = (TextView) goodsView.findViewById(R.id.item_food_price);
             goodName.setText(""+item.getGoods_name());
             goodCount.setText("x" + item.getCount());
-            goodPrice.setText("$" + item.getPrice());
+            goodPrice.setText("$" + CommonUtils.deci2(item.getPrice()));
             itemCommonGoodsLayout.addView(goodsView);
         }
 

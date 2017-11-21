@@ -271,7 +271,6 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
     public void redirectToMain(List<RestInfo.BodyBean.RemarkDictBean> remarkDict, List<RestInfo.BodyBean.FinishedTimeBean> finishedTime, List<RestInfo.BodyBean.DictStatusBean> dictStatus)
     {
         CommonUtils.setJpushAlias(activity, CommonUtils.getLoginName(activity));
-
         Intent intent = new Intent();
         intent.putExtra("remarkDict", (Serializable) remarkDict);
         intent.putExtra("finishedTime", (Serializable) finishedTime);
