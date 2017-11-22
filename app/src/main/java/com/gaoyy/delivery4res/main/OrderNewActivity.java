@@ -252,8 +252,20 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
 
                     itemCommonAddtime.setText("" + data.getAddTime());
                     itemCommonAddress.setText("" + data.getAddr().getArea_info());
-                    itemCommonCustomer.setText("" + data.getAddr().getTrueName());
-                    itemCommonPhone.setText("" + data.getAddr().getMobile());
+
+                    if (data.getDistribution_type().equals("Pick-Up"))
+                    {
+                        Log.d(Constant.TAG,"=Pick-Up==>"+data.getDistribution_type());
+                        itemCommonCustomer.setText("" + data.getBuyerName());
+                        itemCommonPhone.setText("" + data.getBuyerMobile());
+                    }
+                    else if (data.getDistribution_type().equals("Delivery"))
+                    {
+                        Log.d(Constant.TAG,"=Delivery==>"+data.getDistribution_type());
+                        itemCommonCustomer.setText("" + data.getAddr().getTrueName());
+                        itemCommonPhone.setText("" + data.getAddr().getMobile());
+                    }
+
                     itemCommonNo.setText("" + data.getOrder_id());
 
                     List<OrderNewInfo.BodyBean.ObjBean.GcsBean> goods = data.getGcs();
@@ -269,13 +281,13 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
                         TextView goodPrice = (TextView) root.findViewById(R.id.item_food_price);
                         goodName.setText("" + item.getGoods_name());
                         goodCount.setText("x" + item.getCount());
-                        double itemSub = (item.getCount()) * ((double)item.getPrice());
-                        sub+= itemSub;
+                        double itemSub = (item.getCount()) * ((double) item.getPrice());
+                        sub += itemSub;
                         //保留2位小数
                         goodPrice.setText("$" + CommonUtils.deci2(item.getPrice()));
                         itemCommonGoodsLayout.addView(root);
                     }
-                    orderNewSubtotal.setText("$"+CommonUtils.deci2(sub));
+                    orderNewSubtotal.setText("$" + CommonUtils.deci2(sub));
                     //设置价格
                     setPrice(data);
                     //总计
