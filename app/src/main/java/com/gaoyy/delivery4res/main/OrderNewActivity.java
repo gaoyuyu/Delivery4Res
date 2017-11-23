@@ -237,34 +237,23 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
                     orderNewInfo = response.body();
 
                     OrderNewInfo.BodyBean.ObjBean data = orderNewInfo.getBody().getObj();
-                    Log.e(Constant.TAG, "getDistribution_type->" + data.getDistribution_type());
 
-                    if (data.getDistribution_type().equals("Pick-Up"))
+                    if ((data.getDistribution_type() != null) && (data.getDistribution_type().equals("Pick-Up")))
                     {
+                        Log.d(Constant.TAG, "=Pick-Up==>" + data.getDistribution_type());
                         ((LinearLayout) (orderNewTip.getParent())).setVisibility(View.GONE);
-                    }
-                    else
-                    {
-                        ((LinearLayout) (orderNewTip.getParent())).setVisibility(View.VISIBLE);
-                    }
-
-                    Log.e(Constant.TAG, "bean->" + data.toString());
-
-                    itemCommonAddtime.setText("" + data.getAddTime());
-                    itemCommonAddress.setText("" + data.getAddr().getArea_info());
-
-                    if (data.getDistribution_type().equals("Pick-Up"))
-                    {
-                        Log.d(Constant.TAG,"=Pick-Up==>"+data.getDistribution_type());
                         itemCommonCustomer.setText("" + data.getBuyerName());
                         itemCommonPhone.setText("" + data.getBuyerMobile());
                     }
-                    else if (data.getDistribution_type().equals("Delivery"))
+                    else if ((data.getDistribution_type() != null) && (data.getDistribution_type().equals("Delivery")))
                     {
-                        Log.d(Constant.TAG,"=Delivery==>"+data.getDistribution_type());
+                        Log.d(Constant.TAG, "=Delivery==>" + data.getDistribution_type());
+                        ((LinearLayout) (orderNewTip.getParent())).setVisibility(View.VISIBLE);
                         itemCommonCustomer.setText("" + data.getAddr().getTrueName());
                         itemCommonPhone.setText("" + data.getAddr().getMobile());
                     }
+
+                    Log.e(Constant.TAG, "bean->" + data.toString());
 
                     itemCommonNo.setText("" + data.getOrder_id());
 
