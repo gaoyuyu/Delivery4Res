@@ -237,7 +237,7 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
                     orderNewInfo = response.body();
 
                     OrderNewInfo.BodyBean.ObjBean data = orderNewInfo.getBody().getObj();
-
+                    Log.d(Constant.TAG, "=order_id==>" + data.getOrder_id());
                     if ((data.getDistribution_type() != null) && (data.getDistribution_type().equals("Pick-Up")))
                     {
                         Log.d(Constant.TAG, "=Pick-Up==>" + data.getDistribution_type());
@@ -255,6 +255,7 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
 
                     Log.e(Constant.TAG, "bean->" + data.toString());
 
+                    itemCommonAddtime.setText("" + data.getAddTime());
                     itemCommonNo.setText("" + data.getOrder_id());
 
                     List<OrderNewInfo.BodyBean.ObjBean.GcsBean> goods = data.getGcs();

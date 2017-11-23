@@ -7,6 +7,7 @@ import android.util.Log;
 import com.gaoyy.delivery4res.R;
 import com.gaoyy.delivery4res.api.Constant;
 import com.gaoyy.delivery4res.api.RetrofitService;
+import com.tencent.bugly.Bugly;
 import com.tencent.bugly.beta.Beta;
 
 import java.util.Locale;
@@ -42,7 +43,7 @@ public class MyApplication extends Application
          自定义日志将会在Logcat中输出。
          建议在测试阶段建议设置成true，发布时设置为false。
          */
-//        Bugly.init(getApplicationContext(), Constant.BUGLY_APP_ID, true);
+        Bugly.init(getApplicationContext(), Constant.BUGLY_APP_ID, true);
     }
 
 
