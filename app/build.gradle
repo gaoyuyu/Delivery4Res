@@ -53,6 +53,7 @@ dependencies {
     compile 'com.tencent.bugly:crashreport_upgrade:latest.release'
     compile 'cn.jiguang.sdk:jpush:3.0.5'
     compile 'cn.jiguang.sdk:jcore:1.1.2'
+    compile 'de.greenrobot:eventbus:3.0.0-beta1'
 
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.34'
     testCompile 'junit:junit:4.12'

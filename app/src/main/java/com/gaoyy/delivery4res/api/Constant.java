@@ -15,8 +15,8 @@ public class Constant
 
     public static final int PAGE_SIZE = 50;
 
-    public static final int MSG_TO_ACT_ORDER_LIST = 101;
-    public static final int MSG_TO_ACT_NEW_ORDER = 102;
+    public static final int BACK_TO_ORDER_LIST = 101;
+    public static final int CLEAR_ORDER_INFO = 102;
     public static final int REQUEST_ACCESS_COARSE_LOCATION = 103;
     public static final int REQUEST_BLUETOOTH_ON = 104;
 

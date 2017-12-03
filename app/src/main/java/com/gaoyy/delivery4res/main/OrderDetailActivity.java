@@ -3,7 +3,6 @@ package com.gaoyy.delivery4res.main;
 import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
@@ -21,6 +20,7 @@ import com.gaoyy.delivery4res.api.bean.CommonInfo;
 import com.gaoyy.delivery4res.api.bean.GeocodeInfo;
 import com.gaoyy.delivery4res.base.BaseActivity;
 import com.gaoyy.delivery4res.base.CustomDialogFragment;
+import com.gaoyy.delivery4res.event.OrderDetailEvent;
 import com.gaoyy.delivery4res.util.CommonUtils;
 import com.gaoyy.delivery4res.util.DialogUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -35,6 +35,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.greenrobot.event.EventBus;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -204,20 +205,13 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
                                         dialog.dismiss();
                                         finish();
                                         // TODO: 2017/9/9 0009 订单l列表
-                                        Intent orderList = new Intent();
-                                        orderList.setAction("android.intent.action.DetailToMainReceiver");
-                                        orderList.putExtra("orderList", 1);
-                                        sendBroadcast(orderList);
-
+                                        EventBus.getDefault().post(new OrderDetailEvent(Constant.BACK_TO_ORDER_LIST));
                                         break;
                                     case AlertDialog.BUTTON_POSITIVE:
                                         dialog.dismiss();
                                         // TODO: 2017/9/9 0009 继续添加
                                         finish();
-                                        Intent clearInfo = new Intent();
-                                        clearInfo.setAction("android.intent.action.DetailToMainReceiver");
-                                        clearInfo.putExtra("clearInfo", 2);
-                                        sendBroadcast(clearInfo);
+                                        EventBus.getDefault().post(new OrderDetailEvent(Constant.CLEAR_ORDER_INFO));
                                         break;
                                     default:
                                         break;

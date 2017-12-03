@@ -1,6 +1,5 @@
 package com.gaoyy.delivery4res.mine;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Message;
 import android.support.v7.widget.AppCompatButton;
@@ -15,6 +14,7 @@ import com.gaoyy.delivery4res.api.bean.CommonInfo;
 import com.gaoyy.delivery4res.base.BaseFragment;
 import com.gaoyy.delivery4res.base.CustomDialogFragment;
 import com.gaoyy.delivery4res.changepwd.ChangePwdActivity;
+import com.gaoyy.delivery4res.event.OrderDetailEvent;
 import com.gaoyy.delivery4res.login.LoginActivity;
 import com.gaoyy.delivery4res.mine.messagelist.MessageListActivity;
 import com.gaoyy.delivery4res.mine.replylist.ReplyListActivity;
@@ -22,6 +22,7 @@ import com.gaoyy.delivery4res.myreplylist.MyReplyListActivity;
 import com.gaoyy.delivery4res.util.CommonUtils;
 import com.gaoyy.delivery4res.util.DialogUtils;
 
+import de.greenrobot.event.EventBus;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,36 +40,6 @@ public class MineFragment extends BaseFragment implements View.OnClickListener
     private RelativeLayout mineReply;
     private AppCompatButton mineSignOutBtn;
 
-
-    //通信监听
-    private OnFragmentInteractionListener onFragmentInteractionListener;
-
-
-    public interface OnFragmentInteractionListener
-    {
-        void onFragmentInteraction(int flag);
-    }
-
-    @Override
-    public void onAttach(Context context)
-    {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener)
-        {
-            onFragmentInteractionListener = (OnFragmentInteractionListener) context;
-        }
-        else
-        {
-            throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener<" + MineFragment.class.getSimpleName() + ">");
-        }
-    }
-
-    @Override
-    public void onDetach()
-    {
-        super.onDetach();
-        onFragmentInteractionListener = null;
-    }
 
     public MineFragment()
     {
@@ -133,11 +104,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener
         switch (id)
         {
             case R.id.mine_order_list:
-                msg.what = Constant.MSG_TO_ACT_ORDER_LIST;
-                if (onFragmentInteractionListener != null)
-                {
-                    onFragmentInteractionListener.onFragmentInteraction(msg.what);
-                }
+                EventBus.getDefault().post(new OrderDetailEvent(Constant.BACK_TO_ORDER_LIST));
                 break;
             case R.id.mine_change_pwd:
                 Intent changePwd = new Intent();
@@ -145,11 +112,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener
                 startActivity(changePwd);
                 break;
             case R.id.mine_new_order:
-                msg.what = Constant.MSG_TO_ACT_NEW_ORDER;
-                if (onFragmentInteractionListener != null)
-                {
-                    onFragmentInteractionListener.onFragmentInteraction(msg.what);
-                }
+                EventBus.getDefault().post(new OrderDetailEvent(Constant.CLEAR_ORDER_INFO));
                 break;
             case R.id.mine_my_reply:
                 Intent myReply = new Intent();
@@ -172,8 +135,6 @@ public class MineFragment extends BaseFragment implements View.OnClickListener
                 logout(loginName, randomCode);
                 break;
         }
-
-
     }
 
     /**

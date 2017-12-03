@@ -30,6 +30,7 @@ import com.gaoyy.delivery4res.api.bean.OrderListInfo;
 import com.gaoyy.delivery4res.api.bean.OrderNewInfo;
 import com.gaoyy.delivery4res.base.BaseActivity;
 import com.gaoyy.delivery4res.base.CustomDialogFragment;
+import com.gaoyy.delivery4res.event.OrderDetailEvent;
 import com.gaoyy.delivery4res.util.CommonUtils;
 import com.gaoyy.delivery4res.util.DialogUtils;
 
@@ -43,6 +44,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.jpush.android.api.JPushInterface;
+import de.greenrobot.event.EventBus;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -652,10 +654,7 @@ public class OrderNewActivity extends BaseActivity implements View.OnClickListen
     private void finishToOrderList()
     {
         finish();
-        Intent orderList = new Intent();
-        orderList.setAction("android.intent.action.DetailToMainReceiver");
-        orderList.putExtra("orderList", 1);
-        sendBroadcast(orderList);
+        EventBus.getDefault().post(new OrderDetailEvent(Constant.BACK_TO_ORDER_LIST));
     }
 
     @Override
