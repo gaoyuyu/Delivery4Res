@@ -93,7 +93,7 @@ public class LoginPresenter implements LoginContract.Presenter
                 }
                 mLoginView.hideLoading();
                 CommonUtils.httpErrorLogger(t.toString());
-                if(!call.isCanceled())
+                if (!call.isCanceled())
                 {
                     mLoginView.showToast(R.string.network_error);
                 }

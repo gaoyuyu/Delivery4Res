@@ -253,17 +253,25 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
     {
         SharedPreferences hotelInfo = activity.getSharedPreferences("hotel", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = hotelInfo.edit();
-        editor.putString("id", hotel.getId());
-        editor.putString("name", hotel.getName());
-        editor.putString("addr", hotel.getAddr());
-        editor.putString("contacts", hotel.getContacts());
-        editor.putString("tel", hotel.getTel());
-        editor.putString("startDeliveryTime", hotel.getStartDeliveryTime());
-        editor.putString("endDeliveryTime", hotel.getEndDeliveryTime());
-        editor.putString("longitude", hotel.getLongitude());
-        editor.putString("latitude", hotel.getLatitude());
-        editor.putString("no", hotel.getNo());
-        editor.apply();
+        if (hotel == null)
+        {
+            editor.clear();
+            editor.apply();
+        }
+        else
+        {
+            editor.putString("id", hotel.getId());
+            editor.putString("name", hotel.getName());
+            editor.putString("addr", hotel.getAddr());
+            editor.putString("contacts", hotel.getContacts());
+            editor.putString("tel", hotel.getTel());
+            editor.putString("startDeliveryTime", hotel.getStartDeliveryTime());
+            editor.putString("endDeliveryTime", hotel.getEndDeliveryTime());
+            editor.putString("longitude", hotel.getLongitude());
+            editor.putString("latitude", hotel.getLatitude());
+            editor.putString("no", hotel.getNo());
+            editor.apply();
+        }
     }
 
 
