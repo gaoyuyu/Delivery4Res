@@ -72,10 +72,12 @@ public class SearchLocationActivity extends BaseActivity implements OnItemClickL
     {
         super.configViews();
         String inputText = getIntent().getStringExtra("inputingText");
-        searchEdit.setText(inputText);
-        //将光标移至文字末尾
-        searchEdit.setSelection(inputText.length());
-
+        if (inputText != null)
+        {
+            searchEdit.setText(inputText);
+            //将光标移至文字末尾
+            searchEdit.setSelection(inputText.length());
+        }
 
         searchListAdapter = new SearchListAdapter(this, placeList);
         searchRv.setAdapter(searchListAdapter);

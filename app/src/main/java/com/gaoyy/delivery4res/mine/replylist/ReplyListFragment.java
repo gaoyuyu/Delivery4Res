@@ -246,7 +246,10 @@ public class ReplyListFragment extends BaseFragment implements ReplyListContract
         Map<String, String> params = getReplyOrderListParams(pageNo, pageSize);
         Log.d(Constant.TAG, "下拉刷新，传递参数-->" + params.toString());
         replyOrderListCall = RetrofitService.sApiService.replyOrderList(params);
-        mReplyListPresenter.replyOrderList(replyOrderListCall, params, Constant.PULL_TO_REFRESH);
+        if(mReplyListPresenter!=null)
+        {
+            mReplyListPresenter.replyOrderList(replyOrderListCall, params, Constant.PULL_TO_REFRESH);
+        }
     }
 
     @Override

@@ -150,5 +150,7 @@
     <string name="ticket_bottom_text">Thanks for ordering from</string>
     <string name="no_data">There is no data，Try to Pull to Refresh</string>
     <string name="subtotal">Subtotal</string>
+    <string name="permission_location_success">Location permission access success</string>
+    <string name="permission_location_fail">Location permission access failure</string>
 
 </resources>

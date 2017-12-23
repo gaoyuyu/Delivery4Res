@@ -123,8 +123,11 @@ public class RestaurantFragment extends BaseFragment implements View.OnClickList
         restApt.clearFocus();
         restRemark.clearFocus();
 
-        //设置备注项信息
-        restDoorBell.setText(remarkDict.get(0).getLabel());
+        if (remarkDict != null)
+        {
+            //设置备注项信息
+            restDoorBell.setText(remarkDict.get(0).getLabel());
+        }
 
         ArrayList<String> finishedTimeList = new ArrayList<>();
         finishedTimeList.add("");

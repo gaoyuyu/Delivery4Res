@@ -22,7 +22,7 @@ import java.util.Map;
 
 import retrofit2.Call;
 
-public class MyReplyListFragment extends BaseFragment implements  MyReplyListContract.View, SwipeRefreshLayout.OnRefreshListener
+public class MyReplyListFragment extends BaseFragment implements MyReplyListContract.View, SwipeRefreshLayout.OnRefreshListener
 {
 
     private static final String LOG_TAG = MyReplyListFragment.class.getSimpleName();
@@ -41,6 +41,7 @@ public class MyReplyListFragment extends BaseFragment implements  MyReplyListCon
     private LinkedList<MyReplyListInfo.BodyBean.ListBean.ResultBean> myReplyList = new LinkedList<>();
 
     private Call<MyReplyListInfo> call;
+
     public MyReplyListFragment()
     {
         // Required empty public constructor
@@ -113,7 +114,7 @@ public class MyReplyListFragment extends BaseFragment implements  MyReplyListCon
                         Map<String, String> params = getMyReplyListParams(pageNo, pageSize);
                         Log.d(Constant.TAG, "上拉加载更多，传递参数-->" + params.toString());
                         call = RetrofitService.sApiService.myReplyList(params);
-                        mMyReplyListPresenter.myReplyList(call,params, Constant.UP_TO_LOAD_MORE);
+                        mMyReplyListPresenter.myReplyList(call, params, Constant.UP_TO_LOAD_MORE);
                     }
                 }
             }
@@ -136,17 +137,17 @@ public class MyReplyListFragment extends BaseFragment implements  MyReplyListCon
         mMyReplyListPresenter.start();
         //在onResume中加载数据
         pageNo = 1;
-        Map<String,String> params = getMyReplyListParams(pageNo,pageSize);
+        Map<String, String> params = getMyReplyListParams(pageNo, pageSize);
         Log.d(Constant.TAG, "我的回复列表参数：" + params.toString());
         call = RetrofitService.sApiService.myReplyList(params);
-        mMyReplyListPresenter.myReplyList(call,params, Constant.PULL_TO_REFRESH);
+        mMyReplyListPresenter.myReplyList(call, params, Constant.PULL_TO_REFRESH);
     }
 
-    public Map<String,String> getMyReplyListParams(int pageNo,int pageSize)
+    public Map<String, String> getMyReplyListParams(int pageNo, int pageSize)
     {
         Map<String, String> params = new HashMap<>();
-        params.put("loginName",CommonUtils.getLoginName(activity));
-        params.put("randomCode",CommonUtils.getRandomCode(activity));
+        params.put("loginName", CommonUtils.getLoginName(activity));
+        params.put("randomCode", CommonUtils.getRandomCode(activity));
         params.put("pageNo", String.valueOf(pageNo));
         params.put("pageSize", String.valueOf(pageSize));
         params.put("language", CommonUtils.getSysLanguage());
@@ -217,6 +218,9 @@ public class MyReplyListFragment extends BaseFragment implements  MyReplyListCon
         Map<String, String> params = getMyReplyListParams(pageNo, pageSize);
         Log.d(Constant.TAG, "下拉刷新，传递参数-->" + params.toString());
         call = RetrofitService.sApiService.myReplyList(params);
-        mMyReplyListPresenter.myReplyList(call,params, Constant.PULL_TO_REFRESH);
+        if (mMyReplyListPresenter != null)
+        {
+            mMyReplyListPresenter.myReplyList(call, params, Constant.PULL_TO_REFRESH);
+        }
     }
 }

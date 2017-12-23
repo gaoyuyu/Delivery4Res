@@ -150,6 +150,8 @@
     <string name="ticket_bottom_text">Thanks for ordering from</string>
     <string name="no_data">暂无数据，请下拉刷新</string>
     <string name="subtotal">Subtotal</string>
+    <string name="permission_location_success">定位权限获取成功</string>
+    <string name="permission_location_fail">定位权限获取失败</string>
 
 
 </resources>

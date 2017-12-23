@@ -211,7 +211,10 @@ public class MessageListFragment extends BaseFragment implements MessageListCont
         Map<String, String> params = getMessageListParams(pageNo, pageSize);
         Log.d(Constant.TAG, "下拉刷新，传递参数-->" + params.toString());
         call = RetrofitService.sApiService.messageList(params);
-        mMessageListPresenter.messageList(call, params, Constant.PULL_TO_REFRESH);
+        if (mMessageListPresenter != null)
+        {
+            mMessageListPresenter.messageList(call, params, Constant.PULL_TO_REFRESH);
+        }
     }
 
     @Override

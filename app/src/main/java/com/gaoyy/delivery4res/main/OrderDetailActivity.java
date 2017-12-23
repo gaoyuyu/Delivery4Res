@@ -118,7 +118,11 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
         apt = getIntent().getStringExtra("apt");
         finishedTime = getIntent().getStringExtra("finishedTime");
         remark = getIntent().getStringExtra("remark");
-        remarks = getIntent().getStringExtra("remarks").trim();
+        remarks = getIntent().getStringExtra("remarks");
+        if (remarks != null)
+        {
+            remarks = remarks.trim();
+        }
 
         orderDetailStartPoint.setText(hotelAddr);
         orderDetailDistination.setText("APT:" + apt + " " + customerAddr);
@@ -263,28 +267,28 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
                         CommonUtils.httpDebugLogger("[customerAddrLat=" + customerAddrLat + "][customerAddrLng=" + customerAddrLng + "]");
                         CommonUtils.httpDebugLogger("[hotelLat=" + hotelLat + "][hotelLng=" + hotelLng + "]");
 
-                        LatLng res = new LatLng(Double.parseDouble(hotelLat), Double.parseDouble(hotelLng));
-                        LatLng cus = new LatLng(customerAddrLat, customerAddrLng);
+                        if (!hotelLat.equals("") && !hotelLng.equals(""))
+                        {
+                            LatLng res = new LatLng(Double.parseDouble(hotelLat), Double.parseDouble(hotelLng));
+                            MarkerOptions resOptions = new MarkerOptions()
+                                    .position(res)
+                                    .title(hotelAddr)
+                                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_restaurant_location));
+                            mMap.addMarker(resOptions);
+                            mMap.animateCamera(CameraUpdateFactory.newLatLng(res));
+                        }
 
-                        MarkerOptions resOptions = new MarkerOptions()
-                                .position(res)
-                                .title(hotelAddr)
-                                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_restaurant_location));
+                        LatLng cus = new LatLng(customerAddrLat, customerAddrLng);
                         MarkerOptions cusOptions = new MarkerOptions()
                                 .position(cus)
                                 .title(customerAddr)
                                 .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_customer_location));
-
-                        mMap.addMarker(resOptions);
                         mMap.addMarker(cusOptions);
-
-                        mMap.animateCamera(CameraUpdateFactory.newLatLng(res));
                     }
                     else
                     {
                         CommonUtils.showToast(OrderDetailActivity.this, geocodeInfo.getStatus());
                     }
-
                 }
             }
 
@@ -299,7 +303,6 @@ public class OrderDetailActivity extends BaseActivity implements OnMapReadyCallb
                 }
             }
         });
-
     }
 
     /**

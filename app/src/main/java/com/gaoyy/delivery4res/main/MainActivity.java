@@ -91,8 +91,8 @@ public class MainActivity extends BaseActivity
         Fragment orderFragment = OrderFragment.newInstance();
         fragmentList.add(orderFragment);
 
-        Fragment fragment = MineFragment.newInstance();
-        fragmentList.add(fragment);
+        Fragment mineFragment = MineFragment.newInstance();
+        fragmentList.add(mineFragment);
 
         mainPagerAdapter = new MainPagerAdapter(this, getSupportFragmentManager(), tabType, fragmentList);
         mainViewpager.setAdapter(mainPagerAdapter);

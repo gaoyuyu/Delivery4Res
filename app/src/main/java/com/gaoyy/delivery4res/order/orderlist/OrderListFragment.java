@@ -278,7 +278,7 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
             {
                 orderListAdapter.setEmptyView(R.layout.error_view);
             }
-            else if(status == Constant.UP_TO_LOAD_MORE)
+            else if (status == Constant.UP_TO_LOAD_MORE)
             {
                 orderListAdapter.loadMoreFail();
                 commonRv.smoothScrollToPosition(orderListAdapter.getItemCount());
@@ -303,7 +303,10 @@ public class OrderListFragment extends BaseFragment implements OrderListContract
         Map<String, String> params = getOrderListParams(pageNo, pageSize);
         Log.d(Constant.TAG, "下拉刷新，传递参数-->" + params.toString());
         orderListCall = RetrofitService.sApiService.orderList(params);
-        mOrderListPresenter.orderList(orderListCall, params, Constant.PULL_TO_REFRESH);
+        if (mOrderListPresenter!= null)
+        {
+            mOrderListPresenter.orderList(orderListCall, params, Constant.PULL_TO_REFRESH);
+        }
     }
 
     private Call<OrderOperationStatusInfo> getStatusCall(int operation, Map<String, String> params)

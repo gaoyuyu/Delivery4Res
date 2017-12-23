@@ -1,12 +1,7 @@
 package com.gaoyy.delivery4res.login;
 
-import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.FrameLayout;
@@ -15,10 +10,17 @@ import android.widget.LinearLayout;
 import com.gaoyy.delivery4res.R;
 import com.gaoyy.delivery4res.api.Constant;
 import com.gaoyy.delivery4res.base.BaseActivity;
-import com.gaoyy.delivery4res.base.CustomDialogFragment;
 import com.gaoyy.delivery4res.util.ActivityUtils;
 import com.gaoyy.delivery4res.util.CommonUtils;
-import com.gaoyy.delivery4res.util.DialogUtils;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.Permission;
+import com.yanzhenjie.permission.PermissionListener;
+import com.yanzhenjie.permission.Rationale;
+import com.yanzhenjie.permission.RationaleListener;
+
+import java.util.List;
+
+import static com.gaoyy.delivery4res.api.Constant.REQUEST_CODE_PERMISSION_SINGLE;
 
 
 public class LoginActivity extends BaseActivity
@@ -54,27 +56,19 @@ public class LoginActivity extends BaseActivity
     {
         super.configViews();
 
-        Log.e(Constant.TAG, "检查定位权限");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-        {
-            // Android M Permission check
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-            {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION))
+        AndPermission.with(this)
+                .requestCode(REQUEST_CODE_PERMISSION_SINGLE)
+                .permission(Permission.LOCATION)
+                .callback(permissionListener)
+                .rationale(new RationaleListener()
                 {
-                    showRequestPermissionDialog();
-                }
-                else
-                {
-                    Log.e(Constant.TAG, "获取定位权限");
-                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, Constant.REQUEST_ACCESS_COARSE_LOCATION);
-                }
-            }
-            else
-            {
-                Log.e(Constant.TAG, "已有定位权限");
-            }
-        }
+                    @Override
+                    public void showRequestPermissionRationale(int requestCode, Rationale rationale)
+                    {
+                        AndPermission.rationaleDialog(LoginActivity.this, rationale).show();
+                    }
+                })
+                .start();
 
         LoginFragment loginFragment = (LoginFragment) getSupportFragmentManager().findFragmentById(R.id.login_content);
         if (loginFragment == null)
@@ -85,52 +79,43 @@ public class LoginActivity extends BaseActivity
         new LoginPresenter(loginFragment);
     }
 
-    private void showRequestPermissionDialog()
+
+    /**
+     * 回调监听。
+     */
+    private PermissionListener permissionListener = new PermissionListener()
     {
-        CustomDialogFragment dialog = DialogUtils.showAlertDialog(this, getResources().getString(R.string.dialog_permission_title),
-                getResources().getString(R.string.dialog_permission_message),
-                getResources().getString(R.string.dialog_permission_deny), getResources().getString(R.string.dialog_permission_grant));
-        dialog.setOnAlertDialogClickListener(new CustomDialogFragment.OnAlertDialogClickListener()
+        @Override
+        public void onSucceed(int requestCode, @NonNull List<String> grantPermissions)
         {
-            @Override
-            public void onButtonClick(DialogInterface dialog, int which)
+            switch (requestCode)
             {
-                switch (which)
-                {
-                    case AlertDialog.BUTTON_NEGATIVE:
-                        dialog.dismiss();
-                        break;
-                    case AlertDialog.BUTTON_POSITIVE:
-                        dialog.dismiss();
-                        Log.e(Constant.TAG, "获取定位权限 in dialog");
-                        ActivityCompat.requestPermissions(LoginActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, Constant.REQUEST_ACCESS_COARSE_LOCATION);
-                        break;
-                    default:
-                        break;
-                }
-
+                case Constant.REQUEST_CODE_PERMISSION_SINGLE:
+                    CommonUtils.showToast(LoginActivity.this, R.string.permission_location_success);
+                    break;
             }
-        });
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults)
-    {
-        switch (requestCode)
-        {
-            case Constant.REQUEST_ACCESS_COARSE_LOCATION:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                {
-                    Log.e(Constant.TAG, "定位权限获取成功");
-                }
-                else
-                {
-                    CommonUtils.showToast(this, getResources().getString(R.string.permission_already_deny));
-                }
-                break;
         }
-    }
 
+        @Override
+        public void onFailed(int requestCode, @NonNull List<String> deniedPermissions)
+        {
+            switch (requestCode)
+            {
+                case Constant.REQUEST_CODE_PERMISSION_SINGLE:
+                    CommonUtils.showToast(LoginActivity.this, R.string.permission_location_fail);
+                    break;
+            }
+
+            if (AndPermission.hasAlwaysDeniedPermission(LoginActivity.this, deniedPermissions))
+            {
+                AndPermission.defaultSettingDialog(LoginActivity.this, Constant.REQUEST_CODE_SETTING)
+                        .setTitle(R.string.dialog_permission_title)
+                        .setMessage(R.string.permission_already_deny)
+                        .setPositiveButton(R.string.dialog_permission_grant)
+                        .show();
+            }
+        }
+    };
 
     @Override
     protected void onNewIntent(Intent intent)
