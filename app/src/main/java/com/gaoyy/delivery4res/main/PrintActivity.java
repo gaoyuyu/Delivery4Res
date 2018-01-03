@@ -60,7 +60,7 @@ public class PrintActivity extends BaseActivity implements AdapterView.OnItemCli
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 // Add the name and address to an array adapter to show in a ListView
 
-                String str = getResources().getString(R.string.print_device)+ " | " + device.getName() + " | " + device.getAddress();
+                String str = getResources().getString(R.string.print_device) + " | " + device.getName() + " | " + device.getAddress();
                 Log.e(Constant.TAG, "==receiver found device  未配对==>" + device.getName() + "===" + device.getAddress());
                 if (deviceList.indexOf(str) == -1)// 防止重复添加
                     deviceList.add(str); // 获取设备名称和mac地址
@@ -180,7 +180,7 @@ public class PrintActivity extends BaseActivity implements AdapterView.OnItemCli
                     {
                         // Add the name and address to an array adapter to show in a ListView
                         Log.e(Constant.TAG, "==已配对设备==>" + device.getName() + "===" + device.getAddress());
-                        String str = getResources().getString(R.string.print_device)+" | " + device.getName() + " | " + device.getAddress();
+                        String str = getResources().getString(R.string.print_device) + " | " + device.getName() + " | " + device.getAddress();
                         if (deviceList.indexOf(str) == -1)// 防止重复添加
                             deviceList.add(str); // 获取设备名称和mac地址
                         arrayAdapter.notifyDataSetChanged();
@@ -326,56 +326,61 @@ public class PrintActivity extends BaseActivity implements AdapterView.OnItemCli
         PrintUtils.printText(getResources().getString(R.string.ticket_order_no) + orderNewInfo.getBody().getObj().getOrder_id() + "\n");
         PrintUtils.printText(getResources().getString(R.string.expect_arrival_time) + orderNewInfo.getBody().getObj().getAppointment_time() + "\n");
         PrintUtils.printText("--------------------------------\n");
-        PrintUtils.printText(PrintUtils.printThreeData(getResources().getString(R.string.ticket_item), getResources().getString(R.string.ticket_amounts), getResources().getString(R.string.ticket_price_ea)+"\n"));
+        PrintUtils.printText(PrintUtils.printThreeData(getResources().getString(R.string.ticket_item), getResources().getString(R.string.ticket_amounts), getResources().getString(R.string.ticket_price_ea) + "\n"));
 
         List<OrderNewInfo.BodyBean.ObjBean.GcsBean> goods = orderNewInfo.getBody().getObj().getGcs();
+        double sub = 0;
         for (OrderNewInfo.BodyBean.ObjBean.GcsBean item : goods)
         {
-            PrintUtils.printText(PrintUtils.printThreeData("" + item.getGoods_name(), item.getCount() + "", "$" + item.getPrice() + "\n"));
+            double itemSub = (item.getCount()) * ((double) item.getPrice());
+            sub += itemSub;
+            PrintUtils.printText(PrintUtils.printThreeData("" + item.getGoods_name(), item.getCount() + "", "$" + CommonUtils.deci2(item.getPrice()) + "\n"));
         }
         PrintUtils.printText("--------------------------------\n");
 
+        PrintUtils.printText(PrintUtils.printTwoData("Subtotal", "$" + CommonUtils.deci2(sub) + "\n"));
+
         OrderNewInfo.BodyBean.ObjBean data = orderNewInfo.getBody().getObj();
+        //税1
+        if (data.getTaxation() != null && (Double) (data.getTaxation()) != 0.0)
+            PrintUtils.printText(PrintUtils.printTwoData(getResources().getString(R.string.taxation) + "(" + data.getTaxrate() + "%)", "$" + CommonUtils.deci2(data.getTaxation()) + "\n"));
+        //税2
+        if (data.getTaxation_tvq() != null && (Double) (data.getTaxation_tvq()) != 0.0)
+            PrintUtils.printText(PrintUtils.printTwoData(getResources().getString(R.string.taxation_tvq) + "(" + data.getTaxrate_tvq() + "%)", "$" + CommonUtils.deci2(data.getTaxation_tvq()) + "\n"));
         if (!data.getDistribution_type().equals("Pick-Up"))
         {
             //小费
             if (data.getTipPrice() != null && (Double) (data.getTipPrice()) != 0.0)
-                PrintUtils.printText(PrintUtils.printTwoData(getResources().getString(R.string.tip_price)+"(" + data.getTipRate() + "%)", "$" + data.getTipPrice() + "\n"));
+                PrintUtils.printText(PrintUtils.printTwoData(getResources().getString(R.string.tip_price) + "(" + data.getTipRate() + "%)", "$" + CommonUtils.deci2(data.getTipPrice()) + "\n"));
         }
         //配送费
         if (data.getShip_price() != null && (Double) (data.getShip_price()) != 0.0)
-            PrintUtils.printText(PrintUtils.printTwoData(getResources().getString(R.string.ship_price), "$" + data.getShip_price() + "\n"));
-        //税1
-        if (data.getTaxation() != null && (Double) (data.getTaxation()) != 0.0)
-            PrintUtils.printText(PrintUtils.printTwoData(getResources().getString(R.string.taxation)+"(" + data.getTaxrate() + "%)", "$" + data.getTaxation() + "\n"));
-        //税2
-        if (data.getTaxation_tvq() != null && (Double) (data.getTaxation_tvq()) != 0.0)
-            PrintUtils.printText(PrintUtils.printTwoData(getResources().getString(R.string.taxation_tvq)+"(" + data.getTaxrate_tvq() + "%)", "$" + data.getTaxation_tvq() + "\n"));
+            PrintUtils.printText(PrintUtils.printTwoData(getResources().getString(R.string.ship_price), "$" + CommonUtils.deci2(data.getShip_price()) + "\n"));
         //收益
         if (data.getUseIncomePrice() != null && (Double) (data.getUseIncomePrice()) != 0.0)
-            PrintUtils.printText(PrintUtils.printTwoData(getResources().getString(R.string.income_price), "-$" + data.getUseIncomePrice() + "\n"));
+            PrintUtils.printText(PrintUtils.printTwoData(getResources().getString(R.string.income_price), "-$" + CommonUtils.deci2(data.getUseIncomePrice()) + "\n"));
         //代金券
         if (data.getCouponPrice() != null && (Double) (data.getCouponPrice()) != 0.0)
-            PrintUtils.printText(PrintUtils.printTwoData(getResources().getString(R.string.coupon_price), "-$" + data.getCouponPrice() + "\n"));
+            PrintUtils.printText(PrintUtils.printTwoData(getResources().getString(R.string.coupon_price), "-$" + CommonUtils.deci2(data.getCouponPrice()) + "\n"));
         //商家满减
         if (data.getActivityPrice() != null && (Double) (data.getActivityPrice()) != 0.0)
-            PrintUtils.printText(PrintUtils.printTwoData(getResources().getString(R.string.activity_price), "-$" + data.getActivityPrice() + "\n"));
+            PrintUtils.printText(PrintUtils.printTwoData(getResources().getString(R.string.activity_price), "-$" + CommonUtils.deci2(data.getActivityPrice()) + "\n"));
 
         PrintUtils.printText("--------------------------------\n");
         PrintUtils.selectCommand(PrintUtils.NORMAL);
         PrintUtils.selectCommand(PrintUtils.ALIGN_LEFT);
-        PrintUtils.printText(PrintUtils.printTwoData(getResources().getString(R.string.sum) , "$" + orderNewInfo.getBody().getObj().getTotalPrice() + "\n"));
+        PrintUtils.printText(PrintUtils.printTwoData(getResources().getString(R.string.sum), "$" + CommonUtils.deci2(orderNewInfo.getBody().getObj().getTotalPrice()) + "\n"));
 //        PrintUtils.printText("--------------------------------\n");
 //        PrintUtils.printText( getResources().getString(R.string.ticket_customer_info)+ "\n");
 //        PrintUtils.printText(getResources().getString(R.string.ticket_purchaser) + orderNewInfo.getBody().getObj().getAddr().getTrueName() + "\n");
 //        PrintUtils.printText(getResources().getString(R.string.address) + orderNewInfo.getBody().getObj().getAddr().getArea_info() + "\n");
 //        PrintUtils.printText(getResources().getString(R.string.ticket_tel) + orderNewInfo.getBody().getObj().getAddr().getMobile() + "\n");
         PrintUtils.printText("--------------------------------\n");
-        PrintUtils.printText(getResources().getString(R.string.ticket_will_be_paid)  +orderNewInfo.getBody().getPaymentMethod()+ "\n");
+        PrintUtils.printText(getResources().getString(R.string.ticket_will_be_paid) + orderNewInfo.getBody().getPaymentMethod() + "\n");
         PrintUtils.printText("--------------------------------\n");
         PrintUtils.selectCommand(PrintUtils.ALIGN_CENTER);
-        PrintUtils.printText(getResources().getString(R.string.ticket_bottom_text)  + "\n");
-        PrintUtils.printText(getResources().getString(R.string.ticket_top_title)  + "\n");
+        PrintUtils.printText(getResources().getString(R.string.ticket_bottom_text) + "\n");
+        PrintUtils.printText(getResources().getString(R.string.ticket_top_title) + "\n");
         print1DCodeBy2(orderNewInfo.getBody().getObj().getOrder_id() + "", mOutputStream);
 
         PrintUtils.printText("\n");

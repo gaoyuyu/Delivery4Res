@@ -18,8 +18,6 @@ public abstract class BaseActivity extends AppCompatActivity
     private int toolbarColor = R.color.colorPrimary;
     public static boolean isForeground = false;
 
-//    private UpdateManager updateManager = new UpdateManager(BaseActivity.this, Constant.DOWNLOAD_RES_APK_URL,Constant.RES_APK_NAME);
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -53,8 +51,6 @@ public abstract class BaseActivity extends AppCompatActivity
     protected void onPause()
     {
         super.onPause();
-        //停止下载
-//        updateManager.stopApkThread();
         isForeground = false;
     }
 

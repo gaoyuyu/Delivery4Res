@@ -92,7 +92,7 @@
 
     <string name="dialog_permission_title">Apply for permission</string>
     <string name="dialog_permission_message">Missing location permission</string>
-    <string name="dialog_permission_grant">Allow</string>
+    <string name="dialog_permission_grant">OK,set it up</string>
     <string name="dialog_permission_deny">Deny</string>
     <string name="permission_already_deny">You has refused to locate permissions can be opened in the settings screen</string>
     <string name="toolbar_title_print">Print</string>

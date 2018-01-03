@@ -92,7 +92,7 @@
 
     <string name="dialog_permission_title">申请定位权限</string>
     <string name="dialog_permission_message">应用缺失定位权限</string>
-    <string name="dialog_permission_grant">同意</string>
+    <string name="dialog_permission_grant">好，去设置</string>
     <string name="dialog_permission_deny">拒绝</string>
 
     <string name="permission_already_deny">已拒绝定位权限的申请，可在手机的设置界面中打开</string>
