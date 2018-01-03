@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 import com.gaoyy.delivery4res.R;
 import com.gaoyy.delivery4res.application.ExitApplication;
 import com.gaoyy.delivery4res.util.CommonUtils;
+import com.jaeger.library.StatusBarUtil;
 
 
 public abstract class BaseActivity extends AppCompatActivity
@@ -26,6 +27,7 @@ public abstract class BaseActivity extends AppCompatActivity
 
         //加载布局
         initContentView();
+        StatusBarUtil.setColorNoTranslucent(this, getResources().getColor(R.color.colorPrimary));
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//强制竖屏
 

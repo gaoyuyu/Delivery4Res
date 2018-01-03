@@ -36,10 +36,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            manifestPlaceholders = [ map_key:"AIzaSyAFhhAGX_9cW87jrdz06uDo96iweddwBl4" ]
+            manifestPlaceholders = [map_key: "AIzaSyAFhhAGX_9cW87jrdz06uDo96iweddwBl4"]
         }
         debug {
-            manifestPlaceholders = [ map_key:"AIzaSyAFhhAGX_9cW87jrdz06uDo96iweddwBl4" ]
+            manifestPlaceholders = [map_key: "AIzaSyAFhhAGX_9cW87jrdz06uDo96iweddwBl4"]
         }
     }
 }
@@ -66,5 +66,6 @@ dependencies {
     compile 'de.greenrobot:eventbus:3.0.0-beta1'
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.34'
     compile 'com.yanzhenjie:permission:1.1.2'
+    compile 'com.jaeger.statusbarutil:library:1.4.0'
     testCompile 'junit:junit:4.12'
 }
